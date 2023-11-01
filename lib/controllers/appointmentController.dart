@@ -32,10 +32,11 @@ class AppointmentController extends GetxController {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = response.body;
-      final List<dynamic> penetapanDataById = data['data'];
+      final Map<String, dynamic> penetapanDataById = data['data'];
 
-      penetapanListById.assignAll(
-          penetapanDataById.map((item) => item as Map<String, dynamic>));
+      final List<Map<String, dynamic>> penetapanDataList = [penetapanDataById];
+
+      penetapanListById.assignAll(penetapanDataList);
 
       if (title == "tanah") {
         Get.to(EditInventoryAScreen());

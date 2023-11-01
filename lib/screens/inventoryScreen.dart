@@ -140,6 +140,24 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 ],
               ),
             ),
+            SizedBox(height: 10),
+            RichText(
+              text: TextSpan(
+                text: 'ID: ',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 12,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: selectedId,
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             SizedBox(height: 30),
             Obx(
               () => SingleChildScrollView(
