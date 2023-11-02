@@ -24,6 +24,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
   String selectedId = '';
   String modifiedTitle = "";
 
+  List<DataColumn> columns = [];
+  List<DataColumn> rows = [];
+
   void modifyTitle(String originalTitle) {
     if (originalTitle == "Tanah (A)") {
       modifiedTitle = "tanah";
@@ -34,10 +37,10 @@ class _InventoryScreenState extends State<InventoryScreen> {
     } else if (originalTitle == "Jalan, Jaringan, dan Irigasi (D)") {
       modifiedTitle = "infrastruktur";
     } else if (originalTitle == "Aset Tetap Lainnya (E)") {
-      modifiedTitle = "aset";
+      modifiedTitle = "asetTetap";
     } else if (originalTitle == "KDP (F)") {
       modifiedTitle = "kdp";
-    } else if (originalTitle == "Aset Lain-lain (TGR)") {
+    } else if (originalTitle == "Aset Lain-lain (TGR/RB/AK)") {
       modifiedTitle = "tgr";
     } else if (originalTitle == "Aset Lain-lain (ATB)") {
       modifiedTitle = "atb";
@@ -89,6 +92,161 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (modifiedTitle == "tanah") {
+      columns = [
+        DataColumn(label: Text('Edit')),
+        DataColumn(label: Text('No.')),
+        DataColumn(label: Text('Kategori Kode')),
+        DataColumn(label: Text('Reg.')),
+        DataColumn(label: Text('Uraian')),
+        DataColumn(label: Text('Tgl. Perolehan')),
+        DataColumn(label: Text('Th. Beli')),
+        // Column Khusus Perkategori
+        DataColumn(label: Text('Luas (m2)')),
+        DataColumn(label: Text('Alamat')),
+        DataColumn(label: Text('Penggunaan')),
+        DataColumn(label: Text('Hak Tanah')),
+        DataColumn(label: Text('Sertifikat Tanggal')),
+        DataColumn(label: Text('Sertifikat Nomor')),
+        DataColumn(label: Text('Harga')),
+        DataColumn(label: Text('Kondisi')),
+        DataColumn(label: Text('Asal Usul')),
+        DataColumn(label: Text('Keterangan')),
+        // DataColumn(label: Text('Tgl Inventaris')),
+        // DataColumn(label: Text('Keberadaan Fisik')),
+        // DataColumn(label: Text('Kondisi Fisik')),
+        // DataColumn(label: Text('Penguasaan')),
+        // DataColumn(label: Text('Doc')),
+      ];
+    } else if (modifiedTitle == "perkakas") {
+      columns = [
+        DataColumn(label: Text('Edit')),
+        DataColumn(label: Text('No.')),
+        DataColumn(label: Text('Kategori Kode')),
+        DataColumn(label: Text('Reg.')),
+        DataColumn(label: Text('Uraian')),
+        DataColumn(label: Text('Tgl. Perolehan')),
+        DataColumn(label: Text('Th. Beli')),
+        // Column Khusus Perkategori
+        DataColumn(label: Text('Ukuran/CC')),
+        DataColumn(label: Text('Bahan')),
+        DataColumn(label: Text('Nomor Pabrik')),
+        DataColumn(label: Text('Nomor Rangka')),
+        DataColumn(label: Text('Nomor Mesin')),
+        DataColumn(label: Text('Nomor Polisi')),
+        DataColumn(label: Text('Nomor BPKB')),
+        DataColumn(label: Text('Merk')),
+        DataColumn(label: Text('Type')),
+        DataColumn(label: Text('Harga')),
+        DataColumn(label: Text('Kondisi')),
+        DataColumn(label: Text('Asal Usul')),
+        DataColumn(label: Text('Keterangan')),
+        // DataColumn(label: Text('Tgl Inventaris')),
+        // DataColumn(label: Text('Keberadaan Fisik')),
+        // DataColumn(label: Text('Kondisi Fisik')),
+        // DataColumn(label: Text('Penguasaan')),
+        // DataColumn(label: Text('Doc')),
+      ];
+    } else if (modifiedTitle == "bangunan") {
+    } else if (modifiedTitle == "insfrastruktur") {
+    } else if (modifiedTitle == "asetTetap") {
+    } else if (modifiedTitle == "kdp") {
+    } else if (modifiedTitle == "tgr") {
+    } else if (modifiedTitle == "atb") {
+    } else if (modifiedTitle == "lainnya") {}
+
+    List<DataRow> generateDataRows() {
+      if (modifiedTitle == "tanah") {
+        return List<DataRow>.generate(
+          penetapanController.penetapanList.length,
+          (index) {
+            final penetapan = penetapanController.penetapanList[index];
+            return DataRow(
+              cells: [
+                DataCell(InkWell(
+                  child: Icon(Icons.edit_document),
+                  onTap: () {
+                    final id = penetapan['id'].toString();
+                    penetapanController.getPenetapanById(id, modifiedTitle);
+                  },
+                )),
+                DataCell(Text('${index + 1}')),
+                DataCell(Text(penetapan['kategori_kode'].toString())),
+                DataCell(Text(penetapan['no_register'].toString())),
+                DataCell(Text(penetapan['uraian'].toString())),
+                DataCell(Text(penetapan['tgl_perolehan'].toString())),
+                DataCell(Text(penetapan['th_beli'].toString())),
+                DataCell(Text(penetapan['a_luas_m2'].toString())),
+                DataCell(Text(penetapan['a_alamat'].toString())),
+                DataCell(Text(penetapan['a_penggunaan'].toString())),
+                DataCell(Text(penetapan['a_hak_tanah'].toString())),
+                DataCell(Text(penetapan['a_sertifikat_tanggal'].toString())),
+                DataCell(Text(penetapan['a_sertifikat_nomor'].toString())),
+                DataCell(Text(penetapan['harga'].toString())),
+                DataCell(Text(penetapan['kondisi'].toString())),
+                DataCell(Text(penetapan['asal_usul'].toString())),
+                DataCell(Text(penetapan['keterangan'].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+              ],
+            );
+          },
+        );
+      } else if (modifiedTitle == "perkakas") {
+        return List<DataRow>.generate(
+          penetapanController.penetapanList.length,
+          (index) {
+            final penetapan = penetapanController.penetapanList[index];
+            return DataRow(
+              cells: [
+                DataCell(InkWell(
+                  child: Icon(Icons.edit_document),
+                  onTap: () {
+                    final id = penetapan['id'].toString();
+                    penetapanController.getPenetapanById(id, modifiedTitle);
+                  },
+                )),
+                DataCell(Text('${index + 1}')),
+                DataCell(Text(penetapan['kategori_kode'].toString())),
+                DataCell(Text(penetapan['no_register'].toString())),
+                DataCell(Text(penetapan['uraian'].toString())),
+                DataCell(Text(penetapan['tgl_perolehan'].toString())),
+                DataCell(Text(penetapan['th_beli'].toString())),
+                DataCell(Text(penetapan['b_cc'].toString())),
+                DataCell(Text(penetapan['b_bahan'].toString())),
+                DataCell(Text(penetapan['b_nomor_pabrik'].toString())),
+                DataCell(Text(penetapan['b_nomor_rangka'].toString())),
+                DataCell(Text(penetapan['b_nomor_mesin'].toString())),
+                DataCell(Text(penetapan['b_nomor_polisi'].toString())),
+                DataCell(Text(penetapan['b_nomor_bpkb'].toString())),
+                DataCell(Text(penetapan['b_merk'].toString())),
+                DataCell(Text(penetapan['b_type'].toString())),
+                DataCell(Text(penetapan['harga'].toString())),
+                DataCell(Text(penetapan['kondisi'].toString())),
+                DataCell(Text(penetapan['asal_usul'].toString())),
+                DataCell(Text(penetapan['keterangan'].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+              ],
+            );
+          },
+        );
+      } else if (modifiedTitle == "bangunan") {
+      } else if (modifiedTitle == "insfrastruktur") {
+      } else if (modifiedTitle == "asetTetap") {
+      } else if (modifiedTitle == "kdp") {
+      } else if (modifiedTitle == "tgr") {
+      } else if (modifiedTitle == "atb") {
+      } else if (modifiedTitle == "lainnya") {}
+      return [];
+    }
+
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       appBar: AppBar(
@@ -140,24 +298,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 10),
-            RichText(
-              text: TextSpan(
-                text: 'ID: ',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                ),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: selectedId,
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-            ),
             SizedBox(height: 30),
             Obx(
               () => SingleChildScrollView(
@@ -174,50 +314,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       ),
                     ),
                   ),
-                  columns: [
-                    DataColumn(label: Text('Edit')),
-                    DataColumn(label: Text('No.')),
-                    DataColumn(label: Text('Kategori Kode')),
-                    DataColumn(label: Text('Reg.')),
-                    DataColumn(label: Text('Uraian')),
-                    DataColumn(label: Text('Tgl. Perolehan')),
-                    DataColumn(label: Text('Th. Beli')),
-                    DataColumn(label: Text('Luas (m2)')),
-                    DataColumn(label: Text('Alamat')),
-                    DataColumn(label: Text('Penggunaan')),
-                    DataColumn(label: Text('Hak Tanah')),
-                    DataColumn(label: Text('Th. Nilai')),
-                  ],
-                  rows: List<DataRow>.generate(
-                    penetapanController.penetapanList.length,
-                    (index) {
-                      final penetapan =
-                          penetapanController.penetapanList[index];
-                      return DataRow(
-                        cells: [
-                          DataCell(InkWell(
-                            child: Icon(Icons.edit_document),
-                            onTap: () {
-                              final id = penetapan['id'].toString();
-                              penetapanController.getPenetapanById(
-                                  id, modifiedTitle);
-                            },
-                          )),
-                          DataCell(Text('${index + 1}')),
-                          DataCell(Text(penetapan['kategori_kode'].toString())),
-                          DataCell(Text(penetapan['no_register'].toString())),
-                          DataCell(Text(penetapan['uraian'].toString())),
-                          DataCell(Text(penetapan['tgl_perolehan'].toString())),
-                          DataCell(Text(penetapan['th_beli'].toString())),
-                          DataCell(Text(penetapan['a_luas_m2'].toString())),
-                          DataCell(Text(penetapan['a_alamat'].toString())),
-                          DataCell(Text(penetapan['a_penggunaan'].toString())),
-                          DataCell(Text(penetapan['a_hak_tanah'].toString())),
-                          DataCell(Text(penetapan['thn_nilai'].toString())),
-                        ],
-                      );
-                    },
-                  ),
+                  columns: columns,
+                  rows: generateDataRows(),
                 ),
               ),
             ),

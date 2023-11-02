@@ -3,6 +3,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:kib_application/constans/colors.dart';
 import 'package:kib_application/controllers/appointmentController.dart';
 import 'package:kib_application/controllers/editInventoryController.dart';
@@ -17,37 +18,44 @@ class EditInventoryAScreen extends StatefulWidget {
 class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
   final penetapanController = Get.put(AppointmentController());
   final editController = Get.put(EditInventoryController());
+  DateTime now = DateTime.now();
 
   @override
   void initState() {
     super.initState();
+    String dateNow = DateFormat('dd/MM/yyyy').format(now);
+    String yearNow = DateFormat.y().format(now);
     final data = penetapanController.penetapanListById[0];
-    editController.skpd.text = data['kode'].toString();
-    editController.skpdUraian.text = data['nama'].toString();
-    editController.noRegister.text = data['no_register'].toString();
-    editController.barang.text = data[''].toString();
-    editController.namaBarang.text = data[''].toString();
-    editController.jumlah.text = data['jumlah'].toString();
-    editController.satuan.text = data['satuan'].toString();
-    editController.perolehan.text = data['cara_perolehan'].toString();
-    editController.tglPerolehan.text = data['tgl_perolehan'].toString();
-    editController.thPerolehan.text = data['tahun'].toString();
-    editController.nilaiPerolehan.text = data['perolehan'].toString();
-    editController.alamat.text = data['a_alamat'].toString();
-    editController.kota.text = data[''].toString();
-    editController.kecamatan.text = data[''].toString();
-    editController.kelurahan.text = data[''].toString();
-    editController.jalan.text = data[''].toString();
-    editController.no.text = data[''].toString();
-    editController.rt.text = data[''].toString();
-    editController.rw.text = data[''].toString();
-    editController.kodePos.text = data[''].toString();
-    editController.hakTanah.text = data['a_hak_tanah'].toString();
-    editController.noSertifikat.text = data['a_sertifikat_nomor'].toString();
-    editController.tglSertifikat.text = data['a_sertifikat_tanggal'].toString();
-    editController.kondisi.text = data['kondisi'].toString();
-    editController.asalUsul.text = data['asal_usul'].toString();
-    editController.penggunaan.text = data['a_penggunaan'].toString();
+    // editController.tahun.text = yearNow;
+    // editController.tglInventaris.text = dateNow;
+    // editController.skpd.text = data['kode'].toString();
+    // editController.skpdUraian.text = data['nama'].toString();
+    // editController.noRegister.text = data['no_register'].toString();
+    // editController.barang.text = data[''].toString();
+    // editController.namaBarang.text = data[''].toString();
+    // editController.jumlah.text = data['jumlah'].toString();
+    // editController.satuan.text = data['satuan'].toString();
+    // editController.perolehan.text = data['cara_perolehan'].toString();
+    // editController.tglPerolehan.text = data['tgl_perolehan'].toString();
+    // editController.thPerolehan.text = data['tahun'].toString();
+    // editController.nilaiPerolehan.text = data['perolehan'].toString();
+    // editController.alamat.text = data['a_alamat'].toString();
+    // editController.kota.text = data[''].toString();
+    // editController.kecamatan.text = data[''].toString();
+    // editController.kelurahan.text = data[''].toString();
+    // editController.jalan.text = data[''].toString();
+    // editController.no.text = data[''].toString();
+    // editController.rt.text = data[''].toString();
+    // editController.rw.text = data[''].toString();
+    // editController.kodePos.text = data[''].toString();
+    // editController.hakTanah.text = data['a_hak_tanah'].toString();
+    // editController.noSertifikat.text = data['a_sertifikat_nomor'].toString();
+    // editController.tglSertifikat.text = data['a_sertifikat_tanggal'].toString();
+    // editController.kondisi.text = data['kondisi'].toString();
+    // editController.asalUsul.text = data['asal_usul'].toString();
+    // editController.penggunaan.text = data['a_penggunaan'].toString();
+    // editController.latitude.text = data['lat'].toString();
+    // editController.longitude.text = data['long'].toString();
   }
 
   List<String> dropdownNoRegister = ["Sesuai", "Tidak Sesuai"];
@@ -204,6 +212,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 15),
                   child: TextFormField(
+                    controller: editController.tahun,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                     ),
@@ -246,7 +255,6 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 15),
                   child: TextFormField(
-                    controller: editController.skpd,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                     ),
@@ -268,7 +276,6 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 15),
                   child: TextFormField(
-                    controller: editController.skpdUraian,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                     ),
@@ -632,7 +639,6 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 15),
                   child: TextFormField(
-                    controller: editController.thPerolehan,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                     ),
@@ -657,7 +663,6 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 15),
                         child: TextFormField(
-                          controller: editController.nilaiPerolehan,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                           ),
@@ -801,7 +806,6 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 15),
                   child: TextFormField(
-                    controller: editController.alamat,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                     ),
@@ -994,7 +998,6 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 15),
                         child: TextFormField(
-                          controller: editController.hakTanah,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                           ),
@@ -1073,7 +1076,6 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 15),
                         child: TextFormField(
-                          controller: editController.noSertifikat,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                           ),
@@ -1152,7 +1154,6 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 15),
                         child: TextFormField(
-                          controller: editController.tglSertifikat,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                           ),
@@ -1468,7 +1469,6 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 15),
                   child: TextFormField(
-                    controller: editController.penggunaan,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                     ),
@@ -2113,7 +2113,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       ),
                     )),
                   ),
-                  onTap: () {},
+                  onTap: () => Navigator.of(context).pop(),
                 ),
               ),
             ],
