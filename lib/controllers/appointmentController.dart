@@ -1,5 +1,13 @@
 import 'package:get/get.dart';
 import 'package:kib_application/screens/forms/editInventoryAScreen.dart';
+import 'package:kib_application/screens/forms/editInventoryBScreen.dart';
+import 'package:kib_application/screens/forms/editInventoryCScreen.dart';
+import 'package:kib_application/screens/forms/editInventoryDScreen.dart';
+import 'package:kib_application/screens/forms/editInventoryEScreen.dart';
+import 'package:kib_application/screens/forms/editInventoryFScreen.dart';
+import 'package:kib_application/screens/forms/editInventoryTGRScreen.dart';
+import 'package:kib_application/screens/forms/editInventoryATBScreen.dart';
+import 'package:kib_application/screens/forms/editInventoryBelumTerdaftarScreen.dart';
 import 'package:kib_application/utils/apiEndpoints.dart';
 
 class AppointmentController extends GetxController {
@@ -41,13 +49,22 @@ class AppointmentController extends GetxController {
       if (title == "tanah") {
         Get.to(EditInventoryAScreen());
       } else if (title == "perkakas") {
+        Get.to(EditInventoryBScreen());
       } else if (title == "bangunan") {
+        Get.to(EditInventoryCScreen());
       } else if (title == "infrastruktur") {
+        Get.to(EditInventoryDScreen());
       } else if (title == "aset") {
+        Get.to(EditInventoryEScreen());
       } else if (title == "kdp") {
+        Get.to(EditInventoryFScreen());
       } else if (title == "tgr") {
+        Get.to(EditInventoryTGRScreen());
       } else if (title == "atb") {
-      } else if (title == "lainnya") {}
+        Get.to(EditInventoryATBScreen());
+      } else if (title == "belumTerdaftar") {
+        Get.to(EditInventoryBelumTerdaftarScreen());
+      }
     } else {}
   }
 }

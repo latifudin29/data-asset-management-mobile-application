@@ -30,11 +30,11 @@ class _InventoryScreenState extends State<InventoryScreen> {
   void modifyTitle(String originalTitle) {
     if (originalTitle == "Tanah (A)") {
       modifiedTitle = "tanah";
-    } else if (originalTitle == "Peralatan dan Mesin (B)") {
+    } else if (originalTitle == "Peralatan/Mesin (B)") {
       modifiedTitle = "perkakas";
-    } else if (originalTitle == "Gedung dan Bangunan (C)") {
+    } else if (originalTitle == "Gedung/Bangunan (C)") {
       modifiedTitle = "bangunan";
-    } else if (originalTitle == "Jalan, Jaringan, dan Irigasi (D)") {
+    } else if (originalTitle == "Jalan/Jaringan/Irigasi (D)") {
       modifiedTitle = "infrastruktur";
     } else if (originalTitle == "Aset Tetap Lainnya (E)") {
       modifiedTitle = "asetTetap";
@@ -45,7 +45,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
     } else if (originalTitle == "Aset Lain-lain (ATB)") {
       modifiedTitle = "atb";
     } else {
-      modifiedTitle = "lainnya";
+      modifiedTitle = "belumTerdaftar";
     }
   }
 
@@ -101,7 +101,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
         DataColumn(label: Text('Uraian')),
         DataColumn(label: Text('Tgl. Perolehan')),
         DataColumn(label: Text('Th. Beli')),
-        // Column Khusus Perkategori
         DataColumn(label: Text('Luas (m2)')),
         DataColumn(label: Text('Alamat')),
         DataColumn(label: Text('Penggunaan')),
@@ -120,6 +119,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
       ];
     } else if (modifiedTitle == "perkakas") {
       columns = [
+        // Column Statis
         DataColumn(label: Text('Edit')),
         DataColumn(label: Text('No.')),
         DataColumn(label: Text('Kategori Kode')),
@@ -127,7 +127,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
         DataColumn(label: Text('Uraian')),
         DataColumn(label: Text('Tgl. Perolehan')),
         DataColumn(label: Text('Th. Beli')),
-        // Column Khusus Perkategori
         DataColumn(label: Text('Ukuran/CC')),
         DataColumn(label: Text('Bahan')),
         DataColumn(label: Text('Nomor Pabrik')),
@@ -141,19 +140,202 @@ class _InventoryScreenState extends State<InventoryScreen> {
         DataColumn(label: Text('Kondisi')),
         DataColumn(label: Text('Asal Usul')),
         DataColumn(label: Text('Keterangan')),
+        DataColumn(label: Text('Tgl Inventaris')),
+        DataColumn(label: Text('Keberadaan Fisik')),
+        DataColumn(label: Text('Kondisi Fisik')),
+        DataColumn(label: Text('Penguasaan')),
+        DataColumn(label: Text('Doc')),
+      ];
+    } else if (modifiedTitle == "bangunan") {
+      columns = [
+        // Column Statis
+        DataColumn(label: Text('Edit')),
+        DataColumn(label: Text('No.')),
+        DataColumn(label: Text('Kategori Kode')),
+        DataColumn(label: Text('Reg.')),
+        DataColumn(label: Text('Uraian')),
+        DataColumn(label: Text('Tgl. Perolehan')),
+        DataColumn(label: Text('Th. Beli')),
+        DataColumn(label: Text('Bertingkat/Tidak')),
+        DataColumn(label: Text('Beton/Tidak')),
+        DataColumn(label: Text('Luas Lantai (m2)')),
+        DataColumn(label: Text('Lokasi')),
+        DataColumn(label: Text('Dokumen Tgl')),
+        DataColumn(label: Text('Dokumen Nomor')),
+        DataColumn(label: Text('Luas (m2)')),
+        DataColumn(label: Text('Status Tanah')),
+        DataColumn(label: Text('Kode Tanah')),
+        DataColumn(label: Text('Harga')),
+        DataColumn(label: Text('Kondisi')),
+        DataColumn(label: Text('Asal Usul')),
+        DataColumn(label: Text('Keterangan')),
         // DataColumn(label: Text('Tgl Inventaris')),
         // DataColumn(label: Text('Keberadaan Fisik')),
         // DataColumn(label: Text('Kondisi Fisik')),
         // DataColumn(label: Text('Penguasaan')),
         // DataColumn(label: Text('Doc')),
       ];
-    } else if (modifiedTitle == "bangunan") {
-    } else if (modifiedTitle == "insfrastruktur") {
+    } else if (modifiedTitle == "infrastruktur") {
+      columns = [
+        DataColumn(label: Text('Edit')),
+        DataColumn(label: Text('No.')),
+        DataColumn(label: Text('Kategori Kode')),
+        DataColumn(label: Text('Reg.')),
+        DataColumn(label: Text('Uraian')),
+        DataColumn(label: Text('Tgl. Perolehan')),
+        DataColumn(label: Text('Th. Beli')),
+        DataColumn(label: Text('Konstruksi')),
+        DataColumn(label: Text('Panjang (Km)')),
+        DataColumn(label: Text('Lebar (m)')),
+        DataColumn(label: Text('Luas (m2)')),
+        DataColumn(label: Text('Lokasi')),
+        DataColumn(label: Text('Dokumen Tgl')),
+        DataColumn(label: Text('Dokumen Nomor')),
+        DataColumn(label: Text('Kode Tanah')),
+        DataColumn(label: Text('Harga')),
+        DataColumn(label: Text('Kondisi')),
+        DataColumn(label: Text('Asal Usul')),
+        DataColumn(label: Text('Keterangan')),
+        // DataColumn(label: Text('Tgl Inventaris')),
+        // DataColumn(label: Text('Keberadaan Fisik')),
+        // DataColumn(label: Text('Kondisi Fisik')),
+        // DataColumn(label: Text('Penguasaan')),
+        // DataColumn(label: Text('Doc')),
+      ];
     } else if (modifiedTitle == "asetTetap") {
+      columns = [
+        DataColumn(label: Text('Edit')),
+        DataColumn(label: Text('No.')),
+        DataColumn(label: Text('Kategori Kode')),
+        DataColumn(label: Text('Reg.')),
+        DataColumn(label: Text('Uraian')),
+        DataColumn(label: Text('Tgl. Perolehan')),
+        DataColumn(label: Text('Th. Beli')),
+        DataColumn(label: Text('Judul/Pencipta')),
+        DataColumn(label: Text('Spesifikasi')),
+        DataColumn(label: Text('Asal Daerah')),
+        DataColumn(label: Text('Pencipta')),
+        DataColumn(label: Text('Jenis')),
+        DataColumn(label: Text('Ukuran')),
+        DataColumn(label: Text('Harga')),
+        DataColumn(label: Text('Kondisi')),
+        DataColumn(label: Text('Asal Usul')),
+        DataColumn(label: Text('Keterangan')),
+        // DataColumn(label: Text('Tgl Inventaris')),
+        // DataColumn(label: Text('Keberadaan Fisik')),
+        // DataColumn(label: Text('Kondisi Fisik')),
+        // DataColumn(label: Text('Penguasaan')),
+        // DataColumn(label: Text('Doc')),
+      ];
     } else if (modifiedTitle == "kdp") {
+      columns = [
+        DataColumn(label: Text('Edit')),
+        DataColumn(label: Text('No.')),
+        DataColumn(label: Text('Kategori Kode')),
+        DataColumn(label: Text('Reg.')),
+        DataColumn(label: Text('Uraian')),
+        DataColumn(label: Text('Tgl. Perolehan')),
+        DataColumn(label: Text('Th. Beli')),
+        DataColumn(label: Text('Bertingkat/Tidak')),
+        DataColumn(label: Text('Beton/Tidak')),
+        DataColumn(label: Text('Luas (m2)')),
+        DataColumn(label: Text('Lokasi')),
+        DataColumn(label: Text('Dokumen Tgl')),
+        DataColumn(label: Text('Dokumen Nomor')),
+        DataColumn(label: Text('Status Tanah')),
+        DataColumn(label: Text('Harga')),
+        DataColumn(label: Text('Kondisi')),
+        DataColumn(label: Text('Asal Usul')),
+        DataColumn(label: Text('Keterangan')),
+        // DataColumn(label: Text('Tgl Inventaris')),
+        // DataColumn(label: Text('Keberadaan Fisik')),
+        // DataColumn(label: Text('Kondisi Fisik')),
+        // DataColumn(label: Text('Penguasaan')),
+        // DataColumn(label: Text('Doc')),
+      ];
     } else if (modifiedTitle == "tgr") {
+      columns = [
+        DataColumn(label: Text('Edit')),
+        DataColumn(label: Text('No.')),
+        DataColumn(label: Text('Kategori Kode')),
+        DataColumn(label: Text('Reg.')),
+        DataColumn(label: Text('Uraian')),
+        DataColumn(label: Text('Tgl. Perolehan')),
+        DataColumn(label: Text('Th. Beli')),
+        DataColumn(label: Text('Bertingkat/Tidak')),
+        DataColumn(label: Text('Beton/Tidak')),
+        DataColumn(label: Text('Luas (m2)')),
+        DataColumn(label: Text('Lokasi')),
+        DataColumn(label: Text('Dokumen Tgl')),
+        DataColumn(label: Text('Dokumen Nomor')),
+        DataColumn(label: Text('Status Tanah')),
+        DataColumn(label: Text('Kode Tanah')),
+        DataColumn(label: Text('Harga')),
+        DataColumn(label: Text('Kondisi')),
+        DataColumn(label: Text('Asal Usul')),
+        DataColumn(label: Text('Keterangan')),
+        // DataColumn(label: Text('Tgl Inventaris')),
+        // DataColumn(label: Text('Keberadaan Fisik')),
+        // DataColumn(label: Text('Kondisi Fisik')),
+        // DataColumn(label: Text('Penguasaan')),
+        // DataColumn(label: Text('Doc')),
+      ];
     } else if (modifiedTitle == "atb") {
-    } else if (modifiedTitle == "lainnya") {}
+      columns = [
+        DataColumn(label: Text('Edit')),
+        DataColumn(label: Text('No.')),
+        DataColumn(label: Text('Kategori Kode')),
+        DataColumn(label: Text('Reg.')),
+        DataColumn(label: Text('Uraian')),
+        DataColumn(label: Text('Tgl. Perolehan')),
+        DataColumn(label: Text('Th. Beli')),
+        DataColumn(label: Text('Bertingkat/Tidak')),
+        DataColumn(label: Text('Beton/Tidak')),
+        DataColumn(label: Text('Luas (m2)')),
+        DataColumn(label: Text('Lokasi')),
+        DataColumn(label: Text('Dokumen Tgl')),
+        DataColumn(label: Text('Dokumen Nomor')),
+        DataColumn(label: Text('Status Tanah')),
+        DataColumn(label: Text('Harga')),
+        DataColumn(label: Text('Kondisi')),
+        DataColumn(label: Text('Asal Usul')),
+        DataColumn(label: Text('Keterangan')),
+        // DataColumn(label: Text('Tgl Inventaris')),
+        // DataColumn(label: Text('Keberadaan Fisik')),
+        // DataColumn(label: Text('Kondisi Fisik')),
+        // DataColumn(label: Text('Penguasaan')),
+        // DataColumn(label: Text('Doc')),
+      ];
+    } else if (modifiedTitle == "belumTerdaftar") {
+      columns = [
+        DataColumn(label: Text('Edit')),
+        DataColumn(label: Text('No.')),
+        DataColumn(label: Text('Kategori Kode')),
+        DataColumn(label: Text('Reg.')),
+        DataColumn(label: Text('Tgl. Perolehan')),
+        DataColumn(label: Text('Th. Perolehan')),
+        DataColumn(label: Text('Cara Perolehan')),
+        DataColumn(label: Text('Merk/Type')),
+        DataColumn(label: Text('Nomor Polisi')),
+        DataColumn(label: Text('Nomor Rangkai')),
+        DataColumn(label: Text('Nomor Mesin')),
+        DataColumn(label: Text('Nomor BPKB')),
+        DataColumn(label: Text('Nomor STNK')),
+        DataColumn(label: Text('Bahan')),
+        DataColumn(label: Text('Warna')),
+        DataColumn(label: Text('CC')),
+        DataColumn(label: Text('Ruangan')),
+        DataColumn(label: Text('Jumlah')),
+        DataColumn(label: Text('Satuan')),
+        DataColumn(label: Text('Harga Satuan')),
+        DataColumn(label: Text('Nilai Perolehan')),
+        DataColumn(label: Text('Alamat')),
+        DataColumn(label: Text('Dasar Pencatatan')),
+        DataColumn(label: Text('Kondisi Barang')),
+        DataColumn(label: Text('Status')),
+        DataColumn(label: Text('Doc')),
+      ];
+    }
 
     List<DataRow> generateDataRows() {
       if (modifiedTitle == "tanah") {
@@ -171,21 +353,94 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   },
                 )),
                 DataCell(Text('${index + 1}')),
-                DataCell(Text(penetapan['kategori_kode'].toString())),
-                DataCell(Text(penetapan['no_register'].toString())),
-                DataCell(Text(penetapan['uraian'].toString())),
-                DataCell(Text(penetapan['tgl_perolehan'].toString())),
-                DataCell(Text(penetapan['th_beli'].toString())),
-                DataCell(Text(penetapan['a_luas_m2'].toString())),
-                DataCell(Text(penetapan['a_alamat'].toString())),
-                DataCell(Text(penetapan['a_penggunaan'].toString())),
-                DataCell(Text(penetapan['a_hak_tanah'].toString())),
-                DataCell(Text(penetapan['a_sertifikat_tanggal'].toString())),
-                DataCell(Text(penetapan['a_sertifikat_nomor'].toString())),
-                DataCell(Text(penetapan['harga'].toString())),
-                DataCell(Text(penetapan['kondisi'].toString())),
-                DataCell(Text(penetapan['asal_usul'].toString())),
-                DataCell(Text(penetapan['keterangan'].toString())),
+                DataCell(
+                  Text(penetapan['kategori_kode'] != null &&
+                          penetapan['kategori_kode'] != ''
+                      ? penetapan['kategori_kode'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['no_register'] != null &&
+                          penetapan['no_register'] != ''
+                      ? penetapan['no_register'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['uraian'] != null && penetapan['uraian'] != ''
+                      ? penetapan['uraian'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['tgl_perolehan'] != null &&
+                          penetapan['tgl_perolehan'] != ''
+                      ? penetapan['tgl_perolehan'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['th_beli'] != null && penetapan['th_beli'] != ''
+                          ? penetapan['th_beli'].toString()
+                          : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['a_luas_m2'] != null &&
+                          penetapan['a_luas_m2'] != ''
+                      ? penetapan['a_luas_m2'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['a_alamat'] != null &&
+                          penetapan['a_alamat'] != ''
+                      ? penetapan['a_alamat'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['a_penggunaan'] != null &&
+                          penetapan['a_penggunaan'] != ''
+                      ? penetapan['a_penggunaan'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['a_hak_tanah'] != null &&
+                          penetapan['a_hak_tanah'] != ''
+                      ? penetapan['a_hak_tanah'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['a_sertifikat_tanggal'] != null &&
+                          penetapan['a_sertifikat_tanggal'] != ''
+                      ? penetapan['a_sertifikat_tanggal'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['a_sertifikat_nomor'] != null &&
+                          penetapan['a_sertifikat_nomor'] != ''
+                      ? penetapan['a_sertifikat_nomor'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['harga'] != null && penetapan['harga'] != ''
+                      ? penetapan['harga'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['kondisi'] != null && penetapan['kondisi'] != ''
+                          ? penetapan['kondisi'].toString()
+                          : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['asal_usul'] != null &&
+                          penetapan['asal_usul'] != ''
+                      ? penetapan['asal_usul'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['keterangan'] != null &&
+                          penetapan['keterangan'] != ''
+                      ? penetapan['keterangan'].toString()
+                      : '-'),
+                ),
                 // DataCell(Text(penetapan[''].toString())),
                 // DataCell(Text(penetapan[''].toString())),
                 // DataCell(Text(penetapan[''].toString())),
@@ -210,24 +465,239 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   },
                 )),
                 DataCell(Text('${index + 1}')),
-                DataCell(Text(penetapan['kategori_kode'].toString())),
-                DataCell(Text(penetapan['no_register'].toString())),
-                DataCell(Text(penetapan['uraian'].toString())),
-                DataCell(Text(penetapan['tgl_perolehan'].toString())),
-                DataCell(Text(penetapan['th_beli'].toString())),
-                DataCell(Text(penetapan['b_cc'].toString())),
-                DataCell(Text(penetapan['b_bahan'].toString())),
-                DataCell(Text(penetapan['b_nomor_pabrik'].toString())),
-                DataCell(Text(penetapan['b_nomor_rangka'].toString())),
-                DataCell(Text(penetapan['b_nomor_mesin'].toString())),
-                DataCell(Text(penetapan['b_nomor_polisi'].toString())),
-                DataCell(Text(penetapan['b_nomor_bpkb'].toString())),
-                DataCell(Text(penetapan['b_merk'].toString())),
-                DataCell(Text(penetapan['b_type'].toString())),
-                DataCell(Text(penetapan['harga'].toString())),
-                DataCell(Text(penetapan['kondisi'].toString())),
-                DataCell(Text(penetapan['asal_usul'].toString())),
-                DataCell(Text(penetapan['keterangan'].toString())),
+                DataCell(
+                  Text(penetapan['kategori_kode'] != null &&
+                          penetapan['kategori_kode'] != ''
+                      ? penetapan['kategori_kode'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['no_register'] != null &&
+                          penetapan['no_register'] != ''
+                      ? penetapan['no_register'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['uraian'] != null && penetapan['uraian'] != ''
+                      ? penetapan['uraian'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['tgl_perolehan'] != null &&
+                          penetapan['tgl_perolehan'] != ''
+                      ? penetapan['tgl_perolehan'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['th_beli'] != null && penetapan['th_beli'] != ''
+                          ? penetapan['th_beli'].toString()
+                          : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['b_cc'] != null && penetapan['b_cc'] != ''
+                      ? penetapan['b_cc'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['b_bahan'] != null && penetapan['b_bahan'] != ''
+                          ? penetapan['b_bahan'].toString()
+                          : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['b_nomor_pabrik'] != null &&
+                          penetapan['b_nomor_pabrik'] != ''
+                      ? penetapan['b_nomor_pabrik'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['b_nomor_rangka'] != null &&
+                          penetapan['b_nomor_rangka'] != ''
+                      ? penetapan['b_nomor_rangka'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['b_nomor_mesin'] != null &&
+                          penetapan['b_nomor_mesin'] != ''
+                      ? penetapan['b_nomor_mesin'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['b_nomor_polisi'] != null &&
+                          penetapan['b_nomor_polisi'] != ''
+                      ? penetapan['b_nomor_polisi'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['b_nomor_bpkb'] != null &&
+                          penetapan['b_nomor_bpkb'] != ''
+                      ? penetapan['b_nomor_bpkb'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['b_merk'] != null && penetapan['b_merk'] != ''
+                      ? penetapan['b_merk'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['b_type'] != null && penetapan['b_type'] != ''
+                      ? penetapan['b_type'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['harga'] != null && penetapan['harga'] != ''
+                      ? penetapan['harga'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['kondisi'] != null && penetapan['kondisi'] != ''
+                          ? penetapan['kondisi'].toString()
+                          : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['asal_usul'] != null &&
+                          penetapan['asal_usul'] != ''
+                      ? penetapan['asal_usul'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['keterangan'] != null &&
+                          penetapan['keterangan'] != ''
+                      ? penetapan['keterangan'].toString()
+                      : '-'),
+                ),
+                DataCell(Text('-')),
+                DataCell(Text('-')),
+                DataCell(Text('-')),
+                DataCell(Text('-')),
+                DataCell(Text('-')),
+              ],
+            );
+          },
+        );
+      } else if (modifiedTitle == "bangunan") {
+        return List<DataRow>.generate(
+          penetapanController.penetapanList.length,
+          (index) {
+            final penetapan = penetapanController.penetapanList[index];
+            return DataRow(
+              cells: [
+                DataCell(InkWell(
+                  child: Icon(Icons.edit_document),
+                  onTap: () {
+                    final id = penetapan['id'].toString();
+                    penetapanController.getPenetapanById(id, modifiedTitle);
+                  },
+                )),
+                DataCell(Text('${index + 1}')),
+                DataCell(
+                  Text(penetapan['kategori_kode'] != null &&
+                          penetapan['kategori_kode'] != ''
+                      ? penetapan['kategori_kode'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['no_register'] != null &&
+                          penetapan['no_register'] != ''
+                      ? penetapan['no_register'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['uraian'] != null && penetapan['uraian'] != ''
+                      ? penetapan['uraian'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['tgl_perolehan'] != null &&
+                          penetapan['tgl_perolehan'] != ''
+                      ? penetapan['tgl_perolehan'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['th_beli'] != null && penetapan['th_beli'] != ''
+                          ? penetapan['th_beli'].toString()
+                          : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['c_bertingkat_tidak'] != null &&
+                          penetapan['c_bertingkat_tidak'] != ''
+                      ? penetapan['c_bertingkat_tidak'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['c_beton_tidak'] != null &&
+                          penetapan['c_beton_tidak'] != ''
+                      ? penetapan['c_beton_tidak'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['c_luas_lantai'] != null &&
+                          penetapan['c_luas_lantai'] != ''
+                      ? penetapan['c_luas_lantai'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['c_lokasi'] != null &&
+                          penetapan['c_lokasi'] != ''
+                      ? penetapan['c_lokasi'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['c_dokumen_tanggal'] != null &&
+                          penetapan['c_dokumen_tanggal'] != ''
+                      ? penetapan['c_dokumen_tanggal'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['c_dokumen_nomor'] != null &&
+                          penetapan['c_dokumen_nomor'] != ''
+                      ? penetapan['c_dokumen_nomor'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['c_luas_bangunan'] != null &&
+                          penetapan['c_luas_bangunan'] != ''
+                      ? penetapan['c_luas_bangunan'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['c_status_tanah'] != null &&
+                          penetapan['c_status_tanah'] != ''
+                      ? penetapan['c_status_tanah'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['c_kode_tanah'] != null &&
+                          penetapan['c_kode_tanah'] != ''
+                      ? penetapan['c_kode_tanah'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['harga'] != null && penetapan['harga'] != ''
+                      ? penetapan['harga'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['kondisi'] != null && penetapan['kondisi'] != ''
+                          ? penetapan['kondisi'].toString()
+                          : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['asal_usul'] != null &&
+                          penetapan['asal_usul'] != ''
+                      ? penetapan['asal_usul'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['keterangan'] != null &&
+                          penetapan['keterangan'] != ''
+                      ? penetapan['keterangan'].toString()
+                      : '-'),
+                ),
                 // DataCell(Text(penetapan[''].toString())),
                 // DataCell(Text(penetapan[''].toString())),
                 // DataCell(Text(penetapan[''].toString())),
@@ -237,13 +707,592 @@ class _InventoryScreenState extends State<InventoryScreen> {
             );
           },
         );
-      } else if (modifiedTitle == "bangunan") {
-      } else if (modifiedTitle == "insfrastruktur") {
+      } else if (modifiedTitle == "infrastruktur") {
+        return List<DataRow>.generate(
+          penetapanController.penetapanList.length,
+          (index) {
+            final penetapan = penetapanController.penetapanList[index];
+            return DataRow(
+              cells: [
+                DataCell(InkWell(
+                  child: Icon(Icons.edit_document),
+                  onTap: () {
+                    final id = penetapan['id'].toString();
+                    penetapanController.getPenetapanById(id, modifiedTitle);
+                  },
+                )),
+                DataCell(Text('${index + 1}')),
+                DataCell(
+                  Text(penetapan['kategori_kode'] != null &&
+                          penetapan['kategori_kode'] != ''
+                      ? penetapan['kategori_kode'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['no_register'] != null &&
+                          penetapan['no_register'] != ''
+                      ? penetapan['no_register'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['uraian'] != null && penetapan['uraian'] != ''
+                      ? penetapan['uraian'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['tgl_perolehan'] != null &&
+                          penetapan['tgl_perolehan'] != ''
+                      ? penetapan['tgl_perolehan'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['th_beli'] != null && penetapan['th_beli'] != ''
+                          ? penetapan['th_beli'].toString()
+                          : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['d_konstruksi'] != null &&
+                          penetapan['d_konstruksi'] != ''
+                      ? penetapan['d_konstruksi'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['d_panjang'] != null &&
+                          penetapan['d_panjang'] != ''
+                      ? penetapan['d_panjang'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['d_lebar'] != null && penetapan['d_lebar'] != ''
+                          ? penetapan['d_lebar'].toString()
+                          : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['d_luas'] != null && penetapan['d_luas'] != ''
+                      ? penetapan['d_luas'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['d_lokasi'] != null &&
+                          penetapan['d_lokasi'] != ''
+                      ? penetapan['d_lokasi'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['d_dokumen_tanggal'] != null &&
+                          penetapan['d_dokumen_tanggal'] != ''
+                      ? penetapan['d_dokumen_tanggal'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['d_dokumen_nomor'] != null &&
+                          penetapan['d_dokumen_nomor'] != ''
+                      ? penetapan['d_dokumen_nomor'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['d_kode_tanah'] != null &&
+                          penetapan['d_kode_tanah'] != ''
+                      ? penetapan['d_kode_tanah'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['harga'] != null && penetapan['harga'] != ''
+                      ? penetapan['harga'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['kondisi'] != null && penetapan['kondisi'] != ''
+                          ? penetapan['kondisi'].toString()
+                          : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['asal_usul'] != null &&
+                          penetapan['asal_usul'] != ''
+                      ? penetapan['asal_usul'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['keterangan'] != null &&
+                          penetapan['keterangan'] != ''
+                      ? penetapan['keterangan'].toString()
+                      : '-'),
+                ),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+              ],
+            );
+          },
+        );
       } else if (modifiedTitle == "asetTetap") {
+        return List<DataRow>.generate(
+          penetapanController.penetapanList.length,
+          (index) {
+            final penetapan = penetapanController.penetapanList[index];
+            return DataRow(
+              cells: [
+                DataCell(InkWell(
+                  child: Icon(Icons.edit_document),
+                  onTap: () {
+                    final id = penetapan['id'].toString();
+                    penetapanController.getPenetapanById(id, modifiedTitle);
+                  },
+                )),
+                DataCell(Text('${index + 1}')),
+                DataCell(
+                  Text(penetapan['kategori_kode'] != null &&
+                          penetapan['kategori_kode'] != ''
+                      ? penetapan['kategori_kode'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['no_register'] != null &&
+                          penetapan['no_register'] != ''
+                      ? penetapan['no_register'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['uraian'] != null && penetapan['uraian'] != ''
+                      ? penetapan['uraian'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['tgl_perolehan'] != null &&
+                          penetapan['tgl_perolehan'] != ''
+                      ? penetapan['tgl_perolehan'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['th_beli'] != null && penetapan['th_beli'] != ''
+                          ? penetapan['th_beli'].toString()
+                          : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['e_judul'] != null && penetapan['e_judul'] != ''
+                          ? penetapan['e_judul'].toString()
+                          : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['e_spek'] != null && penetapan['e_spek'] != ''
+                      ? penetapan['e_spek'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['e_asal'] != null && penetapan['e_asal'] != ''
+                      ? penetapan['e_asal'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['e_pencipta'] != null &&
+                          penetapan['e_pencipta'] != ''
+                      ? penetapan['e_pencipta'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['e_jenis'] != null && penetapan['e_jenis'] != ''
+                          ? penetapan['e_jenis'].toString()
+                          : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['e_ukuran'] != null &&
+                          penetapan['e_ukuran'] != ''
+                      ? penetapan['e_ukuran'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['harga'] != null && penetapan['harga'] != ''
+                      ? penetapan['harga'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['kondisi'] != null && penetapan['kondisi'] != ''
+                          ? penetapan['kondisi'].toString()
+                          : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['asal_usul'] != null &&
+                          penetapan['asal_usul'] != ''
+                      ? penetapan['asal_usul'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['keterangan'] != null &&
+                          penetapan['keterangan'] != ''
+                      ? penetapan['keterangan'].toString()
+                      : '-'),
+                ),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+              ],
+            );
+          },
+        );
       } else if (modifiedTitle == "kdp") {
+        return List<DataRow>.generate(
+          penetapanController.penetapanList.length,
+          (index) {
+            final penetapan = penetapanController.penetapanList[index];
+            return DataRow(
+              cells: [
+                DataCell(InkWell(
+                  child: Icon(Icons.edit_document),
+                  onTap: () {
+                    final id = penetapan['id'].toString();
+                    penetapanController.getPenetapanById(id, modifiedTitle);
+                  },
+                )),
+                DataCell(Text('${index + 1}')),
+                DataCell(
+                  Text(penetapan['kategori_kode'] != null &&
+                          penetapan['kategori_kode'] != ''
+                      ? penetapan['kategori_kode'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['no_register'] != null &&
+                          penetapan['no_register'] != ''
+                      ? penetapan['no_register'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['uraian'] != null && penetapan['uraian'] != ''
+                      ? penetapan['uraian'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['tgl_perolehan'] != null &&
+                          penetapan['tgl_perolehan'] != ''
+                      ? penetapan['tgl_perolehan'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['th_beli'] != null && penetapan['th_beli'] != ''
+                          ? penetapan['th_beli'].toString()
+                          : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['f_bertingkat_tidak'] != null &&
+                          penetapan['f_bertingkat_tidak'] != ''
+                      ? penetapan['f_bertingkat_tidak'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['f_beton_tidak'] != null &&
+                          penetapan['f_beton_tidak'] != ''
+                      ? penetapan['f_beton_tidak'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['f_luas_bangunan'] != null &&
+                          penetapan['f_luas_bangunan'] != ''
+                      ? penetapan['f_luas_bangunan'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['f_lokasi'] != null &&
+                          penetapan['f_lokasi'] != ''
+                      ? penetapan['f_lokasi'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['f_dokumen_tanggal'] != null &&
+                          penetapan['f_dokumen_tanggal'] != ''
+                      ? penetapan['f_dokumen_tanggal'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['f_dokumen_nomor'] != null &&
+                          penetapan['f_dokumen_nomor'] != ''
+                      ? penetapan['f_dokumen_nomor'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['f_lokasi'] != null &&
+                          penetapan['f_lokasi'] != ''
+                      ? penetapan['f_lokasi'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['f_status_tanah'] != null &&
+                          penetapan['f_status_tanah'] != ''
+                      ? penetapan['f_status_tanah'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['harga'] != null && penetapan['harga'] != ''
+                      ? penetapan['harga'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['kondisi'] != null && penetapan['kondisi'] != ''
+                          ? penetapan['kondisi'].toString()
+                          : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['asal_usul'] != null &&
+                          penetapan['asal_usul'] != ''
+                      ? penetapan['asal_usul'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['keterangan'] != null &&
+                          penetapan['keterangan'] != ''
+                      ? penetapan['keterangan'].toString()
+                      : '-'),
+                ),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+              ],
+            );
+          },
+        );
       } else if (modifiedTitle == "tgr") {
+        return List<DataRow>.generate(
+          penetapanController.penetapanList.length,
+          (index) {
+            final penetapan = penetapanController.penetapanList[index];
+            return DataRow(
+              cells: [
+                DataCell(InkWell(
+                  child: Icon(Icons.edit_document),
+                  onTap: () {
+                    final id = penetapan['id'].toString();
+                    penetapanController.getPenetapanById(id, modifiedTitle);
+                  },
+                )),
+                DataCell(Text('${index + 1}')),
+                DataCell(
+                  Text(penetapan['kategori_kode'] != null &&
+                          penetapan['kategori_kode'] != ''
+                      ? penetapan['kategori_kode'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['no_register'] != null &&
+                          penetapan['no_register'] != ''
+                      ? penetapan['no_register'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['uraian'] != null && penetapan['uraian'] != ''
+                      ? penetapan['uraian'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['tgl_perolehan'] != null &&
+                          penetapan['tgl_perolehan'] != ''
+                      ? penetapan['tgl_perolehan'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['th_beli'] != null && penetapan['th_beli'] != ''
+                          ? penetapan['th_beli'].toString()
+                          : '-'),
+                ),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(
+                  Text(penetapan['harga'] != null && penetapan['harga'] != ''
+                      ? penetapan['harga'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['kondisi'] != null && penetapan['kondisi'] != ''
+                          ? penetapan['kondisi'].toString()
+                          : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['asal_usul'] != null &&
+                          penetapan['asal_usul'] != ''
+                      ? penetapan['asal_usul'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['keterangan'] != null &&
+                          penetapan['keterangan'] != ''
+                      ? penetapan['keterangan'].toString()
+                      : '-'),
+                ),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+              ],
+            );
+          },
+        );
       } else if (modifiedTitle == "atb") {
-      } else if (modifiedTitle == "lainnya") {}
+        return List<DataRow>.generate(
+          penetapanController.penetapanList.length,
+          (index) {
+            final penetapan = penetapanController.penetapanList[index];
+            return DataRow(
+              cells: [
+                DataCell(InkWell(
+                  child: Icon(Icons.edit_document),
+                  onTap: () {
+                    final id = penetapan['id'].toString();
+                    penetapanController.getPenetapanById(id, modifiedTitle);
+                  },
+                )),
+                DataCell(Text('${index + 1}')),
+                DataCell(
+                  Text(penetapan['kategori_kode'] != null &&
+                          penetapan['kategori_kode'] != ''
+                      ? penetapan['kategori_kode'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['no_register'] != null &&
+                          penetapan['no_register'] != ''
+                      ? penetapan['no_register'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['uraian'] != null && penetapan['uraian'] != ''
+                      ? penetapan['uraian'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['tgl_perolehan'] != null &&
+                          penetapan['tgl_perolehan'] != ''
+                      ? penetapan['tgl_perolehan'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['th_beli'] != null && penetapan['th_beli'] != ''
+                          ? penetapan['th_beli'].toString()
+                          : '-'),
+                ),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(
+                  Text(penetapan['harga'] != null && penetapan['harga'] != ''
+                      ? penetapan['harga'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['kondisi'] != null && penetapan['kondisi'] != ''
+                          ? penetapan['kondisi'].toString()
+                          : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['asal_usul'] != null &&
+                          penetapan['asal_usul'] != ''
+                      ? penetapan['asal_usul'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['keterangan'] != null &&
+                          penetapan['keterangan'] != ''
+                      ? penetapan['keterangan'].toString()
+                      : '-'),
+                ),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+                // DataCell(Text(penetapan[''].toString())),
+              ],
+            );
+          },
+        );
+      } else if (modifiedTitle == "belumTerdaftar") {
+        return List<DataRow>.generate(
+          penetapanController.penetapanList.length,
+          (index) {
+            final penetapan = penetapanController.penetapanList[index];
+            return DataRow(
+              cells: [
+                DataCell(InkWell(
+                  child: Icon(Icons.edit_document),
+                  onTap: () {
+                    final id = penetapan['id'].toString();
+                    penetapanController.getPenetapanById(id, modifiedTitle);
+                  },
+                )),
+                DataCell(Text('${index + 1}')),
+                DataCell(Text(penetapan['kategori_kode'] != null &&
+                        penetapan['kategori_kode'] != ''
+                    ? penetapan['kategori_kode'].toString()
+                    : '-')),
+                DataCell(
+                  Text(penetapan['no_register'] != null &&
+                          penetapan['no_register'] != ''
+                      ? penetapan['no_register'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['tgl_perolehan'] != null &&
+                          penetapan['tgl_perolehan'] != ''
+                      ? penetapan['tgl_perolehan'].toString()
+                      : '-'),
+                ),
+                DataCell(Text('')),
+                DataCell(
+                  Text(penetapan['cara_perolehan'] != null &&
+                          penetapan['cara_perolehan'] != ''
+                      ? penetapan['cara_perolehan'].toString()
+                      : '-'),
+                ),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+              ],
+            );
+          },
+        );
+      }
       return [];
     }
 
@@ -267,59 +1316,60 @@ class _InventoryScreenState extends State<InventoryScreen> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 28),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 30),
-            CustomDropdown.searchRequest(
-              controller: searchDepartement,
-              futureRequest: getDepartementData,
-              futureRequestDelay: const Duration(seconds: 3),
-              hintText: 'Pilih Departemen',
-              onChanged: selectDepartemen,
-            ),
-            SizedBox(height: 10),
-            RichText(
-              text: TextSpan(
-                text: 'SKPD: ',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                ),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: selectedSKPD,
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 28),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 30),
+              CustomDropdown.searchRequest(
+                controller: searchDepartement,
+                futureRequest: getDepartementData,
+                futureRequestDelay: const Duration(seconds: 3),
+                hintText: 'Pilih Departemen',
+                onChanged: selectDepartemen,
               ),
-            ),
-            SizedBox(height: 30),
-            Obx(
-              () => SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  headingRowColor: MaterialStateProperty.all(
-                      Color.fromARGB(255, 202, 202, 202)),
-                  columnSpacing: 40,
-                  decoration: BoxDecoration(
-                    border: Border(
-                      right: BorderSide(
-                        color: Colors.grey,
-                        width: 0.5,
+              SizedBox(height: 10),
+              RichText(
+                text: TextSpan(
+                  text: 'SKPD: ',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 12,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: selectedSKPD,
+                      style: TextStyle(
+                        color: Colors.black,
                       ),
                     ),
-                  ),
-                  columns: columns,
-                  rows: generateDataRows(),
+                  ],
                 ),
               ),
-            ),
-          ],
+              SizedBox(height: 30),
+              Container(
+                height: 400,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey.shade200),
+                  color: Colors.white,
+                ),
+                child: Obx(
+                  () => SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      headingRowColor: MaterialStateProperty.all(
+                          Color.fromARGB(255, 202, 202, 202)),
+                      columnSpacing: 40,
+                      columns: columns,
+                      rows: generateDataRows(),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

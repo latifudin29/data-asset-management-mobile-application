@@ -26,36 +26,32 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
     String dateNow = DateFormat('dd/MM/yyyy').format(now);
     String yearNow = DateFormat.y().format(now);
     final data = penetapanController.penetapanListById[0];
-    // editController.tahun.text = yearNow;
-    // editController.tglInventaris.text = dateNow;
-    // editController.skpd.text = data['kode'].toString();
-    // editController.skpdUraian.text = data['nama'].toString();
-    // editController.noRegister.text = data['no_register'].toString();
-    // editController.barang.text = data[''].toString();
-    // editController.namaBarang.text = data[''].toString();
-    // editController.jumlah.text = data['jumlah'].toString();
-    // editController.satuan.text = data['satuan'].toString();
-    // editController.perolehan.text = data['cara_perolehan'].toString();
-    // editController.tglPerolehan.text = data['tgl_perolehan'].toString();
-    // editController.thPerolehan.text = data['tahun'].toString();
-    // editController.nilaiPerolehan.text = data['perolehan'].toString();
-    // editController.alamat.text = data['a_alamat'].toString();
-    // editController.kota.text = data[''].toString();
-    // editController.kecamatan.text = data[''].toString();
-    // editController.kelurahan.text = data[''].toString();
-    // editController.jalan.text = data[''].toString();
-    // editController.no.text = data[''].toString();
-    // editController.rt.text = data[''].toString();
-    // editController.rw.text = data[''].toString();
-    // editController.kodePos.text = data[''].toString();
-    // editController.hakTanah.text = data['a_hak_tanah'].toString();
-    // editController.noSertifikat.text = data['a_sertifikat_nomor'].toString();
-    // editController.tglSertifikat.text = data['a_sertifikat_tanggal'].toString();
-    // editController.kondisi.text = data['kondisi'].toString();
-    // editController.asalUsul.text = data['asal_usul'].toString();
-    // editController.penggunaan.text = data['a_penggunaan'].toString();
-    // editController.latitude.text = data['lat'].toString();
-    // editController.longitude.text = data['long'].toString();
+
+    editController.tahunSekarang.text = yearNow;
+    editController.tglInventaris.text = dateNow;
+    editController.skpd.text = data['kode'].toString();
+    editController.skpdUraian.text = data['nama'].toString();
+    editController.noRegister.text = data['no_register'].toString();
+    editController.barang.text =
+        data['barang'].toString() + (' - ') + data['nama_barang'].toString();
+    editController.namaBarang.text = '';
+    editController.jumlah.text = data['jumlah'].toString();
+    editController.aLuasM2.text = data['a_luas_m2'].toString();
+    editController.satuan.text = data['satuan'].toString();
+    editController.caraPerolehan.text = data['cara_perolehan'].toString();
+    editController.tglPerolehan.text = data['tgl_perolehan'].toString();
+    editController.thBeli.text = data['th_beli'].toString();
+    editController.perolehan.text = data['perolehan'].toString();
+    editController.aAlamat.text = data['a_alamat'].toString();
+    editController.aHakTanah.text = data['a_hak_tanah'].toString();
+    editController.aSertifikatNo.text = data['a_sertifikat_nomor'].toString();
+    editController.aSertifikatTgl.text =
+        data['a_sertifikat_tanggal'].toString();
+    editController.kondisi.text = data['kondisi'].toString();
+    editController.asalUsul.text = data['asal_usul'].toString();
+    editController.aPenggunaan.text = data['a_penggunaan'].toString();
+    editController.lat.text = data['lat'].toString();
+    editController.long.text = data['long'].toString();
   }
 
   List<String> dropdownNoRegister = ["Sesuai", "Tidak Sesuai"];
@@ -66,6 +62,15 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
 
   List<String> dropdownNamaBarang = ["Sesuai", "Tidak Sesuai"];
   String selectedNamaBarang = "Sesuai";
+
+  List<String> dropdownJumlah = ["Sesuai", "Tidak Sesuai"];
+  String selectedJumlah = "Sesuai";
+
+  List<String> dropdownLuas = ["Sesuai", "Tidak Sesuai"];
+  String selectedLuas = "Sesuai";
+
+  List<String> dropdownPerolehanChoose = ["Sesuai", "Tidak Sesuai"];
+  String selectedPerolehanChoose = "Sesuai";
 
   List<String> dropdownHakTanah = ["Sesuai", "Tidak Sesuai"];
   String selectedHakTanah = "Sesuai";
@@ -123,7 +128,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
   String selectedAtasNama = "Pemerintah Daerah";
 
   String choose = "tidak";
-  String choose_pemerintah = "";
+  String choose_pemerintah = "daerah";
 
   final ImagePicker _picker = ImagePicker();
   File? image;
@@ -208,11 +213,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey.shade400,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 15),
                   child: TextFormField(
-                    controller: editController.tahun,
+                    controller: editController.tahunSekarang,
+                    readOnly: true,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                     ),
@@ -234,6 +241,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 15),
                   child: TextFormField(
+                    controller: editController.tglInventaris,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                     ),
@@ -251,10 +259,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey.shade400,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 15),
                   child: TextFormField(
+                    controller: editController.skpd,
+                    readOnly: true,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                     ),
@@ -272,10 +283,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey.shade400,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 15),
                   child: TextFormField(
+                    controller: editController.skpdUraian,
+                    readOnly: true,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                     ),
@@ -296,11 +310,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
                         borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey.shade400,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 15),
                         child: TextFormField(
                           controller: editController.noRegister,
+                          readOnly: true,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                           ),
@@ -375,10 +391,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
                         borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey.shade400,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 15),
                         child: TextFormField(
+                          controller: editController.barang,
+                          readOnly: true,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                           ),
@@ -453,10 +472,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
                         borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey.shade400,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 15),
                         child: TextFormField(
+                          controller: editController.namaBarang,
+                          readOnly: true,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                           ),
@@ -524,21 +546,162 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                 textAlign: TextAlign.left,
               ),
               SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    controller: editController.jumlah,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey.shade400,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15),
+                        child: TextFormField(
+                          controller: editController.jumlah,
+                          readOnly: true,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  SizedBox(width: 10),
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton2(
+                      buttonStyleData: ButtonStyleData(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                      iconStyleData: const IconStyleData(
+                        icon: Icon(
+                          Icons.arrow_drop_down_outlined,
+                          color: Colors.grey,
+                          size: 25,
+                        ),
+                        iconEnabledColor: primaryTextColor,
+                      ),
+                      value: selectedJumlah,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedJumlah = newValue ?? "Sesuai";
+                        });
+                      },
+                      items: dropdownJumlah.map((String item) {
+                        return DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(item),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
               ),
+              SizedBox(height: 10),
+              selectedJumlah == "Tidak Sesuai"
+                  ? Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15),
+                        child: TextFormField(
+                          controller: editController.jumlah,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    )
+                  : SizedBox(),
+              SizedBox(height: 15),
+              Text(
+                'Luas',
+                style: TextStyle(fontSize: 16),
+                textAlign: TextAlign.left,
+              ),
+              SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey.shade400,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15),
+                        child: TextFormField(
+                          controller: editController.aLuasM2,
+                          readOnly: true,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton2(
+                      buttonStyleData: ButtonStyleData(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                      iconStyleData: const IconStyleData(
+                        icon: Icon(
+                          Icons.arrow_drop_down_outlined,
+                          color: Colors.grey,
+                          size: 25,
+                        ),
+                        iconEnabledColor: primaryTextColor,
+                      ),
+                      value: selectedLuas,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedLuas = newValue ?? "Sesuai";
+                        });
+                      },
+                      items: dropdownLuas.map((String item) {
+                        return DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(item),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              selectedLuas == "Tidak Sesuai"
+                  ? Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15),
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    )
+                  : SizedBox(),
               SizedBox(height: 15),
               Text(
                 'Satuan',
@@ -568,40 +731,100 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                 textAlign: TextAlign.left,
               ),
               SizedBox(height: 10),
-              DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  buttonStyleData: ButtonStyleData(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.grey,
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey.shade400,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15),
+                        child: TextFormField(
+                          controller: editController.caraPerolehan,
+                          readOnly: true,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                  isExpanded: true,
-                  iconStyleData: const IconStyleData(
-                    icon: Icon(
-                      Icons.arrow_drop_down_outlined,
-                      color: Colors.grey,
-                      size: 25,
+                  SizedBox(width: 10),
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton2(
+                      buttonStyleData: ButtonStyleData(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                      iconStyleData: const IconStyleData(
+                        icon: Icon(
+                          Icons.arrow_drop_down_outlined,
+                          color: Colors.grey,
+                          size: 25,
+                        ),
+                        iconEnabledColor: primaryTextColor,
+                      ),
+                      value: selectedPerolehanChoose,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedPerolehanChoose = newValue ?? "Sesuai";
+                        });
+                      },
+                      items: dropdownPerolehanChoose.map((String item) {
+                        return DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(item),
+                        );
+                      }).toList(),
                     ),
-                    iconEnabledColor: primaryTextColor,
                   ),
-                  value: selectedPerolehan,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedPerolehan = newValue ?? "Pembelian";
-                    });
-                  },
-                  items: dropdownPerolehan.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(item),
-                    );
-                  }).toList(),
-                ),
+                ],
               ),
+              SizedBox(height: 10),
+              selectedPerolehanChoose == "Tidak Sesuai"
+                  ? DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        buttonStyleData: ButtonStyleData(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                        isExpanded: true,
+                        iconStyleData: const IconStyleData(
+                          icon: Icon(
+                            Icons.arrow_drop_down_outlined,
+                            color: Colors.grey,
+                            size: 25,
+                          ),
+                          iconEnabledColor: primaryTextColor,
+                        ),
+                        value: selectedPerolehan,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedPerolehan = newValue ?? "Pembelian";
+                          });
+                        },
+                        items: dropdownPerolehan.map((String item) {
+                          return DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(item),
+                          );
+                        }).toList(),
+                      ),
+                    )
+                  : SizedBox(),
               SizedBox(height: 15),
               Text(
                 'Tanggal Perolehan',
@@ -613,11 +836,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey.shade400,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 15),
                   child: TextFormField(
                     controller: editController.tglPerolehan,
+                    readOnly: true,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                     ),
@@ -635,10 +860,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey.shade400,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 15),
                   child: TextFormField(
+                    controller: editController.thBeli,
+                    readOnly: true,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                     ),
@@ -659,10 +887,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
                         borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey.shade400,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 15),
                         child: TextFormField(
+                          controller: editController.perolehan,
+                          readOnly: true,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                           ),
@@ -802,184 +1033,187 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey.shade400,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 15),
                   child: TextFormField(
+                    controller: editController.aAlamat,
+                    readOnly: true,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 15),
-              Text(
-                'Kabupaten/Kota',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                'Kecamatan',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                'Kelurahan',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                'Jalan',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                'No.',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                'RT',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                'RW',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                'Kode Pos',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
+              // SizedBox(height: 15),
+              // Text(
+              //   'Kabupaten/Kota',
+              //   style: TextStyle(fontSize: 16),
+              //   textAlign: TextAlign.left,
+              // ),
+              // SizedBox(height: 10),
+              // Container(
+              //   decoration: BoxDecoration(
+              //     border: Border.all(color: Colors.grey),
+              //     borderRadius: BorderRadius.circular(12),
+              //   ),
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(left: 15),
+              //     child: TextFormField(
+              //       decoration: const InputDecoration(
+              //         border: InputBorder.none,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(height: 15),
+              // Text(
+              //   'Kecamatan',
+              //   style: TextStyle(fontSize: 16),
+              //   textAlign: TextAlign.left,
+              // ),
+              // SizedBox(height: 10),
+              // Container(
+              //   decoration: BoxDecoration(
+              //     border: Border.all(color: Colors.grey),
+              //     borderRadius: BorderRadius.circular(12),
+              //   ),
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(left: 15),
+              //     child: TextFormField(
+              //       decoration: const InputDecoration(
+              //         border: InputBorder.none,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(height: 15),
+              // Text(
+              //   'Kelurahan',
+              //   style: TextStyle(fontSize: 16),
+              //   textAlign: TextAlign.left,
+              // ),
+              // SizedBox(height: 10),
+              // Container(
+              //   decoration: BoxDecoration(
+              //     border: Border.all(color: Colors.grey),
+              //     borderRadius: BorderRadius.circular(12),
+              //   ),
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(left: 15),
+              //     child: TextFormField(
+              //       decoration: const InputDecoration(
+              //         border: InputBorder.none,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(height: 15),
+              // Text(
+              //   'Jalan',
+              //   style: TextStyle(fontSize: 16),
+              //   textAlign: TextAlign.left,
+              // ),
+              // SizedBox(height: 10),
+              // Container(
+              //   decoration: BoxDecoration(
+              //     border: Border.all(color: Colors.grey),
+              //     borderRadius: BorderRadius.circular(12),
+              //   ),
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(left: 15),
+              //     child: TextFormField(
+              //       decoration: const InputDecoration(
+              //         border: InputBorder.none,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(height: 15),
+              // Text(
+              //   'No.',
+              //   style: TextStyle(fontSize: 16),
+              //   textAlign: TextAlign.left,
+              // ),
+              // SizedBox(height: 10),
+              // Container(
+              //   decoration: BoxDecoration(
+              //     border: Border.all(color: Colors.grey),
+              //     borderRadius: BorderRadius.circular(12),
+              //   ),
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(left: 15),
+              //     child: TextFormField(
+              //       decoration: const InputDecoration(
+              //         border: InputBorder.none,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(height: 15),
+              // Text(
+              //   'RT',
+              //   style: TextStyle(fontSize: 16),
+              //   textAlign: TextAlign.left,
+              // ),
+              // SizedBox(height: 10),
+              // Container(
+              //   decoration: BoxDecoration(
+              //     border: Border.all(color: Colors.grey),
+              //     borderRadius: BorderRadius.circular(12),
+              //   ),
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(left: 15),
+              //     child: TextFormField(
+              //       decoration: const InputDecoration(
+              //         border: InputBorder.none,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(height: 15),
+              // Text(
+              //   'RW',
+              //   style: TextStyle(fontSize: 16),
+              //   textAlign: TextAlign.left,
+              // ),
+              // SizedBox(height: 10),
+              // Container(
+              //   decoration: BoxDecoration(
+              //     border: Border.all(color: Colors.grey),
+              //     borderRadius: BorderRadius.circular(12),
+              //   ),
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(left: 15),
+              //     child: TextFormField(
+              //       decoration: const InputDecoration(
+              //         border: InputBorder.none,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(height: 15),
+              // Text(
+              //   'Kode Pos',
+              //   style: TextStyle(fontSize: 16),
+              //   textAlign: TextAlign.left,
+              // ),
+              // SizedBox(height: 10),
+              // Container(
+              //   decoration: BoxDecoration(
+              //     border: Border.all(color: Colors.grey),
+              //     borderRadius: BorderRadius.circular(12),
+              //   ),
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(left: 15),
+              //     child: TextFormField(
+              //       decoration: const InputDecoration(
+              //         border: InputBorder.none,
+              //       ),
+              //     ),
+              //   ),
+              // ),
               SizedBox(height: 15),
               Text(
                 'Hak Tanah',
@@ -994,10 +1228,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
                         borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey.shade400,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 15),
                         child: TextFormField(
+                          controller: editController.aHakTanah,
+                          readOnly: true,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                           ),
@@ -1072,10 +1309,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
                         borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey.shade400,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 15),
                         child: TextFormField(
+                          controller: editController.aSertifikatNo,
+                          readOnly: true,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                           ),
@@ -1150,10 +1390,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
                         borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey.shade400,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 15),
                         child: TextFormField(
+                          controller: editController.aSertifikatTgl,
+                          readOnly: true,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                           ),
@@ -1269,11 +1512,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
                         borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey.shade400,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 15),
                         child: TextFormField(
                           controller: editController.kondisi,
+                          readOnly: true,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                           ),
@@ -1348,11 +1593,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
                         borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey.shade400,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 15),
                         child: TextFormField(
                           controller: editController.asalUsul,
+                          readOnly: true,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                           ),
@@ -1463,12 +1710,14 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
               SizedBox(height: 10),
               Container(
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                ),
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.grey.shade400),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 15),
                   child: TextFormField(
+                    controller: editController.aPenggunaan,
+                    readOnly: true,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                     ),
@@ -1954,6 +2203,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                 children: [
                   Expanded(
                     child: TextField(
+                      controller: editController.lat,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -1967,6 +2217,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                   SizedBox(width: 10),
                   Expanded(
                     child: TextField(
+                      controller: editController.long,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(12)),

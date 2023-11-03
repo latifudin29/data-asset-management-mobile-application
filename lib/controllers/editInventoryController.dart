@@ -144,8 +144,10 @@ class EditInventoryController extends GetxController {
       manfaatStatusId;
 
   // FIELDS RESULT JOIN WITH TABLE DEPARTEMEN, KATEGORIS, AND KIB_INVENTARIS
+  late TextEditingController skpd, skpdUraian, barang, namaBarang;
 
   // FIELDS CUSTOM
+  late TextEditingController tahunSekarang, tglInventaris;
 
   @override
   void onInit() {
@@ -289,6 +291,13 @@ class EditInventoryController extends GetxController {
     manfaatFileNm = TextEditingController();
     manfaatKategoriId = TextEditingController();
     manfaatStatusId = TextEditingController();
+    //
+    tahunSekarang = TextEditingController();
+    tglInventaris = TextEditingController();
+    skpd = TextEditingController();
+    skpdUraian = TextEditingController();
+    barang = TextEditingController();
+    namaBarang = TextEditingController();
   }
 }
 

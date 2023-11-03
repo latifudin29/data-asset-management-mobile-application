@@ -46,9 +46,9 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     List<String> titleScreen = [
       "Tanah (A)",
-      "Peralatan dan Mesin (B)",
-      "Gedung dan Bangunan (C)",
-      "Jalan, Jaringan, dan Irigasi (D)",
+      "Peralatan/Mesin (B)",
+      "Gedung/Bangunan (C)",
+      "Jalan/Jaringan/Irigasi (D)",
       "Aset Tetap Lainnya (E)",
       "KDP (F)",
       "Aset Lain-lain (TGR/RB/AK)",
