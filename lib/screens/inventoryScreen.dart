@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:kib_application/constans/colors.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:kib_application/controllers/appointmentController.dart';
@@ -20,26 +21,31 @@ class _InventoryScreenState extends State<InventoryScreen> {
   final searchDepartement = TextEditingController();
   final departemenSelected = TextEditingController();
 
+  DateTime now = DateTime.now();
+
   String selectedSKPD = '0.00.000';
   String selectedId = '';
   String modifiedTitle = "";
+
+  int page = 1;
+  int totalPages = 10;
 
   List<DataColumn> columns = [];
   List<DataColumn> rows = [];
 
   void modifyTitle(String originalTitle) {
     if (originalTitle == "Tanah (A)") {
-      modifiedTitle = "tanah";
+      modifiedTitle = "A";
     } else if (originalTitle == "Peralatan/Mesin (B)") {
-      modifiedTitle = "perkakas";
+      modifiedTitle = "B";
     } else if (originalTitle == "Gedung/Bangunan (C)") {
-      modifiedTitle = "bangunan";
+      modifiedTitle = "C";
     } else if (originalTitle == "Jalan/Jaringan/Irigasi (D)") {
-      modifiedTitle = "infrastruktur";
+      modifiedTitle = "D";
     } else if (originalTitle == "Aset Tetap Lainnya (E)") {
-      modifiedTitle = "asetTetap";
+      modifiedTitle = "E";
     } else if (originalTitle == "KDP (F)") {
-      modifiedTitle = "kdp";
+      modifiedTitle = "F";
     } else if (originalTitle == "Aset Lain-lain (TGR/RB/AK)") {
       modifiedTitle = "tgr";
     } else if (originalTitle == "Aset Lain-lain (ATB)") {
@@ -54,6 +60,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
     super.initState();
     departemenController.getDepartemen();
     modifyTitle(widget.title);
+    String yearNow = DateFormat.y().format(now);
+    penetapanController.tahun.text = yearNow;
   }
 
   Future<List<String>> getDepartementData(String query) async {
@@ -73,7 +81,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
   }
 
   Future<void> loadPenetapanData() async {
-    await penetapanController.getPenetapan(selectedId, modifiedTitle);
+    page = page;
+    await penetapanController.getPenetapan(selectedId, modifiedTitle, page);
   }
 
   void selectDepartemen(String selectedItem) {
@@ -87,15 +96,14 @@ class _InventoryScreenState extends State<InventoryScreen> {
       selectedSKPD = department['kode'].toString();
       selectedId = department['id'].toString();
     });
-    loadPenetapanData();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (modifiedTitle == "tanah") {
+    if (modifiedTitle == "A") {
       columns = [
-        DataColumn(label: Text('Edit')),
         DataColumn(label: Text('No.')),
+        DataColumn(label: Text('Aksi')),
         DataColumn(label: Text('Kategori Kode')),
         DataColumn(label: Text('Reg.')),
         DataColumn(label: Text('Uraian')),
@@ -111,17 +119,16 @@ class _InventoryScreenState extends State<InventoryScreen> {
         DataColumn(label: Text('Kondisi')),
         DataColumn(label: Text('Asal Usul')),
         DataColumn(label: Text('Keterangan')),
-        // DataColumn(label: Text('Tgl Inventaris')),
-        // DataColumn(label: Text('Keberadaan Fisik')),
-        // DataColumn(label: Text('Kondisi Fisik')),
-        // DataColumn(label: Text('Penguasaan')),
-        // DataColumn(label: Text('Doc')),
+        DataColumn(label: Text('Tgl Inventaris')),
+        DataColumn(label: Text('Keberadaan Fisik')),
+        DataColumn(label: Text('Kondisi Fisik')),
+        DataColumn(label: Text('Penguasaan')),
+        DataColumn(label: Text('Doc')),
       ];
-    } else if (modifiedTitle == "perkakas") {
+    } else if (modifiedTitle == "B") {
       columns = [
-        // Column Statis
-        DataColumn(label: Text('Edit')),
         DataColumn(label: Text('No.')),
+        DataColumn(label: Text('Aksi')),
         DataColumn(label: Text('Kategori Kode')),
         DataColumn(label: Text('Reg.')),
         DataColumn(label: Text('Uraian')),
@@ -146,11 +153,10 @@ class _InventoryScreenState extends State<InventoryScreen> {
         DataColumn(label: Text('Penguasaan')),
         DataColumn(label: Text('Doc')),
       ];
-    } else if (modifiedTitle == "bangunan") {
+    } else if (modifiedTitle == "C") {
       columns = [
-        // Column Statis
-        DataColumn(label: Text('Edit')),
         DataColumn(label: Text('No.')),
+        DataColumn(label: Text('Aksi')),
         DataColumn(label: Text('Kategori Kode')),
         DataColumn(label: Text('Reg.')),
         DataColumn(label: Text('Uraian')),
@@ -175,10 +181,10 @@ class _InventoryScreenState extends State<InventoryScreen> {
         // DataColumn(label: Text('Penguasaan')),
         // DataColumn(label: Text('Doc')),
       ];
-    } else if (modifiedTitle == "infrastruktur") {
+    } else if (modifiedTitle == "D") {
       columns = [
-        DataColumn(label: Text('Edit')),
         DataColumn(label: Text('No.')),
+        DataColumn(label: Text('Aksi')),
         DataColumn(label: Text('Kategori Kode')),
         DataColumn(label: Text('Reg.')),
         DataColumn(label: Text('Uraian')),
@@ -202,10 +208,10 @@ class _InventoryScreenState extends State<InventoryScreen> {
         // DataColumn(label: Text('Penguasaan')),
         // DataColumn(label: Text('Doc')),
       ];
-    } else if (modifiedTitle == "asetTetap") {
+    } else if (modifiedTitle == "E") {
       columns = [
-        DataColumn(label: Text('Edit')),
         DataColumn(label: Text('No.')),
+        DataColumn(label: Text('Aksi')),
         DataColumn(label: Text('Kategori Kode')),
         DataColumn(label: Text('Reg.')),
         DataColumn(label: Text('Uraian')),
@@ -227,10 +233,10 @@ class _InventoryScreenState extends State<InventoryScreen> {
         // DataColumn(label: Text('Penguasaan')),
         // DataColumn(label: Text('Doc')),
       ];
-    } else if (modifiedTitle == "kdp") {
+    } else if (modifiedTitle == "F") {
       columns = [
-        DataColumn(label: Text('Edit')),
         DataColumn(label: Text('No.')),
+        DataColumn(label: Text('Aksi')),
         DataColumn(label: Text('Kategori Kode')),
         DataColumn(label: Text('Reg.')),
         DataColumn(label: Text('Uraian')),
@@ -255,8 +261,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
       ];
     } else if (modifiedTitle == "tgr") {
       columns = [
-        DataColumn(label: Text('Edit')),
         DataColumn(label: Text('No.')),
+        DataColumn(label: Text('Aksi')),
         DataColumn(label: Text('Kategori Kode')),
         DataColumn(label: Text('Reg.')),
         DataColumn(label: Text('Uraian')),
@@ -282,8 +288,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
       ];
     } else if (modifiedTitle == "atb") {
       columns = [
-        DataColumn(label: Text('Edit')),
         DataColumn(label: Text('No.')),
+        DataColumn(label: Text('Aksi')),
         DataColumn(label: Text('Kategori Kode')),
         DataColumn(label: Text('Reg.')),
         DataColumn(label: Text('Uraian')),
@@ -308,8 +314,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
       ];
     } else if (modifiedTitle == "belumTerdaftar") {
       columns = [
-        DataColumn(label: Text('Edit')),
         DataColumn(label: Text('No.')),
+        DataColumn(label: Text('Aksi')),
         DataColumn(label: Text('Kategori Kode')),
         DataColumn(label: Text('Reg.')),
         DataColumn(label: Text('Tgl. Perolehan')),
@@ -338,25 +344,36 @@ class _InventoryScreenState extends State<InventoryScreen> {
     }
 
     List<DataRow> generateDataRows() {
-      if (modifiedTitle == "tanah") {
+      if (modifiedTitle == "A") {
         return List<DataRow>.generate(
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
             return DataRow(
               cells: [
-                DataCell(InkWell(
-                  child: Icon(Icons.edit_document),
-                  onTap: () {
-                    final id = penetapan['id'].toString();
-                    penetapanController.getPenetapanById(id, modifiedTitle);
-                  },
+                DataCell(Text(penetapan['nomor'].toString())),
+                DataCell(Row(
+                  children: [
+                    InkWell(
+                      child: Icon(Icons.edit_document, color: Colors.orange),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.file_open, color: Colors.red),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                  ],
                 )),
-                DataCell(Text('${index + 1}')),
                 DataCell(
-                  Text(penetapan['kategori_kode'] != null &&
-                          penetapan['kategori_kode'] != ''
-                      ? penetapan['kategori_kode'].toString()
+                  Text(penetapan['kode'] != null && penetapan['kode'] != ''
+                      ? penetapan['kode'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -366,14 +383,14 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['uraian'] != null && penetapan['uraian'] != ''
-                      ? penetapan['uraian'].toString()
+                  Text(penetapan['nama'] != null && penetapan['nama'] != ''
+                      ? penetapan['nama'].toString()
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_perolehan'] != null &&
-                          penetapan['tgl_perolehan'] != ''
-                      ? penetapan['tgl_perolehan'].toString()
+                  Text(penetapan['tgl_perolehan_formated'] != null &&
+                          penetapan['tgl_perolehan_formated'] != ''
+                      ? penetapan['tgl_perolehan_formated'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -407,9 +424,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['a_sertifikat_tanggal'] != null &&
-                          penetapan['a_sertifikat_tanggal'] != ''
-                      ? penetapan['a_sertifikat_tanggal'].toString()
+                  Text(penetapan['sertifikat_tgl'] != null &&
+                          penetapan['sertifikat_tgl'] != ''
+                      ? penetapan['sertifikat_tgl'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -441,30 +458,67 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       ? penetapan['keterangan'].toString()
                       : '-'),
                 ),
-                // DataCell(Text(penetapan[''].toString())),
-                // DataCell(Text(penetapan[''].toString())),
-                // DataCell(Text(penetapan[''].toString())),
-                // DataCell(Text(penetapan[''].toString())),
-                // DataCell(Text(penetapan[''].toString())),
+                DataCell(
+                  Text(penetapan['tgl_inventaris'] != null &&
+                          penetapan['tgl_inventaris'] != ''
+                      ? penetapan['tgl_inventaris'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['keberadaan_fisik'] != null &&
+                          penetapan['keberadaan_fisik'] != ''
+                      ? penetapan['keberadaan_fisik'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['kondisi_akhir'] != null &&
+                          penetapan['kondisi_akhir'] != ''
+                      ? penetapan['kondisi_akhir'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['penggunaan_status'] != null &&
+                          penetapan['penggunaan_status'] != ''
+                      ? penetapan['penggunaan_status'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(
+                      penetapan['file_nm'] != null && penetapan['file_nm'] != ''
+                          ? penetapan['file_nm'].toString()
+                          : '-'),
+                ),
               ],
             );
           },
         );
-      } else if (modifiedTitle == "perkakas") {
+      } else if (modifiedTitle == "B") {
         return List<DataRow>.generate(
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
             return DataRow(
               cells: [
-                DataCell(InkWell(
-                  child: Icon(Icons.edit_document),
-                  onTap: () {
-                    final id = penetapan['id'].toString();
-                    penetapanController.getPenetapanById(id, modifiedTitle);
-                  },
+                DataCell(Text(penetapan['nomor'].toString())),
+                DataCell(Row(
+                  children: [
+                    InkWell(
+                      child: Icon(Icons.edit_document, color: Colors.orange),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.file_open, color: Colors.red),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                  ],
                 )),
-                DataCell(Text('${index + 1}')),
                 DataCell(
                   Text(penetapan['kategori_kode'] != null &&
                           penetapan['kategori_kode'] != ''
@@ -483,9 +537,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_perolehan'] != null &&
-                          penetapan['tgl_perolehan'] != ''
-                      ? penetapan['tgl_perolehan'].toString()
+                  Text(penetapan['tgl_perolehan_formated'] != null &&
+                          penetapan['tgl_perolehan_formated'] != ''
+                      ? penetapan['tgl_perolehan_formated'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -577,21 +631,33 @@ class _InventoryScreenState extends State<InventoryScreen> {
             );
           },
         );
-      } else if (modifiedTitle == "bangunan") {
+      } else if (modifiedTitle == "C") {
         return List<DataRow>.generate(
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
             return DataRow(
               cells: [
-                DataCell(InkWell(
-                  child: Icon(Icons.edit_document),
-                  onTap: () {
-                    final id = penetapan['id'].toString();
-                    penetapanController.getPenetapanById(id, modifiedTitle);
-                  },
+                DataCell(Text(penetapan['nomor'].toString())),
+                DataCell(Row(
+                  children: [
+                    InkWell(
+                      child: Icon(Icons.edit_document, color: Colors.orange),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.file_open, color: Colors.red),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                  ],
                 )),
-                DataCell(Text('${index + 1}')),
                 DataCell(
                   Text(penetapan['kategori_kode'] != null &&
                           penetapan['kategori_kode'] != ''
@@ -610,9 +676,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_perolehan'] != null &&
-                          penetapan['tgl_perolehan'] != ''
-                      ? penetapan['tgl_perolehan'].toString()
+                  Text(penetapan['tgl_perolehan_formated'] != null &&
+                          penetapan['tgl_perolehan_formated'] != ''
+                      ? penetapan['tgl_perolehan_formated'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -707,21 +773,33 @@ class _InventoryScreenState extends State<InventoryScreen> {
             );
           },
         );
-      } else if (modifiedTitle == "infrastruktur") {
+      } else if (modifiedTitle == "D") {
         return List<DataRow>.generate(
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
             return DataRow(
               cells: [
-                DataCell(InkWell(
-                  child: Icon(Icons.edit_document),
-                  onTap: () {
-                    final id = penetapan['id'].toString();
-                    penetapanController.getPenetapanById(id, modifiedTitle);
-                  },
+                DataCell(Text(penetapan['nomor'].toString())),
+                DataCell(Row(
+                  children: [
+                    InkWell(
+                      child: Icon(Icons.edit_document, color: Colors.orange),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.file_open, color: Colors.red),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                  ],
                 )),
-                DataCell(Text('${index + 1}')),
                 DataCell(
                   Text(penetapan['kategori_kode'] != null &&
                           penetapan['kategori_kode'] != ''
@@ -740,9 +818,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_perolehan'] != null &&
-                          penetapan['tgl_perolehan'] != ''
-                      ? penetapan['tgl_perolehan'].toString()
+                  Text(penetapan['tgl_perolehan_formated'] != null &&
+                          penetapan['tgl_perolehan_formated'] != ''
+                      ? penetapan['tgl_perolehan_formated'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -830,21 +908,33 @@ class _InventoryScreenState extends State<InventoryScreen> {
             );
           },
         );
-      } else if (modifiedTitle == "asetTetap") {
+      } else if (modifiedTitle == "E") {
         return List<DataRow>.generate(
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
             return DataRow(
               cells: [
-                DataCell(InkWell(
-                  child: Icon(Icons.edit_document),
-                  onTap: () {
-                    final id = penetapan['id'].toString();
-                    penetapanController.getPenetapanById(id, modifiedTitle);
-                  },
+                DataCell(Text(penetapan['nomor'].toString())),
+                DataCell(Row(
+                  children: [
+                    InkWell(
+                      child: Icon(Icons.edit_document, color: Colors.orange),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.file_open, color: Colors.red),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                  ],
                 )),
-                DataCell(Text('${index + 1}')),
                 DataCell(
                   Text(penetapan['kategori_kode'] != null &&
                           penetapan['kategori_kode'] != ''
@@ -863,9 +953,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_perolehan'] != null &&
-                          penetapan['tgl_perolehan'] != ''
-                      ? penetapan['tgl_perolehan'].toString()
+                  Text(penetapan['tgl_perolehan_formated'] != null &&
+                          penetapan['tgl_perolehan_formated'] != ''
+                      ? penetapan['tgl_perolehan_formated'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -940,21 +1030,33 @@ class _InventoryScreenState extends State<InventoryScreen> {
             );
           },
         );
-      } else if (modifiedTitle == "kdp") {
+      } else if (modifiedTitle == "F") {
         return List<DataRow>.generate(
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
             return DataRow(
               cells: [
-                DataCell(InkWell(
-                  child: Icon(Icons.edit_document),
-                  onTap: () {
-                    final id = penetapan['id'].toString();
-                    penetapanController.getPenetapanById(id, modifiedTitle);
-                  },
+                DataCell(Text(penetapan['nomor'].toString())),
+                DataCell(Row(
+                  children: [
+                    InkWell(
+                      child: Icon(Icons.edit_document, color: Colors.orange),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.file_open, color: Colors.red),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                  ],
                 )),
-                DataCell(Text('${index + 1}')),
                 DataCell(
                   Text(penetapan['kategori_kode'] != null &&
                           penetapan['kategori_kode'] != ''
@@ -973,9 +1075,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_perolehan'] != null &&
-                          penetapan['tgl_perolehan'] != ''
-                      ? penetapan['tgl_perolehan'].toString()
+                  Text(penetapan['tgl_perolehan_formated'] != null &&
+                          penetapan['tgl_perolehan_formated'] != ''
+                      ? penetapan['tgl_perolehan_formated'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -1071,14 +1173,26 @@ class _InventoryScreenState extends State<InventoryScreen> {
             final penetapan = penetapanController.penetapanList[index];
             return DataRow(
               cells: [
-                DataCell(InkWell(
-                  child: Icon(Icons.edit_document),
-                  onTap: () {
-                    final id = penetapan['id'].toString();
-                    penetapanController.getPenetapanById(id, modifiedTitle);
-                  },
+                DataCell(Text(penetapan['nomor'].toString())),
+                DataCell(Row(
+                  children: [
+                    InkWell(
+                      child: Icon(Icons.edit_document, color: Colors.orange),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.file_open, color: Colors.red),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                  ],
                 )),
-                DataCell(Text('${index + 1}')),
                 DataCell(
                   Text(penetapan['kategori_kode'] != null &&
                           penetapan['kategori_kode'] != ''
@@ -1155,14 +1269,26 @@ class _InventoryScreenState extends State<InventoryScreen> {
             final penetapan = penetapanController.penetapanList[index];
             return DataRow(
               cells: [
-                DataCell(InkWell(
-                  child: Icon(Icons.edit_document),
-                  onTap: () {
-                    final id = penetapan['id'].toString();
-                    penetapanController.getPenetapanById(id, modifiedTitle);
-                  },
+                DataCell(Text(penetapan['nomor'].toString())),
+                DataCell(Row(
+                  children: [
+                    InkWell(
+                      child: Icon(Icons.edit_document, color: Colors.orange),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.file_open, color: Colors.red),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                  ],
                 )),
-                DataCell(Text('${index + 1}')),
                 DataCell(
                   Text(penetapan['kategori_kode'] != null &&
                           penetapan['kategori_kode'] != ''
@@ -1181,9 +1307,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_perolehan'] != null &&
-                          penetapan['tgl_perolehan'] != ''
-                      ? penetapan['tgl_perolehan'].toString()
+                  Text(penetapan['tgl_perolehan_formated'] != null &&
+                          penetapan['tgl_perolehan_formated'] != ''
+                      ? penetapan['tgl_perolehan_formated'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -1238,14 +1364,26 @@ class _InventoryScreenState extends State<InventoryScreen> {
             final penetapan = penetapanController.penetapanList[index];
             return DataRow(
               cells: [
-                DataCell(InkWell(
-                  child: Icon(Icons.edit_document),
-                  onTap: () {
-                    final id = penetapan['id'].toString();
-                    penetapanController.getPenetapanById(id, modifiedTitle);
-                  },
+                DataCell(Text(penetapan['nomor'].toString())),
+                DataCell(Row(
+                  children: [
+                    InkWell(
+                      child: Icon(Icons.edit_document, color: Colors.orange),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.file_open, color: Colors.red),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                  ],
                 )),
-                DataCell(Text('${index + 1}')),
                 DataCell(Text(penetapan['kategori_kode'] != null &&
                         penetapan['kategori_kode'] != ''
                     ? penetapan['kategori_kode'].toString()
@@ -1257,9 +1395,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_perolehan'] != null &&
-                          penetapan['tgl_perolehan'] != ''
-                      ? penetapan['tgl_perolehan'].toString()
+                  Text(penetapan['tgl_perolehan_formated'] != null &&
+                          penetapan['tgl_perolehan_formated'] != ''
+                      ? penetapan['tgl_perolehan_formated'].toString()
                       : '-'),
                 ),
                 DataCell(Text('')),
@@ -1317,59 +1455,143 @@ class _InventoryScreenState extends State<InventoryScreen> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 28),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 30),
-              CustomDropdown.searchRequest(
-                controller: searchDepartement,
-                futureRequest: getDepartementData,
-                futureRequestDelay: const Duration(seconds: 3),
-                hintText: 'Pilih Departemen',
-                onChanged: selectDepartemen,
-              ),
-              SizedBox(height: 10),
-              RichText(
-                text: TextSpan(
-                  text: 'SKPD: ',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 12,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 28),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomDropdown.searchRequest(
+                    controller: searchDepartement,
+                    futureRequest: getDepartementData,
+                    futureRequestDelay: const Duration(seconds: 3),
+                    hintText: 'Pilih Departemen',
+                    onChanged: selectDepartemen,
                   ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: selectedSKPD,
+                  SizedBox(height: 10),
+                  RichText(
+                    text: TextSpan(
+                      text: 'SKPD: ',
                       style: TextStyle(
                         color: Colors.black,
+                        fontSize: 12,
                       ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: selectedSKPD,
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 15),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: penetapanController.tahun,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(12)),
+                            ),
+                            labelText: 'Tahun',
+                            labelStyle: TextStyle(color: secondaryTextColor),
+                            contentPadding: EdgeInsets.all(14),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: buttonColor,
+                          padding: EdgeInsets.all(16),
+                        ),
+                        onPressed: loadPenetapanData,
+                        child: Text('Generate'),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              SizedBox(height: 30),
-              Container(
-                height: 400,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.shade200),
-                  color: Colors.white,
-                ),
-                child: Obx(
-                  () => SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
+            ),
+            SizedBox(height: 30),
+            Container(
+              height: 300,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey.shade200),
+                color: Colors.white,
+              ),
+              child: Obx(
+                () => SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
                     child: DataTable(
                       headingRowColor: MaterialStateProperty.all(
                           Color.fromARGB(255, 202, 202, 202)),
-                      columnSpacing: 40,
+                      columnSpacing: 30,
                       columns: columns,
                       rows: generateDataRows(),
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+            SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 28),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'Page $page of $totalPages',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                    ),
+                  ),
+                  Spacer(),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: buttonColor,
+                    ),
+                    onPressed: () {
+                      if (page > 1) {
+                        setState(() {
+                          page--;
+                        });
+                        loadPenetapanData();
+                      }
+                    },
+                    child: Text('Previous'),
+                  ),
+                  SizedBox(width: 10),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: buttonColor,
+                    ),
+                    onPressed: () {
+                      if (page < totalPages) {
+                        setState(() {
+                          page++;
+                        });
+                        loadPenetapanData();
+                      }
+                    },
+                    child: Text('Next'),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

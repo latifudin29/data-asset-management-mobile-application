@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kib_application/screens/forms/editInventoryAScreen.dart';
 import 'package:kib_application/screens/forms/editInventoryBScreen.dart';
@@ -16,13 +17,24 @@ class AppointmentController extends GetxController {
   RxList<Map<String, dynamic>> penetapanListById =
       RxList<Map<String, dynamic>>([]);
 
-  Future<void> getPenetapan(String id, String kategori) async {
+  late TextEditingController tahun;
+
+  @override
+  void onInit() {
+    super.onInit();
+    tahun = TextEditingController();
+  }
+
+  Future<void> getPenetapan(String id, String kategori, int page) async {
     final response = await _connect.get(ApiEndPoints.baseurl +
         ApiEndPoints.authEndPoints.getPenetapan +
         id +
         '/' +
         kategori +
-        '?perPage=5&page=1');
+        '?perPage=5&page=' +
+        page.toString() +
+        '&tahun=' +
+        tahun.text);
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = response.body;
@@ -46,17 +58,17 @@ class AppointmentController extends GetxController {
 
       penetapanListById.assignAll(penetapanDataList);
 
-      if (title == "tanah") {
+      if (title == "A") {
         Get.to(EditInventoryAScreen());
-      } else if (title == "perkakas") {
+      } else if (title == "B") {
         Get.to(EditInventoryBScreen());
-      } else if (title == "bangunan") {
+      } else if (title == "C") {
         Get.to(EditInventoryCScreen());
-      } else if (title == "infrastruktur") {
+      } else if (title == "D") {
         Get.to(EditInventoryDScreen());
-      } else if (title == "aset") {
+      } else if (title == "E") {
         Get.to(EditInventoryEScreen());
-      } else if (title == "kdp") {
+      } else if (title == "F") {
         Get.to(EditInventoryFScreen());
       } else if (title == "tgr") {
         Get.to(EditInventoryTGRScreen());
