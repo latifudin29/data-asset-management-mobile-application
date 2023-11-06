@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:kib_application/constans/colors.dart';
 import 'package:kib_application/controllers/appointmentController.dart';
-import 'package:kib_application/controllers/editInventoryController.dart';
+import 'package:kib_application/controllers/inventoryController.dart';
 
 class EditInventoryAScreen extends StatefulWidget {
   const EditInventoryAScreen({super.key});
@@ -17,7 +17,7 @@ class EditInventoryAScreen extends StatefulWidget {
 
 class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
   final penetapanController = Get.put(AppointmentController());
-  final editController = Get.put(EditInventoryController());
+  final editController = Get.put(InventoryController());
   DateTime now = DateTime.now();
 
   @override
@@ -25,7 +25,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
     super.initState();
     String dateNow = DateFormat('dd/MM/yyyy').format(now);
     final data = penetapanController.penetapanListById[0];
-    // Sudah
+
     editController.tahunNilai.text = penetapanController.tahun.text;
     editController.tglInventaris.text = dateNow;
     editController.skpd.text = data['kode'].toString();
@@ -2292,238 +2292,282 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                 ],
               ),
               SizedBox(height: 20),
-              Text(
-                'Tercatat Ganda',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  buttonStyleData: ButtonStyleData(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                  isExpanded: true,
-                  iconStyleData: const IconStyleData(
-                    icon: Icon(
-                      Icons.arrow_drop_down_outlined,
-                      color: Colors.grey,
-                      size: 25,
-                    ),
-                    iconEnabledColor: primaryTextColor,
-                  ),
-                  value: selectedGanda,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedGanda = newValue ?? "Ya";
-                    });
-                  },
-                  items: dropdownGanda.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(item),
-                    );
-                  }).toList(),
-                ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                'Atas Nama',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  buttonStyleData: ButtonStyleData(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                  isExpanded: true,
-                  iconStyleData: const IconStyleData(
-                    icon: Icon(
-                      Icons.arrow_drop_down_outlined,
-                      color: Colors.grey,
-                      size: 25,
-                    ),
-                    iconEnabledColor: primaryTextColor,
-                  ),
-                  value: selectedAtasNama,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedAtasNama = newValue ?? "Pemerintah Daerah";
-                    });
-                  },
-                  items: dropdownAtasNama.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(item),
-                    );
-                  }).toList(),
-                ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                'Titik Koordinat',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: editController.lat,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                        ),
-                        labelText: 'Latitude',
-                        labelStyle: TextStyle(color: secondaryTextColor),
-                        contentPadding: EdgeInsets.all(18),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: TextField(
-                      controller: editController.long,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                        ),
-                        labelText: 'Longitude',
-                        labelStyle: TextStyle(color: secondaryTextColor),
-                        contentPadding: EdgeInsets.all(18),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 15),
-              Text(
-                'Lainnya',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                'Keterangan',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              Row(
+              // Tercatat Ganda
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Tambah File",
+                    'Tercatat Ganda',
                     style: TextStyle(fontSize: 16),
                     textAlign: TextAlign.left,
                   ),
-                  SizedBox(width: 10),
-                  GestureDetector(
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: buttonColor,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.add_photo_alternate_outlined,
-                          size: 20,
-                          color: Colors.white,
+                  SizedBox(height: 10),
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton2(
+                      buttonStyleData: ButtonStyleData(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
+                      isExpanded: true,
+                      iconStyleData: const IconStyleData(
+                        icon: Icon(
+                          Icons.arrow_drop_down_outlined,
+                          color: Colors.grey,
+                          size: 25,
+                        ),
+                        iconEnabledColor: primaryTextColor,
+                      ),
+                      value: selectedGanda,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedGanda = newValue ?? "Ya";
+                        });
+                      },
+                      items: dropdownGanda.map((String item) {
+                        return DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(item),
+                        );
+                      }).toList(),
                     ),
-                    onTap: () {
-                      _showImagePickerBottomSheet();
-                    },
                   ),
                 ],
               ),
-              multipleImages.isNotEmpty
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 18),
-                      child: Container(
-                        height: 110,
-                        child: GridView.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 35,
+              SizedBox(height: 15),
+              // Atas Nama
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Atas Nama',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton2(
+                      buttonStyleData: ButtonStyleData(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.grey,
                           ),
-                          itemCount: multipleImages.length,
-                          itemBuilder: (context, index) {
-                            return GridTile(
-                                child: Image.file(multipleImages[index]));
-                          },
                         ),
                       ),
-                    )
-                  : SizedBox(height: 0),
-              SizedBox(height: 20),
-              Text(
-                'Petugas',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
+                      isExpanded: true,
+                      iconStyleData: const IconStyleData(
+                        icon: Icon(
+                          Icons.arrow_drop_down_outlined,
+                          color: Colors.grey,
+                          size: 25,
+                        ),
+                        iconEnabledColor: primaryTextColor,
+                      ),
+                      value: selectedAtasNama,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedAtasNama = newValue ?? "Pemerintah Daerah";
+                        });
+                      },
+                      items: dropdownAtasNama.map((String item) {
+                        return DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(item),
+                        );
+                      }).toList(),
                     ),
                   ),
-                ),
+                ],
+              ),
+              SizedBox(height: 15),
+              // Titik Koordinat
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Titik Koordinat',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: editController.lat,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(12)),
+                            ),
+                            labelText: 'Latitude',
+                            labelStyle: TextStyle(color: secondaryTextColor),
+                            contentPadding: EdgeInsets.all(18),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: TextField(
+                          controller: editController.long,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(12)),
+                            ),
+                            labelText: 'Longitude',
+                            labelStyle: TextStyle(color: secondaryTextColor),
+                            contentPadding: EdgeInsets.all(18),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              // Lainnya
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Lainnya',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              // Keterangan
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Keterangan',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              // Tambah File
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Tambah File",
+                        style: TextStyle(fontSize: 16),
+                        textAlign: TextAlign.left,
+                      ),
+                      SizedBox(width: 10),
+                      GestureDetector(
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: buttonColor,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.add_photo_alternate_outlined,
+                              size: 20,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        onTap: () {
+                          _showImagePickerBottomSheet();
+                        },
+                      ),
+                    ],
+                  ),
+                  multipleImages.isNotEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 18),
+                          child: Container(
+                            height: 110,
+                            child: GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 35,
+                              ),
+                              itemCount: multipleImages.length,
+                              itemBuilder: (context, index) {
+                                return GridTile(
+                                    child: Image.file(multipleImages[index]));
+                              },
+                            ),
+                          ),
+                        )
+                      : SizedBox(height: 0),
+                ],
+              ),
+              SizedBox(height: 20),
+              // Petugas
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Petugas',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 35),

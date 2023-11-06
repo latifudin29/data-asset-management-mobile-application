@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:kib_application/constans/colors.dart';
 import 'package:kib_application/controllers/appointmentController.dart';
-import 'package:kib_application/controllers/editInventoryController.dart';
+import 'package:kib_application/controllers/inventoryController.dart';
 
 class EditInventoryBScreen extends StatefulWidget {
   const EditInventoryBScreen({super.key});
@@ -17,7 +17,7 @@ class EditInventoryBScreen extends StatefulWidget {
 
 class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
   final penetapanController = Get.put(AppointmentController());
-  final editController = Get.put(EditInventoryController());
+  final editController = Get.put(InventoryController());
   DateTime now = DateTime.now();
 
   @override

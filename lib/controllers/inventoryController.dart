@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-class EditInventoryController extends GetxController {
+class InventoryController extends GetxController {
   // FIELDS FROM TABLES PENETAPAN
   late TextEditingController uraian,
       tahun,
