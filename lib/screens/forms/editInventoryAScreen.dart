@@ -24,29 +24,35 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
   void initState() {
     super.initState();
     String dateNow = DateFormat('dd/MM/yyyy').format(now);
-    String yearNow = DateFormat.y().format(now);
     final data = penetapanController.penetapanListById[0];
-
-    editController.tahunSekarang.text = yearNow;
+    // Sudah
+    editController.tahunNilai.text = penetapanController.tahun.text;
     editController.tglInventaris.text = dateNow;
     editController.skpd.text = data['kode'].toString();
     editController.skpdUraian.text = data['nama'].toString();
     editController.noRegister.text = data['no_register'].toString();
+    editController.noRegisterBaru.text = data['no_register'].toString();
+    // Belum
     editController.barang.text =
         data['barang'].toString() + (' - ') + data['nama_barang'].toString();
     editController.namaBarang.text = '';
+    // Sudah
     editController.jumlah.text = data['jumlah'].toString();
+    editController.jumlahBaru.text = data['jumlah'].toString();
     editController.aLuasM2.text = data['a_luas_m2'].toString();
+    editController.luasBaru.text = data['a_luas_m2'].toString();
+    // Belum
     editController.satuan.text = data['satuan'].toString();
+    //
     editController.caraPerolehan.text = data['cara_perolehan'].toString();
-    editController.tglPerolehan.text = data['tgl_perolehan'].toString();
+    editController.tglPerolehan.text =
+        data['tgl_perolehan_formated'].toString();
     editController.thBeli.text = data['th_beli'].toString();
     editController.perolehan.text = data['perolehan'].toString();
     editController.aAlamat.text = data['a_alamat'].toString();
     editController.aHakTanah.text = data['a_hak_tanah'].toString();
     editController.aSertifikatNo.text = data['a_sertifikat_nomor'].toString();
-    editController.aSertifikatTgl.text =
-        data['a_sertifikat_tanggal'].toString();
+    editController.aSertifikatTgl.text = data['sertifikat_tgl'].toString();
     editController.kondisi.text = data['kondisi'].toString();
     editController.asalUsul.text = data['asal_usul'].toString();
     editController.aPenggunaan.text = data['a_penggunaan'].toString();
@@ -203,1046 +209,852 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               SizedBox(height: 30),
-              Text(
-                'Tahun',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.grey.shade400,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    controller: editController.tahunSekarang,
-                    readOnly: true,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                'Tanggal Inventaris',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    controller: editController.tglInventaris,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                'SKPD',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.grey.shade400,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    controller: editController.skpd,
-                    readOnly: true,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                'SKPD Uraian',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.grey.shade400,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    controller: editController.skpdUraian,
-                    readOnly: true,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                'No. Register',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Row(
+              // Tahun
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey.shade400,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          controller: editController.noRegister,
-                          readOnly: true,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    ),
+                  Text(
+                    'Tahun',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
                   ),
-                  SizedBox(width: 10),
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      buttonStyleData: ButtonStyleData(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.grey,
-                          ),
+                  SizedBox(height: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.grey.shade400,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: TextFormField(
+                        controller: editController.tahunNilai,
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
                         ),
                       ),
-                      iconStyleData: const IconStyleData(
-                        icon: Icon(
-                          Icons.arrow_drop_down_outlined,
-                          color: Colors.grey,
-                          size: 25,
-                        ),
-                        iconEnabledColor: primaryTextColor,
-                      ),
-                      value: selectedNoRegister,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedNoRegister = newValue ?? "Sesuai";
-                        });
-                      },
-                      items: dropdownNoRegister.map((String item) {
-                        return DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(item),
-                        );
-                      }).toList(),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 10),
-              selectedNoRegister == "Tidak Sesuai"
-                  ? Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    )
-                  : SizedBox(),
               SizedBox(height: 15),
-              Text(
-                'Barang',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Row(
+              // Tanggal Inventaris
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey.shade400,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          controller: editController.barang,
-                          readOnly: true,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    ),
+                  Text(
+                    'Tanggal Inventaris',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
                   ),
-                  SizedBox(width: 10),
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      buttonStyleData: ButtonStyleData(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.grey,
-                          ),
+                  SizedBox(height: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: TextFormField(
+                        controller: editController.tglInventaris,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
                         ),
                       ),
-                      iconStyleData: const IconStyleData(
-                        icon: Icon(
-                          Icons.arrow_drop_down_outlined,
-                          color: Colors.grey,
-                          size: 25,
-                        ),
-                        iconEnabledColor: primaryTextColor,
-                      ),
-                      value: selectedBarang,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedBarang = newValue ?? "Sesuai";
-                        });
-                      },
-                      items: dropdownBarang.map((String item) {
-                        return DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(item),
-                        );
-                      }).toList(),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 10),
-              selectedBarang == "Tidak Sesuai"
-                  ? Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    )
-                  : SizedBox(),
               SizedBox(height: 15),
-              Text(
-                'Nama Spesifikasi Barang',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Row(
+              // SKPD
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey.shade400,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          controller: editController.namaBarang,
-                          readOnly: true,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    ),
+                  Text(
+                    'SKPD',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
                   ),
-                  SizedBox(width: 10),
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      buttonStyleData: ButtonStyleData(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.grey,
-                          ),
+                  SizedBox(height: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.grey.shade400,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: TextFormField(
+                        controller: editController.skpd,
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
                         ),
                       ),
-                      iconStyleData: const IconStyleData(
-                        icon: Icon(
-                          Icons.arrow_drop_down_outlined,
-                          color: Colors.grey,
-                          size: 25,
-                        ),
-                        iconEnabledColor: primaryTextColor,
-                      ),
-                      value: selectedNamaBarang,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedNamaBarang = newValue ?? "Sesuai";
-                        });
-                      },
-                      items: dropdownNamaBarang.map((String item) {
-                        return DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(item),
-                        );
-                      }).toList(),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 10),
-              selectedNamaBarang == "Tidak Sesuai"
-                  ? Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    )
-                  : SizedBox(),
               SizedBox(height: 15),
-              Text(
-                'Jumlah',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Row(
+              // SKPD Uraian
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey.shade400,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          controller: editController.jumlah,
-                          readOnly: true,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    ),
+                  Text(
+                    'SKPD Uraian',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
                   ),
-                  SizedBox(width: 10),
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      buttonStyleData: ButtonStyleData(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.grey,
-                          ),
+                  SizedBox(height: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.grey.shade400,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: TextFormField(
+                        controller: editController.skpdUraian,
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
                         ),
                       ),
-                      iconStyleData: const IconStyleData(
-                        icon: Icon(
-                          Icons.arrow_drop_down_outlined,
-                          color: Colors.grey,
-                          size: 25,
-                        ),
-                        iconEnabledColor: primaryTextColor,
-                      ),
-                      value: selectedJumlah,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedJumlah = newValue ?? "Sesuai";
-                        });
-                      },
-                      items: dropdownJumlah.map((String item) {
-                        return DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(item),
-                        );
-                      }).toList(),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 10),
-              selectedJumlah == "Tidak Sesuai"
-                  ? Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          controller: editController.jumlah,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    )
-                  : SizedBox(),
               SizedBox(height: 15),
-              Text(
-                'Luas',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Row(
+              // No Register
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey.shade400,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          controller: editController.aLuasM2,
-                          readOnly: true,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    ),
+                  Text(
+                    'No. Register',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
                   ),
-                  SizedBox(width: 10),
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      buttonStyleData: ButtonStyleData(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                      iconStyleData: const IconStyleData(
-                        icon: Icon(
-                          Icons.arrow_drop_down_outlined,
-                          color: Colors.grey,
-                          size: 25,
-                        ),
-                        iconEnabledColor: primaryTextColor,
-                      ),
-                      value: selectedLuas,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedLuas = newValue ?? "Sesuai";
-                        });
-                      },
-                      items: dropdownLuas.map((String item) {
-                        return DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(item),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 10),
-              selectedLuas == "Tidak Sesuai"
-                  ? Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    )
-                  : SizedBox(),
-              SizedBox(height: 15),
-              Text(
-                'Satuan',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    controller: editController.satuan,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                'Perolehan',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey.shade400,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          controller: editController.caraPerolehan,
-                          readOnly: true,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      buttonStyleData: ButtonStyleData(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                      iconStyleData: const IconStyleData(
-                        icon: Icon(
-                          Icons.arrow_drop_down_outlined,
-                          color: Colors.grey,
-                          size: 25,
-                        ),
-                        iconEnabledColor: primaryTextColor,
-                      ),
-                      value: selectedPerolehanChoose,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedPerolehanChoose = newValue ?? "Sesuai";
-                        });
-                      },
-                      items: dropdownPerolehanChoose.map((String item) {
-                        return DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(item),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 10),
-              selectedPerolehanChoose == "Tidak Sesuai"
-                  ? DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        buttonStyleData: ButtonStyleData(
-                          height: 50,
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
                           decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: Colors.grey,
+                            color: Colors.grey.shade400,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              controller: editController.noRegister,
+                              readOnly: true,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
                             ),
                           ),
                         ),
-                        isExpanded: true,
-                        iconStyleData: const IconStyleData(
-                          icon: Icon(
-                            Icons.arrow_drop_down_outlined,
-                            color: Colors.grey,
-                            size: 25,
+                      ),
+                      SizedBox(width: 10),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          buttonStyleData: ButtonStyleData(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.grey,
+                              ),
+                            ),
                           ),
-                          iconEnabledColor: primaryTextColor,
-                        ),
-                        value: selectedPerolehan,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedPerolehan = newValue ?? "Pembelian";
-                          });
-                        },
-                        items: dropdownPerolehan.map((String item) {
-                          return DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(item),
-                          );
-                        }).toList(),
-                      ),
-                    )
-                  : SizedBox(),
-              SizedBox(height: 15),
-              Text(
-                'Tanggal Perolehan',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.grey.shade400,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    controller: editController.tglPerolehan,
-                    readOnly: true,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                'Tahun Perolehan',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.grey.shade400,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    controller: editController.thBeli,
-                    readOnly: true,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                'Nilai Perolehan',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey.shade400,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          controller: editController.perolehan,
-                          readOnly: true,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
+                          iconStyleData: const IconStyleData(
+                            icon: Icon(
+                              Icons.arrow_drop_down_outlined,
+                              color: Colors.grey,
+                              size: 25,
+                            ),
+                            iconEnabledColor: primaryTextColor,
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      buttonStyleData: ButtonStyleData(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                      iconStyleData: const IconStyleData(
-                        icon: Icon(
-                          Icons.arrow_drop_down_outlined,
-                          color: Colors.grey,
-                          size: 25,
-                        ),
-                        iconEnabledColor: primaryTextColor,
-                      ),
-                      value: selectedNilaiPerolehan,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedNilaiPerolehan = newValue ?? "Sesuai";
-                        });
-                      },
-                      items: dropdownNilaiPerolehan.map((String item) {
-                        return DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(item),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 10),
-              selectedNilaiPerolehan == "Tidak Sesuai"
-                  ? Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    )
-                  : SizedBox(),
-              SizedBox(height: 15),
-              Text(
-                'Apakah nilai perolehan merupakan biaya atribusi/biasa yang menambah kapasitas manfaat?',
-                style: TextStyle(fontSize: 16),
-              ),
-              SizedBox(height: 10),
-              DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  buttonStyleData: ButtonStyleData(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                  isExpanded: true,
-                  iconStyleData: const IconStyleData(
-                    icon: Icon(
-                      Icons.arrow_drop_down_outlined,
-                      color: Colors.grey,
-                      size: 25,
-                    ),
-                    iconEnabledColor: primaryTextColor,
-                  ),
-                  value: selectedQuestion,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedQuestion = newValue ?? "Bukan";
-                    });
-                  },
-                  items: dropdownQuestion.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(item),
-                    );
-                  }).toList(),
-                ),
-              ),
-              SizedBox(height: 10),
-              selectedQuestion == "Ya" // Memeriksa pilihan dropdown
-                  ? Column(
-                      children: [
-                        RadioListTile(
-                          title: Text("Tidak diketahui data awal/induknya"),
-                          value: "tidak",
-                          groupValue: choose,
-                          onChanged: (value) {
+                          value: selectedNoRegister,
+                          onChanged: (String? newValue) {
                             setState(() {
-                              choose = value.toString();
+                              selectedNoRegister = newValue ?? "Sesuai";
                             });
                           },
+                          items: dropdownNoRegister.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
                         ),
-                        RadioListTile(
-                          title: Text(
-                              "Ya, Diketahui data awal/Induknya dan sebutkan data barang awal/induknya"),
-                          value: "ya",
-                          groupValue: choose,
-                          onChanged: (value) {
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  selectedNoRegister == "Tidak Sesuai"
+                      ? Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              controller: editController.noRegisterBaru,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox(),
+                ],
+              ),
+              SizedBox(height: 15),
+              // Barang
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Barang',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey.shade400,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              controller: editController.barang,
+                              readOnly: true,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          buttonStyleData: ButtonStyleData(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          iconStyleData: const IconStyleData(
+                            icon: Icon(
+                              Icons.arrow_drop_down_outlined,
+                              color: Colors.grey,
+                              size: 25,
+                            ),
+                            iconEnabledColor: primaryTextColor,
+                          ),
+                          value: selectedBarang,
+                          onChanged: (String? newValue) {
                             setState(() {
-                              choose = value.toString();
+                              selectedBarang = newValue ?? "Sesuai";
                             });
                           },
+                          items: dropdownBarang.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
                         ),
-                      ],
-                    )
-                  : SizedBox(),
-              SizedBox(height: 10),
-              Text(
-                'Alamat',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.grey.shade400,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    controller: editController.aAlamat,
-                    readOnly: true,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
-              // SizedBox(height: 15),
-              // Text(
-              //   'Kabupaten/Kota',
-              //   style: TextStyle(fontSize: 16),
-              //   textAlign: TextAlign.left,
-              // ),
-              // SizedBox(height: 10),
-              // Container(
-              //   decoration: BoxDecoration(
-              //     border: Border.all(color: Colors.grey),
-              //     borderRadius: BorderRadius.circular(12),
-              //   ),
-              //   child: Padding(
-              //     padding: const EdgeInsets.only(left: 15),
-              //     child: TextFormField(
-              //       decoration: const InputDecoration(
-              //         border: InputBorder.none,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(height: 15),
-              // Text(
-              //   'Kecamatan',
-              //   style: TextStyle(fontSize: 16),
-              //   textAlign: TextAlign.left,
-              // ),
-              // SizedBox(height: 10),
-              // Container(
-              //   decoration: BoxDecoration(
-              //     border: Border.all(color: Colors.grey),
-              //     borderRadius: BorderRadius.circular(12),
-              //   ),
-              //   child: Padding(
-              //     padding: const EdgeInsets.only(left: 15),
-              //     child: TextFormField(
-              //       decoration: const InputDecoration(
-              //         border: InputBorder.none,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(height: 15),
-              // Text(
-              //   'Kelurahan',
-              //   style: TextStyle(fontSize: 16),
-              //   textAlign: TextAlign.left,
-              // ),
-              // SizedBox(height: 10),
-              // Container(
-              //   decoration: BoxDecoration(
-              //     border: Border.all(color: Colors.grey),
-              //     borderRadius: BorderRadius.circular(12),
-              //   ),
-              //   child: Padding(
-              //     padding: const EdgeInsets.only(left: 15),
-              //     child: TextFormField(
-              //       decoration: const InputDecoration(
-              //         border: InputBorder.none,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(height: 15),
-              // Text(
-              //   'Jalan',
-              //   style: TextStyle(fontSize: 16),
-              //   textAlign: TextAlign.left,
-              // ),
-              // SizedBox(height: 10),
-              // Container(
-              //   decoration: BoxDecoration(
-              //     border: Border.all(color: Colors.grey),
-              //     borderRadius: BorderRadius.circular(12),
-              //   ),
-              //   child: Padding(
-              //     padding: const EdgeInsets.only(left: 15),
-              //     child: TextFormField(
-              //       decoration: const InputDecoration(
-              //         border: InputBorder.none,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(height: 15),
-              // Text(
-              //   'No.',
-              //   style: TextStyle(fontSize: 16),
-              //   textAlign: TextAlign.left,
-              // ),
-              // SizedBox(height: 10),
-              // Container(
-              //   decoration: BoxDecoration(
-              //     border: Border.all(color: Colors.grey),
-              //     borderRadius: BorderRadius.circular(12),
-              //   ),
-              //   child: Padding(
-              //     padding: const EdgeInsets.only(left: 15),
-              //     child: TextFormField(
-              //       decoration: const InputDecoration(
-              //         border: InputBorder.none,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(height: 15),
-              // Text(
-              //   'RT',
-              //   style: TextStyle(fontSize: 16),
-              //   textAlign: TextAlign.left,
-              // ),
-              // SizedBox(height: 10),
-              // Container(
-              //   decoration: BoxDecoration(
-              //     border: Border.all(color: Colors.grey),
-              //     borderRadius: BorderRadius.circular(12),
-              //   ),
-              //   child: Padding(
-              //     padding: const EdgeInsets.only(left: 15),
-              //     child: TextFormField(
-              //       decoration: const InputDecoration(
-              //         border: InputBorder.none,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(height: 15),
-              // Text(
-              //   'RW',
-              //   style: TextStyle(fontSize: 16),
-              //   textAlign: TextAlign.left,
-              // ),
-              // SizedBox(height: 10),
-              // Container(
-              //   decoration: BoxDecoration(
-              //     border: Border.all(color: Colors.grey),
-              //     borderRadius: BorderRadius.circular(12),
-              //   ),
-              //   child: Padding(
-              //     padding: const EdgeInsets.only(left: 15),
-              //     child: TextFormField(
-              //       decoration: const InputDecoration(
-              //         border: InputBorder.none,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(height: 15),
-              // Text(
-              //   'Kode Pos',
-              //   style: TextStyle(fontSize: 16),
-              //   textAlign: TextAlign.left,
-              // ),
-              // SizedBox(height: 10),
-              // Container(
-              //   decoration: BoxDecoration(
-              //     border: Border.all(color: Colors.grey),
-              //     borderRadius: BorderRadius.circular(12),
-              //   ),
-              //   child: Padding(
-              //     padding: const EdgeInsets.only(left: 15),
-              //     child: TextFormField(
-              //       decoration: const InputDecoration(
-              //         border: InputBorder.none,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              SizedBox(height: 15),
-              Text(
-                'Hak Tanah',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey.shade400,
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          controller: editController.aHakTanah,
-                          readOnly: true,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  selectedBarang == "Tidak Sesuai"
+                      ? Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox(),
+                ],
+              ),
+              SizedBox(height: 15),
+              // Nama Spesifikasi Barang
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Nama Spesifikasi Barang',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey.shade400,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              controller: editController.namaBarang,
+                              readOnly: true,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
                           ),
                         ),
                       ),
+                      SizedBox(width: 10),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          buttonStyleData: ButtonStyleData(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          iconStyleData: const IconStyleData(
+                            icon: Icon(
+                              Icons.arrow_drop_down_outlined,
+                              color: Colors.grey,
+                              size: 25,
+                            ),
+                            iconEnabledColor: primaryTextColor,
+                          ),
+                          value: selectedNamaBarang,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedNamaBarang = newValue ?? "Sesuai";
+                            });
+                          },
+                          items: dropdownNamaBarang.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  selectedNamaBarang == "Tidak Sesuai"
+                      ? Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox(),
+                ],
+              ),
+              SizedBox(height: 15),
+              // Jumlah
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Jumlah',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey.shade400,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              controller: editController.jumlah,
+                              readOnly: true,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          buttonStyleData: ButtonStyleData(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          iconStyleData: const IconStyleData(
+                            icon: Icon(
+                              Icons.arrow_drop_down_outlined,
+                              color: Colors.grey,
+                              size: 25,
+                            ),
+                            iconEnabledColor: primaryTextColor,
+                          ),
+                          value: selectedJumlah,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedJumlah = newValue ?? "Sesuai";
+                            });
+                          },
+                          items: dropdownJumlah.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  selectedJumlah == "Tidak Sesuai"
+                      ? Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              controller: editController.jumlah,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox(),
+                ],
+              ),
+              SizedBox(height: 15),
+              // Luas
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Luas',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey.shade400,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              controller: editController.aLuasM2,
+                              readOnly: true,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          buttonStyleData: ButtonStyleData(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          iconStyleData: const IconStyleData(
+                            icon: Icon(
+                              Icons.arrow_drop_down_outlined,
+                              color: Colors.grey,
+                              size: 25,
+                            ),
+                            iconEnabledColor: primaryTextColor,
+                          ),
+                          value: selectedLuas,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedLuas = newValue ?? "Sesuai";
+                            });
+                          },
+                          items: dropdownLuas.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  selectedLuas == "Tidak Sesuai"
+                      ? Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              controller: editController.luasBaru,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox(),
+                ],
+              ),
+              SizedBox(height: 15),
+              // Satuan
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Satuan',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                      ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                ],
+              ),
+              SizedBox(height: 15),
+              // Perolehan
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Perolehan',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey.shade400,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              controller: editController.caraPerolehan,
+                              readOnly: true,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          buttonStyleData: ButtonStyleData(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          iconStyleData: const IconStyleData(
+                            icon: Icon(
+                              Icons.arrow_drop_down_outlined,
+                              color: Colors.grey,
+                              size: 25,
+                            ),
+                            iconEnabledColor: primaryTextColor,
+                          ),
+                          value: selectedPerolehanChoose,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedPerolehanChoose = newValue ?? "Sesuai";
+                            });
+                          },
+                          items: dropdownPerolehanChoose.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  selectedPerolehanChoose == "Tidak Sesuai"
+                      ? DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            buttonStyleData: ButtonStyleData(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                            isExpanded: true,
+                            iconStyleData: const IconStyleData(
+                              icon: Icon(
+                                Icons.arrow_drop_down_outlined,
+                                color: Colors.grey,
+                                size: 25,
+                              ),
+                              iconEnabledColor: primaryTextColor,
+                            ),
+                            value: selectedPerolehan,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedPerolehan = newValue ?? "Pembelian";
+                              });
+                            },
+                            items: dropdownPerolehan.map((String item) {
+                              return DropdownMenuItem<String>(
+                                value: item,
+                                child: Text(item),
+                              );
+                            }).toList(),
+                          ),
+                        )
+                      : SizedBox(),
+                ],
+              ),
+              SizedBox(height: 15),
+              // Tanggal Perolehan
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Tanggal Perolehan',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.grey.shade400,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: TextFormField(
+                        controller: editController.tglPerolehan,
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              // Tahun Perolehan
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Tahun Perolehan',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.grey.shade400,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: TextFormField(
+                        controller: editController.thBeli,
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              // Nilai Perolehan
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Nilai Perolehan',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey.shade400,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              controller: editController.perolehan,
+                              readOnly: true,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          buttonStyleData: ButtonStyleData(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          iconStyleData: const IconStyleData(
+                            icon: Icon(
+                              Icons.arrow_drop_down_outlined,
+                              color: Colors.grey,
+                              size: 25,
+                            ),
+                            iconEnabledColor: primaryTextColor,
+                          ),
+                          value: selectedNilaiPerolehan,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedNilaiPerolehan = newValue ?? "Sesuai";
+                            });
+                          },
+                          items: dropdownNilaiPerolehan.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  selectedNilaiPerolehan == "Tidak Sesuai"
+                      ? Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox(),
+                ],
+              ),
+              SizedBox(height: 15),
+              // Apakah nilai perolehan merupakan biaya atribusi/biasa yang menambah kapasitas manfaat?
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Apakah nilai perolehan merupakan biaya atribusi/biasa yang menambah kapasitas manfaat?',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(height: 10),
                   DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       buttonStyleData: ButtonStyleData(
@@ -1254,6 +1066,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           ),
                         ),
                       ),
+                      isExpanded: true,
                       iconStyleData: const IconStyleData(
                         icon: Icon(
                           Icons.arrow_drop_down_outlined,
@@ -1262,13 +1075,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                         ),
                         iconEnabledColor: primaryTextColor,
                       ),
-                      value: selectedHakTanah,
+                      value: selectedQuestion,
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedHakTanah = newValue ?? "Sesuai";
+                          selectedQuestion = newValue ?? "Bukan";
                         });
                       },
-                      items: dropdownHakTanah.map((String item) {
+                      items: dropdownQuestion.map((String item) {
                         return DropdownMenuItem<String>(
                           value: item,
                           child: Text(item),
@@ -1276,54 +1089,506 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       }).toList(),
                     ),
                   ),
+                  SizedBox(height: 10),
+                  selectedQuestion == "Ya" // Memeriksa pilihan dropdown
+                      ? Column(
+                          children: [
+                            RadioListTile(
+                              title: Text("Tidak diketahui data awal/induknya"),
+                              value: "tidak",
+                              groupValue: choose,
+                              onChanged: (value) {
+                                setState(() {
+                                  choose = value.toString();
+                                });
+                              },
+                            ),
+                            RadioListTile(
+                              title: Text(
+                                  "Ya, Diketahui data awal/Induknya dan sebutkan data barang awal/induknya"),
+                              value: "ya",
+                              groupValue: choose,
+                              onChanged: (value) {
+                                setState(() {
+                                  choose = value.toString();
+                                });
+                              },
+                            ),
+                          ],
+                        )
+                      : SizedBox(),
                 ],
               ),
-              SizedBox(height: 10),
-              selectedHakTanah == "Tidak Sesuai"
-                  ? Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    )
-                  : SizedBox(),
               SizedBox(height: 15),
-              Text(
-                'No. Sertifikat',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Row(
+              // Alamat
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey.shade400,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          controller: editController.aSertifikatNo,
-                          readOnly: true,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
+                  Text(
+                    'Alamat',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.grey.shade400,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: TextFormField(
+                        controller: editController.aAlamat,
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  // SizedBox(height: 15),
+                  // Text(
+                  //   'Kabupaten/Kota',
+                  //   style: TextStyle(fontSize: 16),
+                  //   textAlign: TextAlign.left,
+                  // ),
+                  // SizedBox(height: 10),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     border: Border.all(color: Colors.grey),
+                  //     borderRadius: BorderRadius.circular(12),
+                  //   ),
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(left: 15),
+                  //     child: TextFormField(
+                  //       decoration: const InputDecoration(
+                  //         border: InputBorder.none,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(height: 15),
+                  // Text(
+                  //   'Kecamatan',
+                  //   style: TextStyle(fontSize: 16),
+                  //   textAlign: TextAlign.left,
+                  // ),
+                  // SizedBox(height: 10),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     border: Border.all(color: Colors.grey),
+                  //     borderRadius: BorderRadius.circular(12),
+                  //   ),
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(left: 15),
+                  //     child: TextFormField(
+                  //       decoration: const InputDecoration(
+                  //         border: InputBorder.none,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(height: 15),
+                  // Text(
+                  //   'Kelurahan',
+                  //   style: TextStyle(fontSize: 16),
+                  //   textAlign: TextAlign.left,
+                  // ),
+                  // SizedBox(height: 10),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     border: Border.all(color: Colors.grey),
+                  //     borderRadius: BorderRadius.circular(12),
+                  //   ),
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(left: 15),
+                  //     child: TextFormField(
+                  //       decoration: const InputDecoration(
+                  //         border: InputBorder.none,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(height: 15),
+                  // Text(
+                  //   'Jalan',
+                  //   style: TextStyle(fontSize: 16),
+                  //   textAlign: TextAlign.left,
+                  // ),
+                  // SizedBox(height: 10),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     border: Border.all(color: Colors.grey),
+                  //     borderRadius: BorderRadius.circular(12),
+                  //   ),
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(left: 15),
+                  //     child: TextFormField(
+                  //       decoration: const InputDecoration(
+                  //         border: InputBorder.none,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(height: 15),
+                  // Text(
+                  //   'No.',
+                  //   style: TextStyle(fontSize: 16),
+                  //   textAlign: TextAlign.left,
+                  // ),
+                  // SizedBox(height: 10),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     border: Border.all(color: Colors.grey),
+                  //     borderRadius: BorderRadius.circular(12),
+                  //   ),
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(left: 15),
+                  //     child: TextFormField(
+                  //       decoration: const InputDecoration(
+                  //         border: InputBorder.none,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(height: 15),
+                  // Text(
+                  //   'RT',
+                  //   style: TextStyle(fontSize: 16),
+                  //   textAlign: TextAlign.left,
+                  // ),
+                  // SizedBox(height: 10),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     border: Border.all(color: Colors.grey),
+                  //     borderRadius: BorderRadius.circular(12),
+                  //   ),
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(left: 15),
+                  //     child: TextFormField(
+                  //       decoration: const InputDecoration(
+                  //         border: InputBorder.none,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(height: 15),
+                  // Text(
+                  //   'RW',
+                  //   style: TextStyle(fontSize: 16),
+                  //   textAlign: TextAlign.left,
+                  // ),
+                  // SizedBox(height: 10),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     border: Border.all(color: Colors.grey),
+                  //     borderRadius: BorderRadius.circular(12),
+                  //   ),
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(left: 15),
+                  //     child: TextFormField(
+                  //       decoration: const InputDecoration(
+                  //         border: InputBorder.none,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(height: 15),
+                  // Text(
+                  //   'Kode Pos',
+                  //   style: TextStyle(fontSize: 16),
+                  //   textAlign: TextAlign.left,
+                  // ),
+                  // SizedBox(height: 10),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     border: Border.all(color: Colors.grey),
+                  //     borderRadius: BorderRadius.circular(12),
+                  //   ),
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(left: 15),
+                  //     child: TextFormField(
+                  //       decoration: const InputDecoration(
+                  //         border: InputBorder.none,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                ],
+              ),
+              SizedBox(height: 15),
+              // Hak Tanah
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Hak Tanah',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey.shade400,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              controller: editController.aHakTanah,
+                              readOnly: true,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          buttonStyleData: ButtonStyleData(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          iconStyleData: const IconStyleData(
+                            icon: Icon(
+                              Icons.arrow_drop_down_outlined,
+                              color: Colors.grey,
+                              size: 25,
+                            ),
+                            iconEnabledColor: primaryTextColor,
+                          ),
+                          value: selectedHakTanah,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedHakTanah = newValue ?? "Sesuai";
+                            });
+                          },
+                          items: dropdownHakTanah.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  selectedHakTanah == "Tidak Sesuai"
+                      ? Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox(),
+                ],
+              ),
+              SizedBox(height: 15),
+              // No Sertifikat
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'No. Sertifikat',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey.shade400,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              controller: editController.aSertifikatNo,
+                              readOnly: true,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          buttonStyleData: ButtonStyleData(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          iconStyleData: const IconStyleData(
+                            icon: Icon(
+                              Icons.arrow_drop_down_outlined,
+                              color: Colors.grey,
+                              size: 25,
+                            ),
+                            iconEnabledColor: primaryTextColor,
+                          ),
+                          value: selectedNoSertifikat,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedNoSertifikat = newValue ?? "Sesuai";
+                            });
+                          },
+                          items: dropdownNoSertifikat.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  selectedNoSertifikat == "Tidak Sesuai"
+                      ? Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox(),
+                ],
+              ),
+              SizedBox(height: 15),
+              // Tanggal Sertifikat
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Tanggal Sertifikat',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey.shade400,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              controller: editController.aSertifikatTgl,
+                              readOnly: true,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          buttonStyleData: ButtonStyleData(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          iconStyleData: const IconStyleData(
+                            icon: Icon(
+                              Icons.arrow_drop_down_outlined,
+                              color: Colors.grey,
+                              size: 25,
+                            ),
+                            iconEnabledColor: primaryTextColor,
+                          ),
+                          value: selectedTglSertifikat,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedTglSertifikat = newValue ?? "Sesuai";
+                            });
+                          },
+                          items: dropdownTglSertifikat.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  selectedTglSertifikat == "Tidak Sesuai"
+                      ? Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox(),
+                ],
+              ),
+              SizedBox(height: 15),
+              // Keberadaan Barang
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Keberadaan Barang',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
                   DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       buttonStyleData: ButtonStyleData(
@@ -1335,6 +1600,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           ),
                         ),
                       ),
+                      isExpanded: true,
                       iconStyleData: const IconStyleData(
                         icon: Icon(
                           Icons.arrow_drop_down_outlined,
@@ -1343,13 +1609,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                         ),
                         iconEnabledColor: primaryTextColor,
                       ),
-                      value: selectedNoSertifikat,
+                      value: selectedKeberadaanBarang,
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedNoSertifikat = newValue ?? "Sesuai";
+                          selectedKeberadaanBarang = newValue ?? "Ada";
                         });
                       },
-                      items: dropdownNoSertifikat.map((String item) {
+                      items: dropdownKeberadaanBarang.map((String item) {
                         return DropdownMenuItem<String>(
                           value: item,
                           child: Text(item),
@@ -1359,52 +1625,191 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
-              selectedNoSertifikat == "Tidak Sesuai"
-                  ? Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    )
-                  : SizedBox(),
               SizedBox(height: 15),
-              Text(
-                'Tanggal Sertifikat',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Row(
+              // Kondisi
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey.shade400,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          controller: editController.aSertifikatTgl,
-                          readOnly: true,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
+                  Text(
+                    'Kondisi',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey.shade400,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              controller: editController.kondisi,
+                              readOnly: true,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                      SizedBox(width: 10),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          buttonStyleData: ButtonStyleData(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          iconStyleData: const IconStyleData(
+                            icon: Icon(
+                              Icons.arrow_drop_down_outlined,
+                              color: Colors.grey,
+                              size: 25,
+                            ),
+                            iconEnabledColor: primaryTextColor,
+                          ),
+                          value: selectedKondisi,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedKondisi = newValue ?? "Sesuai";
+                            });
+                          },
+                          items: dropdownKondisi.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(height: 10),
+                  selectedKondisi == "Tidak Sesuai"
+                      ? Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox(),
+                ],
+              ),
+              SizedBox(height: 15),
+              // Asal Usul
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Asal Usul',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey.shade400,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              controller: editController.asalUsul,
+                              readOnly: true,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          buttonStyleData: ButtonStyleData(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          iconStyleData: const IconStyleData(
+                            icon: Icon(
+                              Icons.arrow_drop_down_outlined,
+                              color: Colors.grey,
+                              size: 25,
+                            ),
+                            iconEnabledColor: primaryTextColor,
+                          ),
+                          value: selectedAsalUsul,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedAsalUsul = newValue ?? "Sesuai";
+                            });
+                          },
+                          items: dropdownAsalUsul.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  selectedAsalUsul == "Tidak Sesuai"
+                      ? Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox(),
+                ],
+              ),
+              SizedBox(height: 15),
+              // Penggunaan Status
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Penggunaan Status',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
                   DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       buttonStyleData: ButtonStyleData(
@@ -1416,6 +1821,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           ),
                         ),
                       ),
+                      isExpanded: true,
                       iconStyleData: const IconStyleData(
                         icon: Icon(
                           Icons.arrow_drop_down_outlined,
@@ -1424,13 +1830,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                         ),
                         iconEnabledColor: primaryTextColor,
                       ),
-                      value: selectedTglSertifikat,
+                      value: selectedStatus,
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedTglSertifikat = newValue ?? "Sesuai";
+                          selectedStatus = newValue ?? "Sedang digunakan";
                         });
                       },
-                      items: dropdownTglSertifikat.map((String item) {
+                      items: dropdownStatus.map((String item) {
                         return DropdownMenuItem<String>(
                           value: item,
                           child: Text(item),
@@ -1440,93 +1846,95 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
-              selectedTglSertifikat == "Tidak Sesuai"
-                  ? Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    )
-                  : SizedBox(),
               SizedBox(height: 15),
-              Text(
-                'Keberadaan Barang',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  buttonStyleData: ButtonStyleData(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                  isExpanded: true,
-                  iconStyleData: const IconStyleData(
-                    icon: Icon(
-                      Icons.arrow_drop_down_outlined,
-                      color: Colors.grey,
-                      size: 25,
-                    ),
-                    iconEnabledColor: primaryTextColor,
-                  ),
-                  value: selectedKeberadaanBarang,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedKeberadaanBarang = newValue ?? "Ada";
-                    });
-                  },
-                  items: dropdownKeberadaanBarang.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(item),
-                    );
-                  }).toList(),
-                ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                'Kondisi',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Row(
+              // Penggunaan Barang
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
+                  Text(
+                    'Penggunaan barang',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
                         borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey.shade400,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          controller: editController.kondisi,
-                          readOnly: true,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
+                        color: Colors.grey.shade400),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: TextFormField(
+                        controller: editController.aPenggunaan,
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                ],
+              ),
+              SizedBox(height: 10),
+              // Pemerintah Daerah
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RadioListTile(
+                    title: Text("Pemerintah Daerah"),
+                    value: "daerah",
+                    groupValue: choose_pemerintah,
+                    onChanged: (value) {
+                      setState(() {
+                        choose_pemerintah = value.toString();
+                      });
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Nama Kuasa Pengguna Barang lainnya/Pengguna Barang lainnya',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              // Pemerintah Pusat
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RadioListTile(
+                    title: Text("Pemerintah Pusat"),
+                    value: "pusat",
+                    groupValue: choose_pemerintah,
+                    onChanged: (value) {
+                      setState(() {
+                        choose_pemerintah = value.toString();
+                      });
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Dasar Penggunaan',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
                   DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       buttonStyleData: ButtonStyleData(
@@ -1538,6 +1946,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           ),
                         ),
                       ),
+                      isExpanded: true,
                       iconStyleData: const IconStyleData(
                         icon: Icon(
                           Icons.arrow_drop_down_outlined,
@@ -1546,13 +1955,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                         ),
                         iconEnabledColor: primaryTextColor,
                       ),
-                      value: selectedKondisi,
+                      value: selectedPenggunaanDaerahPusat,
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedKondisi = newValue ?? "Sesuai";
+                          selectedPenggunaanDaerahPusat = newValue ?? "Tidak";
                         });
                       },
-                      items: dropdownKondisi.map((String item) {
+                      items: dropdownPenggunaanDaerahPusat.map((String item) {
                         return DropdownMenuItem<String>(
                           value: item,
                           child: Text(item),
@@ -1560,54 +1969,98 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       }).toList(),
                     ),
                   ),
+                  selectedPenggunaanDaerahPusat == "Ada"
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Nama',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  SizedBox(width: 72),
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: IntrinsicWidth(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: TextFormField(
+                                            decoration: const InputDecoration(
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 15),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Nama Dokumen',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  SizedBox(width: 15),
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: IntrinsicWidth(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: TextFormField(
+                                            decoration: const InputDecoration(
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      : SizedBox(),
                 ],
               ),
               SizedBox(height: 10),
-              selectedKondisi == "Tidak Sesuai"
-                  ? Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    )
-                  : SizedBox(),
-              SizedBox(height: 15),
-              Text(
-                'Asal Usul',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Row(
+              // Pemerintah Daerah Lain
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey.shade400,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          controller: editController.asalUsul,
-                          readOnly: true,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    ),
+                  RadioListTile(
+                    title: Text("Pemerintah Daerah Lain"),
+                    value: "daerah_lain",
+                    groupValue: choose_pemerintah,
+                    onChanged: (value) {
+                      setState(() {
+                        choose_pemerintah = value.toString();
+                      });
+                    },
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(height: 10),
+                  Text(
+                    'Dasar Penggunaan',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
                   DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       buttonStyleData: ButtonStyleData(
@@ -1619,6 +2072,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           ),
                         ),
                       ),
+                      isExpanded: true,
                       iconStyleData: const IconStyleData(
                         icon: Icon(
                           Icons.arrow_drop_down_outlined,
@@ -1627,13 +2081,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                         ),
                         iconEnabledColor: primaryTextColor,
                       ),
-                      value: selectedAsalUsul,
+                      value: selectedPenggunaanDaerahLain,
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedAsalUsul = newValue ?? "Sesuai";
+                          selectedPenggunaanDaerahLain = newValue ?? "Ya";
                         });
                       },
-                      items: dropdownAsalUsul.map((String item) {
+                      items: dropdownPenggunaanDaerahLain.map((String item) {
                         return DropdownMenuItem<String>(
                           value: item,
                           child: Text(item),
@@ -1641,475 +2095,202 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       }).toList(),
                     ),
                   ),
+                  selectedPenggunaanDaerahLain == "Ada"
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Nama',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  SizedBox(width: 72),
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: IntrinsicWidth(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: TextFormField(
+                                            decoration: const InputDecoration(
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 15),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Nama Dokumen',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  SizedBox(width: 15),
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: IntrinsicWidth(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: TextFormField(
+                                            decoration: const InputDecoration(
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      : SizedBox(),
                 ],
               ),
               SizedBox(height: 10),
-              selectedAsalUsul == "Tidak Sesuai"
-                  ? Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
+              // Pihak Lain
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RadioListTile(
+                    title: Text("Pihak Lain"),
+                    value: "pihak_lain",
+                    groupValue: choose_pemerintah,
+                    onChanged: (value) {
+                      setState(() {
+                        choose_pemerintah = value.toString();
+                      });
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Dasar Penggunaan',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton2(
+                      buttonStyleData: ButtonStyleData(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.grey,
                           ),
                         ),
                       ),
-                    )
-                  : SizedBox(),
-              SizedBox(height: 15),
-              Text(
-                'Penggunaan Status',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  buttonStyleData: ButtonStyleData(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.grey,
+                      isExpanded: true,
+                      iconStyleData: const IconStyleData(
+                        icon: Icon(
+                          Icons.arrow_drop_down_outlined,
+                          color: Colors.grey,
+                          size: 25,
+                        ),
+                        iconEnabledColor: primaryTextColor,
                       ),
+                      value: selectedPenggunaanPihakLain,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedPenggunaanPihakLain = newValue ?? "Ya";
+                        });
+                      },
+                      items: dropdownPenggunaanPihakLain.map((String item) {
+                        return DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(item),
+                        );
+                      }).toList(),
                     ),
                   ),
-                  isExpanded: true,
-                  iconStyleData: const IconStyleData(
-                    icon: Icon(
-                      Icons.arrow_drop_down_outlined,
-                      color: Colors.grey,
-                      size: 25,
-                    ),
-                    iconEnabledColor: primaryTextColor,
-                  ),
-                  value: selectedStatus,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedStatus = newValue ?? "Sedang digunakan";
-                    });
-                  },
-                  items: dropdownStatus.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(item),
-                    );
-                  }).toList(),
-                ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                'Penggunaan barang',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.grey.shade400),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    controller: editController.aPenggunaan,
-                    readOnly: true,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-              RadioListTile(
-                title: Text("Pemerintah Daerah"),
-                value: "daerah",
-                groupValue: choose_pemerintah,
-                onChanged: (value) {
-                  setState(() {
-                    choose_pemerintah = value.toString();
-                  });
-                },
-              ),
-              SizedBox(height: 10),
-              Text(
-                'Nama Kuasa Pengguna Barang lainnya/Pengguna Barang lainnya',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-              RadioListTile(
-                title: Text("Pemerintah Pusat"),
-                value: "pusat",
-                groupValue: choose_pemerintah,
-                onChanged: (value) {
-                  setState(() {
-                    choose_pemerintah = value.toString();
-                  });
-                },
-              ),
-              SizedBox(height: 10),
-              Text(
-                'Dasar Penggunaan',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  buttonStyleData: ButtonStyleData(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                  isExpanded: true,
-                  iconStyleData: const IconStyleData(
-                    icon: Icon(
-                      Icons.arrow_drop_down_outlined,
-                      color: Colors.grey,
-                      size: 25,
-                    ),
-                    iconEnabledColor: primaryTextColor,
-                  ),
-                  value: selectedPenggunaanDaerahPusat,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedPenggunaanDaerahPusat = newValue ?? "Tidak";
-                    });
-                  },
-                  items: dropdownPenggunaanDaerahPusat.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(item),
-                    );
-                  }).toList(),
-                ),
-              ),
-              selectedPenggunaanDaerahPusat == "Ada"
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 15),
-                      child: Column(
-                        children: [
-                          Row(
+                  selectedPenggunaanPihakLain == "Ada"
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Column(
                             children: [
-                              Text(
-                                'Nama',
-                                style: TextStyle(fontSize: 16),
-                                textAlign: TextAlign.left,
-                              ),
-                              SizedBox(width: 72),
-                              Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(12),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Nama',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.left,
                                   ),
-                                  child: IntrinsicWidth(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 15),
-                                      child: TextFormField(
-                                        decoration: const InputDecoration(
-                                          border: InputBorder.none,
+                                  SizedBox(width: 72),
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: IntrinsicWidth(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: TextFormField(
+                                            decoration: const InputDecoration(
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
-                          SizedBox(height: 15),
-                          Row(
-                            children: [
-                              Text(
-                                'Nama Dokumen',
-                                style: TextStyle(fontSize: 16),
-                                textAlign: TextAlign.left,
-                              ),
-                              SizedBox(width: 15),
-                              Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(12),
+                              SizedBox(height: 15),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Nama Dokumen',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.left,
                                   ),
-                                  child: IntrinsicWidth(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 15),
-                                      child: TextFormField(
-                                        decoration: const InputDecoration(
-                                          border: InputBorder.none,
+                                  SizedBox(width: 15),
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: IntrinsicWidth(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: TextFormField(
+                                            decoration: const InputDecoration(
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    )
-                  : SizedBox(),
-              SizedBox(height: 10),
-              RadioListTile(
-                title: Text("Pemerintah Daerah Lain"),
-                value: "daerah_lain",
-                groupValue: choose_pemerintah,
-                onChanged: (value) {
-                  setState(() {
-                    choose_pemerintah = value.toString();
-                  });
-                },
+                        )
+                      : SizedBox(),
+                ],
               ),
-              SizedBox(height: 10),
-              Text(
-                'Dasar Penggunaan',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  buttonStyleData: ButtonStyleData(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                  isExpanded: true,
-                  iconStyleData: const IconStyleData(
-                    icon: Icon(
-                      Icons.arrow_drop_down_outlined,
-                      color: Colors.grey,
-                      size: 25,
-                    ),
-                    iconEnabledColor: primaryTextColor,
-                  ),
-                  value: selectedPenggunaanDaerahLain,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedPenggunaanDaerahLain = newValue ?? "Ya";
-                    });
-                  },
-                  items: dropdownPenggunaanDaerahLain.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(item),
-                    );
-                  }).toList(),
-                ),
-              ),
-              selectedPenggunaanDaerahLain == "Ada"
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 15),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                'Nama',
-                                style: TextStyle(fontSize: 16),
-                                textAlign: TextAlign.left,
-                              ),
-                              SizedBox(width: 72),
-                              Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: IntrinsicWidth(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 15),
-                                      child: TextFormField(
-                                        decoration: const InputDecoration(
-                                          border: InputBorder.none,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 15),
-                          Row(
-                            children: [
-                              Text(
-                                'Nama Dokumen',
-                                style: TextStyle(fontSize: 16),
-                                textAlign: TextAlign.left,
-                              ),
-                              SizedBox(width: 15),
-                              Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: IntrinsicWidth(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 15),
-                                      child: TextFormField(
-                                        decoration: const InputDecoration(
-                                          border: InputBorder.none,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
-                  : SizedBox(),
-              SizedBox(height: 10),
-              RadioListTile(
-                title: Text("Pihak Lain"),
-                value: "pihak_lain",
-                groupValue: choose_pemerintah,
-                onChanged: (value) {
-                  setState(() {
-                    choose_pemerintah = value.toString();
-                  });
-                },
-              ),
-              SizedBox(height: 10),
-              Text(
-                'Dasar Penggunaan',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 10),
-              DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  buttonStyleData: ButtonStyleData(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                  isExpanded: true,
-                  iconStyleData: const IconStyleData(
-                    icon: Icon(
-                      Icons.arrow_drop_down_outlined,
-                      color: Colors.grey,
-                      size: 25,
-                    ),
-                    iconEnabledColor: primaryTextColor,
-                  ),
-                  value: selectedPenggunaanPihakLain,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedPenggunaanPihakLain = newValue ?? "Ya";
-                    });
-                  },
-                  items: dropdownPenggunaanPihakLain.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(item),
-                    );
-                  }).toList(),
-                ),
-              ),
-              selectedPenggunaanPihakLain == "Ada"
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 15),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                'Nama',
-                                style: TextStyle(fontSize: 16),
-                                textAlign: TextAlign.left,
-                              ),
-                              SizedBox(width: 72),
-                              Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: IntrinsicWidth(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 15),
-                                      child: TextFormField(
-                                        decoration: const InputDecoration(
-                                          border: InputBorder.none,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 15),
-                          Row(
-                            children: [
-                              Text(
-                                'Nama Dokumen',
-                                style: TextStyle(fontSize: 16),
-                                textAlign: TextAlign.left,
-                              ),
-                              SizedBox(width: 15),
-                              Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: IntrinsicWidth(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 15),
-                                      child: TextFormField(
-                                        decoration: const InputDecoration(
-                                          border: InputBorder.none,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
-                  : SizedBox(),
               SizedBox(height: 20),
               Text(
                 'Tercatat Ganda',

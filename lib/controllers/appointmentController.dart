@@ -31,7 +31,7 @@ class AppointmentController extends GetxController {
         id +
         '/' +
         kategori +
-        '?perPage=5&page=' +
+        '?perPage=10&page=' +
         page.toString() +
         '&tahun=' +
         tahun.text);

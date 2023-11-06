@@ -147,7 +147,11 @@ class EditInventoryController extends GetxController {
   late TextEditingController skpd, skpdUraian, barang, namaBarang;
 
   // FIELDS CUSTOM
-  late TextEditingController tahunSekarang, tglInventaris;
+  late TextEditingController tahunNilai,
+      tglInventaris,
+      noRegisterBaru,
+      jumlahBaru,
+      luasBaru;
 
   @override
   void onInit() {
@@ -292,10 +296,13 @@ class EditInventoryController extends GetxController {
     manfaatKategoriId = TextEditingController();
     manfaatStatusId = TextEditingController();
     //
-    tahunSekarang = TextEditingController();
+    tahunNilai = TextEditingController();
     tglInventaris = TextEditingController();
     skpd = TextEditingController();
     skpdUraian = TextEditingController();
+    noRegisterBaru = TextEditingController();
+    jumlahBaru = TextEditingController();
+    luasBaru = TextEditingController();
     barang = TextEditingController();
     namaBarang = TextEditingController();
   }
