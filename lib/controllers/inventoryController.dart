@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 class InventoryController extends GetxController {
   // FIELDS FROM TABLES PENETAPAN
   late TextEditingController uraian,
-      tahun,
       noRegister,
       tglPerolehan,
       caraPerolehan,
@@ -23,9 +22,6 @@ class InventoryController extends GetxController {
       noSp2d,
       noId,
       kib,
-      keterangan,
-      lat,
-      long,
       aRtRw,
       aNop,
       aLuasM2,
@@ -110,7 +106,6 @@ class InventoryController extends GetxController {
       updated,
       createUid,
       updateUid,
-      status,
       gJenisBarang,
       gKeterangan1,
       gKeterangan2,
@@ -153,11 +148,87 @@ class InventoryController extends GetxController {
       jumlahBaru,
       luasBaru;
 
+  // FIELDS General
+  late TextEditingController kode,
+      nama,
+      kib_id,
+      kategori_id,
+      departemen_id,
+      tgl_inventaris,
+      no_register_awal,
+      no_register_akhir,
+      no_register_status,
+      kategori_id_awal,
+      kategori_id_akhir,
+      kategori_id_status,
+      keberadaan_fisik,
+      kondisi_awal,
+      kondisi_akhir,
+      kondisi_status,
+      pemilik_id,
+      tercatat_ganda,
+      lat,
+      long,
+      lainnya,
+      keterangan,
+      status,
+      file_nm,
+      perolehan_awal,
+      perolehan_akhir,
+      perolehan_status,
+      penggunaan_awal,
+      penggunaan_akhir,
+      penggunaan_status,
+      petugas;
+
+  // FIELDS Inventaris A
+  late TextEditingController a_alamat_awal, a_alamat_akhir, a_alamat_status;
+
+  // FIELDS Inventaris B
+  late TextEditingController b_merk_awal,
+      b_merk_akhir,
+      b_merk_status,
+      b_nomor_rangka_awal,
+      b_nomor_rangka_akhir,
+      b_nomor_rangka_status,
+      b_nomor_bpkb_awal,
+      b_nomor_bpkb_akhir,
+      b_nomor_bpkb_status,
+      b_nomor_polisi_awal,
+      b_nomor_polisi_akhir,
+      b_nomor_polisi_status;
+
+  // FIELDS Inventaris C
+  late TextEditingController c_status_tanah_awal,
+      c_status_tanah_akhir,
+      c_status_tanah_status,
+      c_lokasi_awal,
+      c_lokasi_akhir,
+      c_lokasi_status;
+
+  // FIELDS Inventaris D
+  late TextEditingController d_status_tanah_awal,
+      d_status_tanah_akhir,
+      d_status_tanah_status,
+      d_kontruksi_awal,
+      d_kontruksi_akhir,
+      d_kontruksi_status,
+      d_lokasi_awal,
+      d_lokasi_akhir,
+      d_lokasi_status;
+
+  // FIELDS Inventaris E
+  late TextEditingController e_judul_awal,
+      e_judul_akhir,
+      e_judul_status,
+      e_spek_awal,
+      e_spek_akhir,
+      e_spek_status;
+
   @override
   void onInit() {
     super.onInit();
     uraian = TextEditingController();
-    tahun = TextEditingController();
     noRegister = TextEditingController();
     tglPerolehan = TextEditingController();
     caraPerolehan = TextEditingController();
