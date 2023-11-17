@@ -35,21 +35,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
   List<DataColumn> columns = [];
   List<DataColumn> rows = [];
 
-  String mapPemilikIdToText(int pemilikId) {
-    switch (pemilikId) {
-      case 1:
-        return 'Pemerintah Daerah';
-      case 2:
-        return 'Pemerintah Daerah Lainnya';
-      case 3:
-        return 'Pemerintah Pusat';
-      case 4:
-        return 'Pihak Lain';
-      default:
-        return 'Tidak Diketahui';
-    }
-  }
-
   void modifyTitle(String originalTitle) {
     if (originalTitle == "Tanah (A)") {
       modifiedTitle = "A";
@@ -149,7 +134,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
         DataColumn(label: Text('Kategori Kode')),
         DataColumn(label: Text('Reg.')),
         DataColumn(label: Text('Uraian')),
-        DataColumn(label: Text('Th. Nilai')),
         DataColumn(label: Text('Tgl. Perolehan')),
         DataColumn(label: Text('Th. Beli')),
         DataColumn(label: Text('Ukuran/CC')),
@@ -165,7 +149,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
         DataColumn(label: Text('Kondisi')),
         DataColumn(label: Text('Asal Usul')),
         DataColumn(label: Text('Keterangan')),
-        DataColumn(label: Text('Ruangan')),
         DataColumn(label: Text('Tgl Inventaris')),
         DataColumn(label: Text('Keberadaan Fisik')),
         DataColumn(label: Text('Kondisi Fisik')),
@@ -369,8 +352,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
-            bool isSelected = penetapan['tgl_inventaris_formated'] != null &&
-                penetapan['tgl_inventaris_formated']
+            bool isSelected = penetapan['tgl_inventaris_formatted'] != null &&
+                penetapan['tgl_inventaris_formatted']
                     .contains(currentYear.toString());
             return DataRow(
               selected: isSelected,
@@ -408,8 +391,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   ],
                 )),
                 DataCell(
-                  Text(penetapan['kode'] != null && penetapan['kode'] != ''
-                      ? penetapan['kode'].toString()
+                  Text(penetapan['kategori_kd'] != null &&
+                          penetapan['kategori_kd'] != ''
+                      ? penetapan['kategori_kd'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -419,14 +403,15 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['nama'] != null && penetapan['nama'] != ''
-                      ? penetapan['nama'].toString()
+                  Text(penetapan['kategori_nm'] != null &&
+                          penetapan['kategori_nm'] != ''
+                      ? penetapan['kategori_nm'].toString()
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_perolehan_formated'] != null &&
-                          penetapan['tgl_perolehan_formated'] != ''
-                      ? penetapan['tgl_perolehan_formated'].toString()
+                  Text(penetapan['tgl_perolehan_formatted'] != null &&
+                          penetapan['tgl_perolehan_formatted'] != ''
+                      ? penetapan['tgl_perolehan_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -460,9 +445,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['sertifikat_tgl'] != null &&
-                          penetapan['sertifikat_tgl'] != ''
-                      ? penetapan['sertifikat_tgl'].toString()
+                  Text(penetapan['a_sertifikat_tanggal_formatted'] != null &&
+                          penetapan['a_sertifikat_tanggal_formatted'] != ''
+                      ? penetapan['a_sertifikat_tanggal_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -472,9 +457,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['harga_formated'] != null &&
-                          penetapan['harga_formated'] != ''
-                      ? penetapan['harga_formated'].toString()
+                  Text(penetapan['perolehan_formatted'] != null &&
+                          penetapan['perolehan_formatted'] != ''
+                      ? penetapan['perolehan_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -496,29 +481,29 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_inventaris_formated'] != null &&
-                          penetapan['tgl_inventaris_formated'] != ''
-                      ? penetapan['tgl_inventaris_formated'].toString()
+                  Text(penetapan['tgl_inventaris_formatted'] != null &&
+                          penetapan['tgl_inventaris_formatted'] != ''
+                      ? penetapan['tgl_inventaris_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['keberadaan_fisik'] != null &&
-                          penetapan['keberadaan_fisik'] != ''
-                      ? (penetapan['keberadaan_fisik'] == 1
+                  Text(penetapan['keberadaan_barang_status'] != null &&
+                          penetapan['keberadaan_barang_status'] != ''
+                      ? (penetapan['keberadaan_barang_status'] == 1
                           ? 'Ada'
                           : 'Tidak Ada/Tidak Ditemukan')
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['kondisi_akhir'] != null &&
-                          penetapan['kondisi_akhir'] != ''
-                      ? penetapan['kondisi_akhir'].toString()
-                      : '-'),
+                  Text(
+                      penetapan['kondisi'] != null && penetapan['kondisi'] != ''
+                          ? penetapan['kondisi'].toString()
+                          : '-'),
                 ),
                 DataCell(
                   Text(penetapan['penguasaan'] != null &&
                           penetapan['penguasaan'] != ''
-                      ? mapPemilikIdToText(penetapan['penguasaan'])
+                      ? penetapan['penguasaan'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -536,8 +521,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
-            bool isSelected = penetapan['tgl_inventaris_formated'] != null &&
-                penetapan['tgl_inventaris_formated']
+            bool isSelected = penetapan['tgl_inventaris_formatted'] != null &&
+                penetapan['tgl_inventaris_formatted']
                     .contains(currentYear.toString());
             return DataRow(
               selected: isSelected,
@@ -575,8 +560,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   ],
                 )),
                 DataCell(
-                  Text(penetapan['kode'] != null && penetapan['kode'] != ''
-                      ? penetapan['kode'].toString()
+                  Text(penetapan['kategori_kd'] != null &&
+                          penetapan['kategori_kd'] != ''
+                      ? penetapan['kategori_kd'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -586,20 +572,15 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['nama'] != null && penetapan['nama'] != ''
-                      ? penetapan['nama'].toString()
+                  Text(penetapan['kategori_nm'] != null &&
+                          penetapan['kategori_nm'] != ''
+                      ? penetapan['kategori_nm'].toString()
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['thn_nilai'] != null &&
-                          penetapan['thn_nilai'] != ''
-                      ? penetapan['thn_nilai'].toString()
-                      : '-'),
-                ),
-                DataCell(
-                  Text(penetapan['tgl_perolehan_formated'] != null &&
-                          penetapan['tgl_perolehan_formated'] != ''
-                      ? penetapan['tgl_perolehan_formated'].toString()
+                  Text(penetapan['tgl_perolehan_formatted'] != null &&
+                          penetapan['tgl_perolehan_formatted'] != ''
+                      ? penetapan['tgl_perolehan_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -660,9 +641,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['harga_formated'] != null &&
-                          penetapan['harga_formated'] != ''
-                      ? penetapan['harga_formated'].toString()
+                  Text(penetapan['perolehan_formatted'] != null &&
+                          penetapan['perolehan_formatted'] != ''
+                      ? penetapan['perolehan_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -684,32 +665,29 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text('-'),
-                ),
-                DataCell(
-                  Text(penetapan['tgl_inventaris_formated'] != null &&
-                          penetapan['tgl_inventaris_formated'] != ''
-                      ? penetapan['tgl_inventaris_formated'].toString()
+                  Text(penetapan['tgl_inventaris_formatted'] != null &&
+                          penetapan['tgl_inventaris_formatted'] != ''
+                      ? penetapan['tgl_inventaris_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['keberadaan_fisik'] != null &&
-                          penetapan['keberadaan_fisik'] != ''
-                      ? (penetapan['keberadaan_fisik'] == 1
+                  Text(penetapan['keberadaan_barang_status'] != null &&
+                          penetapan['keberadaan_barang_status'] != ''
+                      ? (penetapan['keberadaan_barang_status'] == 1
                           ? 'Ada'
                           : 'Tidak Ada/Tidak Ditemukan')
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['kondisi_akhir'] != null &&
-                          penetapan['kondisi_akhir'] != ''
-                      ? penetapan['kondisi_akhir'].toString()
-                      : '-'),
+                  Text(
+                      penetapan['kondisi'] != null && penetapan['kondisi'] != ''
+                          ? penetapan['kondisi'].toString()
+                          : '-'),
                 ),
                 DataCell(
                   Text(penetapan['penguasaan'] != null &&
                           penetapan['penguasaan'] != ''
-                      ? mapPemilikIdToText(penetapan['penguasaan'])
+                      ? penetapan['penguasaan'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -727,8 +705,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
-            bool isSelected = penetapan['tgl_inventaris_formated'] != null &&
-                penetapan['tgl_inventaris_formated']
+            bool isSelected = penetapan['tgl_inventaris_formatted'] != null &&
+                penetapan['tgl_inventaris_formatted']
                     .contains(currentYear.toString());
             return DataRow(
               selected: isSelected,
@@ -776,8 +754,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   ],
                 )),
                 DataCell(
-                  Text(penetapan['kode'] != null && penetapan['kode'] != ''
-                      ? penetapan['kode'].toString()
+                  Text(penetapan['kategori_kd'] != null &&
+                          penetapan['kategori_kd'] != ''
+                      ? penetapan['kategori_kd'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -787,14 +766,15 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['nama'] != null && penetapan['nama'] != ''
-                      ? penetapan['nama'].toString()
+                  Text(penetapan['kategori_nm'] != null &&
+                          penetapan['kategori_nm'] != ''
+                      ? penetapan['kategori_nm'].toString()
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_perolehan_formated'] != null &&
-                          penetapan['tgl_perolehan_formated'] != ''
-                      ? penetapan['tgl_perolehan_formated'].toString()
+                  Text(penetapan['tgl_perolehan_formatted'] != null &&
+                          penetapan['tgl_perolehan_formatted'] != ''
+                      ? penetapan['tgl_perolehan_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -828,9 +808,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['dokumen_tgl'] != null &&
-                          penetapan['dokumen_tgl'] != ''
-                      ? penetapan['dokumen_tgl'].toString()
+                  Text(penetapan['c_dokumen_tanggal_formatted'] != null &&
+                          penetapan['c_dokumen_tanggal_formatted'] != ''
+                      ? penetapan['c_dokumen_tanggal_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -858,9 +838,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['harga_formated'] != null &&
-                          penetapan['harga_formated'] != ''
-                      ? penetapan['harga_formated'].toString()
+                  Text(penetapan['perolehan_formatted'] != null &&
+                          penetapan['perolehan_formatted'] != ''
+                      ? penetapan['perolehan_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -882,29 +862,29 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_inventaris_formated'] != null &&
-                          penetapan['tgl_inventaris_formated'] != ''
-                      ? penetapan['tgl_inventaris_formated'].toString()
+                  Text(penetapan['tgl_inventaris_formatted'] != null &&
+                          penetapan['tgl_inventaris_formatted'] != ''
+                      ? penetapan['tgl_inventaris_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['keberadaan_fisik'] != null &&
-                          penetapan['keberadaan_fisik'] != ''
-                      ? (penetapan['keberadaan_fisik'] == 1
+                  Text(penetapan['keberadaan_barang_status'] != null &&
+                          penetapan['keberadaan_barang_status'] != ''
+                      ? (penetapan['keberadaan_barang_status'] == 1
                           ? 'Ada'
                           : 'Tidak Ada/Tidak Ditemukan')
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['kondisi_akhir'] != null &&
-                          penetapan['kondisi_akhir'] != ''
-                      ? penetapan['kondisi_akhir'].toString()
-                      : '-'),
+                  Text(
+                      penetapan['kondisi'] != null && penetapan['kondisi'] != ''
+                          ? penetapan['kondisi'].toString()
+                          : '-'),
                 ),
                 DataCell(
                   Text(penetapan['penguasaan'] != null &&
                           penetapan['penguasaan'] != ''
-                      ? mapPemilikIdToText(penetapan['penguasaan'])
+                      ? penetapan['penguasaan'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -922,8 +902,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
-            bool isSelected = penetapan['tgl_inventaris_formated'] != null &&
-                penetapan['tgl_inventaris_formated']
+            bool isSelected = penetapan['tgl_inventaris_formatted'] != null &&
+                penetapan['tgl_inventaris_formatted']
                     .contains(currentYear.toString());
             return DataRow(
               selected: isSelected,
@@ -971,8 +951,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   ],
                 )),
                 DataCell(
-                  Text(penetapan['kode'] != null && penetapan['kode'] != ''
-                      ? penetapan['kode'].toString()
+                  Text(penetapan['kategori_kd'] != null &&
+                          penetapan['kategori_kd'] != ''
+                      ? penetapan['kategori_kd'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -982,14 +963,15 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['nama'] != null && penetapan['nama'] != ''
-                      ? penetapan['nama'].toString()
+                  Text(penetapan['kategori_nm'] != null &&
+                          penetapan['kategori_nm'] != ''
+                      ? penetapan['kategori_nm'].toString()
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_perolehan_formated'] != null &&
-                          penetapan['tgl_perolehan_formated'] != ''
-                      ? penetapan['tgl_perolehan_formated'].toString()
+                  Text(penetapan['tgl_perolehan_formatted'] != null &&
+                          penetapan['tgl_perolehan_formatted'] != ''
+                      ? penetapan['tgl_perolehan_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -1028,9 +1010,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['dokumen_tgl'] != null &&
-                          penetapan['dokumen_tgl'] != ''
-                      ? penetapan['dokumen_tgl'].toString()
+                  Text(penetapan['d_dokumen_tanggal_formatted'] != null &&
+                          penetapan['d_dokumen_tanggal_formatted'] != ''
+                      ? penetapan['d_dokumen_tanggal_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -1046,9 +1028,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['harga_formated'] != null &&
-                          penetapan['harga_formated'] != ''
-                      ? penetapan['harga_formated'].toString()
+                  Text(penetapan['perolehan_formatted'] != null &&
+                          penetapan['perolehan_formatted'] != ''
+                      ? penetapan['perolehan_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -1070,29 +1052,29 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_inventaris_formated'] != null &&
-                          penetapan['tgl_inventaris_formated'] != ''
-                      ? penetapan['tgl_inventaris_formated'].toString()
+                  Text(penetapan['tgl_inventaris_formatted'] != null &&
+                          penetapan['tgl_inventaris_formatted'] != ''
+                      ? penetapan['tgl_inventaris_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['keberadaan_fisik'] != null &&
-                          penetapan['keberadaan_fisik'] != ''
-                      ? (penetapan['keberadaan_fisik'] == 1
+                  Text(penetapan['keberadaan_barang_status'] != null &&
+                          penetapan['keberadaan_barang_status'] != ''
+                      ? (penetapan['keberadaan_barang_status'] == 1
                           ? 'Ada'
                           : 'Tidak Ada/Tidak Ditemukan')
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['kondisi_akhir'] != null &&
-                          penetapan['kondisi_akhir'] != ''
-                      ? penetapan['kondisi_akhir'].toString()
-                      : '-'),
+                  Text(
+                      penetapan['kondisi'] != null && penetapan['kondisi'] != ''
+                          ? penetapan['kondisi'].toString()
+                          : '-'),
                 ),
                 DataCell(
                   Text(penetapan['penguasaan'] != null &&
                           penetapan['penguasaan'] != ''
-                      ? mapPemilikIdToText(penetapan['penguasaan'])
+                      ? penetapan['penguasaan'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -1110,7 +1092,15 @@ class _InventoryScreenState extends State<InventoryScreen> {
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
+            bool isSelected = penetapan['tgl_inventaris_formatted'] != null &&
+                penetapan['tgl_inventaris_formatted']
+                    .contains(currentYear.toString());
             return DataRow(
+              selected: isSelected,
+              color: isSelected
+                  ? MaterialStateProperty.all(
+                      Color.fromARGB(255, 206, 255, 207))
+                  : null,
               cells: [
                 DataCell(Text(penetapan['nomor'].toString())),
                 DataCell(Row(
@@ -1151,8 +1141,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   ],
                 )),
                 DataCell(
-                  Text(penetapan['kode'] != null && penetapan['kode'] != ''
-                      ? penetapan['kode'].toString()
+                  Text(penetapan['kategori_kd'] != null &&
+                          penetapan['kategori_kd'] != ''
+                      ? penetapan['kategori_kd'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -1162,14 +1153,15 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['nama'] != null && penetapan['nama'] != ''
-                      ? penetapan['nama'].toString()
+                  Text(penetapan['kategori_nm'] != null &&
+                          penetapan['kategori_nm'] != ''
+                      ? penetapan['kategori_nm'].toString()
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_perolehan_formated'] != null &&
-                          penetapan['tgl_perolehan_formated'] != ''
-                      ? penetapan['tgl_perolehan_formated'].toString()
+                  Text(penetapan['tgl_perolehan_formatted'] != null &&
+                          penetapan['tgl_perolehan_formatted'] != ''
+                      ? penetapan['tgl_perolehan_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -1213,8 +1205,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['harga'] != null && penetapan['harga'] != ''
-                      ? penetapan['harga'].toString()
+                  Text(penetapan['perolehan_formatted'] != null &&
+                          penetapan['perolehan_formatted'] != ''
+                      ? penetapan['perolehan_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -1236,27 +1229,29 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_inventaris'] != null &&
-                          penetapan['tgl_inventaris'] != ''
-                      ? penetapan['tgl_inventaris'].toString()
+                  Text(penetapan['tgl_inventaris_formatted'] != null &&
+                          penetapan['tgl_inventaris_formatted'] != ''
+                      ? penetapan['tgl_inventaris_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['keberadaan_fisik'] != null &&
-                          penetapan['keberadaan_fisik'] != ''
-                      ? penetapan['keberadaan_fisik'].toString()
+                  Text(penetapan['keberadaan_barang_status'] != null &&
+                          penetapan['keberadaan_barang_status'] != ''
+                      ? (penetapan['keberadaan_barang_status'] == 1
+                          ? 'Ada'
+                          : 'Tidak Ada/Tidak Ditemukan')
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['kondisi_akhir'] != null &&
-                          penetapan['kondisi_akhir'] != ''
-                      ? penetapan['kondisi_akhir'].toString()
-                      : '-'),
+                  Text(
+                      penetapan['kondisi'] != null && penetapan['kondisi'] != ''
+                          ? penetapan['kondisi'].toString()
+                          : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['penggunaan_status'] != null &&
-                          penetapan['penggunaan_status'] != ''
-                      ? penetapan['penggunaan_status'].toString()
+                  Text(penetapan['penguasaan'] != null &&
+                          penetapan['penguasaan'] != ''
+                      ? penetapan['penguasaan'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -1274,7 +1269,15 @@ class _InventoryScreenState extends State<InventoryScreen> {
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
+            bool isSelected = penetapan['tgl_inventaris_formatted'] != null &&
+                penetapan['tgl_inventaris_formatted']
+                    .contains(currentYear.toString());
             return DataRow(
+              selected: isSelected,
+              color: isSelected
+                  ? MaterialStateProperty.all(
+                      Color.fromARGB(255, 206, 255, 207))
+                  : null,
               cells: [
                 DataCell(Text(penetapan['nomor'].toString())),
                 DataCell(Row(
@@ -1315,8 +1318,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   ],
                 )),
                 DataCell(
-                  Text(penetapan['kode'] != null && penetapan['kode'] != ''
-                      ? penetapan['kode'].toString()
+                  Text(penetapan['kategori_kd'] != null &&
+                          penetapan['kategori_kd'] != ''
+                      ? penetapan['kategori_kd'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -1326,14 +1330,15 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['nama'] != null && penetapan['nama'] != ''
-                      ? penetapan['nama'].toString()
+                  Text(penetapan['kategori_nm'] != null &&
+                          penetapan['kategori_nm'] != ''
+                      ? penetapan['kategori_nm'].toString()
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_perolehan_formated'] != null &&
-                          penetapan['tgl_perolehan_formated'] != ''
-                      ? penetapan['tgl_perolehan_formated'].toString()
+                  Text(penetapan['tgl_perolehan_formatted'] != null &&
+                          penetapan['tgl_perolehan_formatted'] != ''
+                      ? penetapan['tgl_perolehan_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -1367,9 +1372,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['dokumen_tgl'] != null &&
-                          penetapan['dokumen_tgl'] != ''
-                      ? penetapan['dokumen_tgl'].toString()
+                  Text(penetapan['f_dokumen_tanggal_formatted'] != null &&
+                          penetapan['f_dokumen_tanggal_formatted'] != ''
+                      ? penetapan['f_dokumen_tanggal_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -1385,8 +1390,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['harga'] != null && penetapan['harga'] != ''
-                      ? penetapan['harga'].toString()
+                  Text(penetapan['perolehan_formatted'] != null &&
+                          penetapan['perolehan_formatted'] != ''
+                      ? penetapan['perolehan_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -1408,27 +1414,29 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_inventaris'] != null &&
-                          penetapan['tgl_inventaris'] != ''
-                      ? penetapan['tgl_inventaris'].toString()
+                  Text(penetapan['tgl_inventaris_formatted'] != null &&
+                          penetapan['tgl_inventaris_formatted'] != ''
+                      ? penetapan['tgl_inventaris_formatted'].toString()
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['keberadaan_fisik'] != null &&
-                          penetapan['keberadaan_fisik'] != ''
-                      ? penetapan['keberadaan_fisik'].toString()
+                  Text(penetapan['keberadaan_barang_status'] != null &&
+                          penetapan['keberadaan_barang_status'] != ''
+                      ? (penetapan['keberadaan_barang_status'] == 1
+                          ? 'Ada'
+                          : 'Tidak Ada/Tidak Ditemukan')
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['kondisi_akhir'] != null &&
-                          penetapan['kondisi_akhir'] != ''
-                      ? penetapan['kondisi_akhir'].toString()
-                      : '-'),
+                  Text(
+                      penetapan['kondisi'] != null && penetapan['kondisi'] != ''
+                          ? penetapan['kondisi'].toString()
+                          : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['penggunaan_status'] != null &&
-                          penetapan['penggunaan_status'] != ''
-                      ? penetapan['penggunaan_status'].toString()
+                  Text(penetapan['penguasaan'] != null &&
+                          penetapan['penguasaan'] != ''
+                      ? penetapan['penguasaan'].toString()
                       : '-'),
                 ),
                 DataCell(
