@@ -6,7 +6,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:kib_application/constans/colors.dart';
 import 'package:kib_application/controllers/appointmentController.dart';
-import 'package:kib_application/controllers/inventoryController.dart';
+import 'package:kib_application/controllers/categoryController.dart';
+import 'package:kib_application/controllers/inventoryAController.dart';
+import 'package:kib_application/utils/snackbar.dart';
 
 class EditInventoryAScreen extends StatefulWidget {
   const EditInventoryAScreen({super.key});
@@ -17,81 +19,132 @@ class EditInventoryAScreen extends StatefulWidget {
 
 class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
   final penetapanController = Get.put(AppointmentController());
-  final editController = Get.put(InventoryController());
+  final editController = Get.put(InventoryAController());
+  final kategoriController = Get.put(CategoryController());
   DateTime now = DateTime.now();
+
+  String selectedKategori = '';
 
   @override
   void initState() {
     super.initState();
-    String dateNow = DateFormat('dd/MM/yyyy').format(now);
+    kategoriController.getKategori("A");
+    String dateNow = DateFormat('dd-MM-yyyy').format(now);
     final data = penetapanController.penetapanListById[0];
+    selectedKategori = data['id_kategori'].toString();
 
-    editController.tahunNilai.text = penetapanController.tahun.text;
-    editController.tglInventaris.text = dateNow;
-    editController.skpd.text = data['kode'].toString();
-    editController.skpdUraian.text = data['nama'].toString();
-    editController.noRegister.text = data['no_register'].toString();
-    editController.noRegisterBaru.text = data['no_register'].toString();
-    // Belum
-    editController.barang.text =
-        data['barang'].toString() + (' - ') + data['nama_barang'].toString();
-    editController.namaBarang.text = '';
-    // Sudah
-    editController.jumlah.text = data['jumlah'].toString();
-    editController.jumlahBaru.text = data['jumlah'].toString();
-    editController.aLuasM2.text = data['a_luas_m2'].toString();
-    editController.luasBaru.text = data['a_luas_m2'].toString();
-    // Belum
-    editController.satuan.text = data['satuan'].toString();
-    //
-    editController.caraPerolehan.text = data['cara_perolehan'].toString();
-    editController.tglPerolehan.text =
+    editController.a_tgl_inventaris.text = dateNow;
+    editController.a_skpd.text = data['kode'].toString();
+    editController.a_skpd_uraian.text = data['nama'].toString();
+    editController.a_no_register_awal.text = data['no_register'].toString();
+    editController.a_no_register_akhir.text = data['no_register'].toString();
+    editController.a_kategori_id_awal.text = data['kategori_id'].toString();
+    editController.a_barang.text =
+        data['kode_kategori'].toString() + ' - ' + data['nama_kategori'];
+    editController.a_jumlah_awal.text = data['jumlah'].toString();
+    editController.a_jumlah_akhir.text = data['jumlah'].toString();
+    editController.a_luas_m2_awal.text = data['a_luas_m2'].toString();
+    editController.a_luas_m2_akhir.text = data['a_luas_m2'].toString();
+    editController.a_satuan.text = data['satuan'].toString();
+    editController.a_cara_perolehan_awal.text =
+        data['cara_perolehan'].toString();
+    editController.a_tgl_perolehan.text =
         data['tgl_perolehan_formated'].toString();
-    editController.thBeli.text = data['th_beli'].toString();
-    editController.perolehan.text = data['perolehan'].toString();
-    editController.aAlamat.text = data['a_alamat'].toString();
-    editController.aHakTanah.text = data['a_hak_tanah'].toString();
-    editController.aSertifikatNo.text = data['a_sertifikat_nomor'].toString();
-    editController.aSertifikatTgl.text = data['sertifikat_tgl'].toString();
-    editController.kondisi.text = data['kondisi'].toString();
-    editController.asalUsul.text = data['asal_usul'].toString();
-    editController.aPenggunaan.text = data['a_penggunaan'].toString();
-    editController.lat.text = data['lat'].toString();
-    editController.long.text = data['long'].toString();
+    editController.a_tahun_perolehan.text = data['tahun'].toString();
+    editController.a_perolehan_awal.text =
+        data['perolehan_formated'].toString();
+    editController.a_perolehan_akhir.text =
+        data['perolehan_formated'].toString();
+    editController.a_alamat_awal.text = data['a_alamat'].toString();
+    editController.a_hak_tanah_awal.text = data['a_hak_tanah'].toString();
+    editController.a_hak_tanah_akhir.text = data['a_hak_tanah'].toString();
+    editController.a_sertifikat_nomor_awal.text =
+        data['a_sertifikat_nomor'].toString();
+    editController.a_sertifikat_nomor_akhir.text =
+        data['a_sertifikat_nomor'].toString();
+    editController.a_sertifikat_tanggal_awal.text =
+        data['sertifikat_tgl'].toString();
+    editController.a_sertifikat_tanggal_akhir.text =
+        data['sertifikat_tgl'].toString();
+    editController.a_keberadaan_barang_awal.text =
+        data['keberadaan_barang'].toString();
+    editController.a_kondisi_awal.text = data['kondisi'].toString();
+    editController.a_asal_usul_awal.text = data['asal_usul'].toString();
+    editController.a_asal_usul_akhir.text = data['asal_usul'].toString();
+    editController.a_penggunaan_awal.text = data['a_penggunaan'].toString();
+    editController.a_pemilik_id.text = data['pemilik_id'].toString();
+    editController.a_lat.text = data['lat'].toString();
+    editController.a_long.text = data['long'].toString();
+    editController.a_lainnya.text = data['lainnya'].toString();
+    editController.a_keterangan.text = data['keterangan'].toString();
+    // File
+    // Petugas
   }
 
-  List<String> dropdownNoRegister = ["Sesuai", "Tidak Sesuai"];
-  String selectedNoRegister = "Sesuai";
+  // No Register
+  List<String> keteranganNoRegister = ["Sesuai", "Tidak Sesuai"];
+  String statusNoRegister = "1";
 
-  List<String> dropdownBarang = ["Sesuai", "Tidak Sesuai"];
-  String selectedBarang = "Sesuai";
+  // Barang
+  List<String> keteranganBarang = ["Sesuai", "Tidak Sesuai"];
+  String statusBarang = "1";
 
-  List<String> dropdownNamaBarang = ["Sesuai", "Tidak Sesuai"];
-  String selectedNamaBarang = "Sesuai";
+  // Nama Barang
+  List<String> keteranganNamaBarang = ["Sesuai", "Tidak Sesuai"];
+  String statusNamaBarang = "1";
 
-  List<String> dropdownJumlah = ["Sesuai", "Tidak Sesuai"];
-  String selectedJumlah = "Sesuai";
+  // Jumlah
+  List<String> keteranganJumlah = ["Sesuai", "Tidak Sesuai"];
+  String statusJumlah = "1";
 
-  List<String> dropdownLuas = ["Sesuai", "Tidak Sesuai"];
-  String selectedLuas = "Sesuai";
+  // Luas
+  List<String> keteranganLuas = ["Sesuai", "Tidak Sesuai"];
+  String statusLuas = "1";
 
-  List<String> dropdownPerolehanChoose = ["Sesuai", "Tidak Sesuai"];
-  String selectedPerolehanChoose = "Sesuai";
+  // Perolehan
+  List<String> keteranganPerolehan = ["Sesuai", "Tidak Sesuai"];
+  String statusPerolehan = "1";
 
-  List<String> dropdownHakTanah = ["Sesuai", "Tidak Sesuai"];
-  String selectedHakTanah = "Sesuai";
+  // Nilai Perolehan
+  List<String> keteranganNilaiPerolehan = ["Sesuai", "Tidak Sesuai"];
+  String statusNilaiPerolehan = "1";
 
-  List<String> dropdownNoSertifikat = ["Sesuai", "Tidak Sesuai"];
-  String selectedNoSertifikat = "Sesuai";
+  // Alamat
+  List<String> keteranganAlamat = ["Sesuai", "Tidak Sesuai"];
+  String statusAlamat = "1";
 
-  List<String> dropdownTglSertifikat = ["Sesuai", "Tidak Sesuai"];
-  String selectedTglSertifikat = "Sesuai";
+  // Hak Tanah
+  List<String> keteranganHakTanah = ["Sesuai", "Tidak Sesuai"];
+  String statusHakTanah = "1";
 
-  List<String> dropdownKondisi = ["Sesuai", "Tidak Sesuai"];
-  String selectedKondisi = "Sesuai";
+  // No Sertifikat
+  List<String> keteranganNoSertifikat = ["Sesuai", "Tidak Sesuai"];
+  String statusNoSertifikat = "1";
 
-  List<String> dropdownAsalUsul = ["Sesuai", "Tidak Sesuai"];
-  String selectedAsalUsul = "Sesuai";
+  // Tanggal Sertifikat
+  List<String> keteranganTglSertifikat = ["Sesuai", "Tidak Sesuai"];
+  String statusTglSertifikat = "1";
+
+  // Kondisi
+  List<String> keteranganKondisi = ["Sesuai", "Tidak Sesuai"];
+  String statusKondisi = "1";
+
+  // Asal Usul
+  List<String> keteranganAsalUsul = ["Sesuai", "Tidak Sesuai"];
+  String statusAsalUsul = "1";
+
+  List<String> dropdownSatuan = [
+    "PAKET",
+    "KALI",
+    "LEMBAR",
+    "RIM",
+    "MILIMETER",
+    "CENTIMETER",
+    "METER",
+    "KILOMETER",
+    "BOTOL",
+  ];
+  String selectedSatuan = "PAKET";
 
   List<String> dropdownPerolehan = [
     "Pembelian",
@@ -101,37 +154,44 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
   ];
   String selectedPerolehan = "Pembelian";
 
-  List<String> dropdownNilaiPerolehan = ["Sesuai", "Tidak Sesuai"];
-  String selectedNilaiPerolehan = "Sesuai";
+  List<String> dropdownKondisi = [
+    "B",
+    "RR",
+    "RB",
+  ];
+  String selectedKondisi = "B";
 
-  List<String> dropdownQuestion = ["Ya", "Bukan"];
-  String selectedQuestion = "Bukan";
+  List<String> keteranganQuestion = ["Ya", "Bukan"];
+  String statusQuestion = "Bukan";
 
-  List<String> dropdownKeberadaanBarang = ["Ada", "Tidak ada/Tidak ditemukan"];
-  String selectedKeberadaanBarang = "Ada";
+  List<String> keteranganKeberadaanBarang = [
+    "Ada",
+    "Tidak ada/Tidak ditemukan"
+  ];
+  String statusKeberadaanBarang = "Ada";
 
-  List<String> dropdownStatus = ["Sedang digunakan", "Tidak digunakan"];
-  String selectedStatus = "Sedang digunakan";
+  List<String> keteranganStatus = ["Sedang digunakan", "Tidak digunakan"];
+  String statusStatus = "Sedang digunakan";
 
-  List<String> dropdownPenggunaanDaerahPusat = ["Ada", "Tidak"];
-  String selectedPenggunaanDaerahPusat = "Tidak";
+  List<String> keteranganPenggunaanDaerahPusat = ["Ada", "Tidak"];
+  String statusPenggunaanDaerahPusat = "Tidak";
 
-  List<String> dropdownPenggunaanDaerahLain = ["Ada", "Tidak"];
-  String selectedPenggunaanDaerahLain = "Tidak";
+  List<String> keteranganPenggunaanDaerahLain = ["Ada", "Tidak"];
+  String statusPenggunaanDaerahLain = "Tidak";
 
-  List<String> dropdownPenggunaanPihakLain = ["Ada", "Tidak"];
-  String selectedPenggunaanPihakLain = "Tidak";
+  List<String> keteranganPenggunaanPihakLain = ["Ada", "Tidak"];
+  String statusPenggunaanPihakLain = "Tidak";
 
-  List<String> dropdownGanda = ["Ya", "Tidak"];
-  String selectedGanda = "Tidak";
+  List<String> keteranganGanda = ["Ya", "Tidak"];
+  String statusGanda = "Tidak";
 
-  List<String> dropdownAtasNama = [
+  List<String> keteranganAtasNama = [
     "Pemerintah Daerah",
     "Pemerintah Daerah Lainnya",
     "Pemerintah Pusat",
     "Pihak Lain"
   ];
-  String selectedAtasNama = "Pemerintah Daerah";
+  String statusAtasNama = "Pemerintah Daerah";
 
   String choose = "tidak";
   String choose_pemerintah = "daerah";
@@ -209,36 +269,6 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               SizedBox(height: 30),
-              // Tahun
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Tahun',
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.left,
-                  ),
-                  SizedBox(height: 10),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.grey.shade400,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 15),
-                      child: TextFormField(
-                        controller: editController.tahunNilai,
-                        readOnly: true,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 15),
               // Tanggal Inventaris
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -257,7 +287,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 15),
                       child: TextFormField(
-                        controller: editController.tglInventaris,
+                        controller: editController.a_tgl_inventaris,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                         ),
@@ -286,7 +316,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 15),
                       child: TextFormField(
-                        controller: editController.skpd,
+                        controller: editController.a_skpd,
                         readOnly: true,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -316,7 +346,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 15),
                       child: TextFormField(
-                        controller: editController.skpdUraian,
+                        controller: editController.a_skpd_uraian,
                         readOnly: true,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -349,7 +379,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
-                              controller: editController.noRegister,
+                              controller: editController.a_no_register_awal,
                               readOnly: true,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
@@ -378,15 +408,17 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: selectedNoRegister,
+                          value: statusNoRegister,
                           onChanged: (String? newValue) {
                             setState(() {
-                              selectedNoRegister = newValue ?? "Sesuai";
+                              statusNoRegister = newValue ?? "1";
                             });
                           },
-                          items: dropdownNoRegister.map((String item) {
+                          items: keteranganNoRegister.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: item,
+                              value: keteranganNoRegister.indexOf(item) == 0
+                                  ? "1"
+                                  : "2",
                               child: Text(item),
                             );
                           }).toList(),
@@ -395,7 +427,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  selectedNoRegister == "Tidak Sesuai"
+                  statusNoRegister == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -404,7 +436,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
-                              controller: editController.noRegisterBaru,
+                              controller: editController.a_no_register_akhir,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                               ),
@@ -437,7 +469,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
-                              controller: editController.barang,
+                              controller: editController.a_barang,
                               readOnly: true,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
@@ -466,15 +498,17 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: selectedBarang,
+                          value: statusBarang,
                           onChanged: (String? newValue) {
                             setState(() {
-                              selectedBarang = newValue ?? "Sesuai";
+                              statusBarang = newValue ?? "1";
                             });
                           },
-                          items: dropdownBarang.map((String item) {
+                          items: keteranganBarang.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: item,
+                              value: keteranganBarang.indexOf(item) == 0
+                                  ? "1"
+                                  : "2",
                               child: Text(item),
                             );
                           }).toList(),
@@ -482,20 +516,67 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 10),
-                  selectedBarang == "Tidak Sesuai"
-                      ? Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(12),
+                  Visibility(
+                    visible: false,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey.shade400,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15),
+                        child: TextFormField(
+                          controller: editController.a_kategori_id_awal,
+                          readOnly: true,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 15),
-                            child: TextFormField(
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  statusBarang == "2"
+                      ? DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            isExpanded: true,
+                            buttonStyleData: ButtonStyleData(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
                               ),
                             ),
+                            iconStyleData: const IconStyleData(
+                              icon: Icon(
+                                Icons.arrow_drop_down_outlined,
+                                color: Colors.grey,
+                                size: 25,
+                              ),
+                              iconEnabledColor: primaryTextColor,
+                            ),
+                            value: selectedKategori,
+                            onChanged: (String? newValue) {
+                              print('Selected Value: $newValue');
+                              setState(() {
+                                selectedKategori = newValue ?? '';
+                              });
+                            },
+                            items: kategoriController.kategoriList
+                                .map<DropdownMenuItem<String>>(
+                              (Map<String, dynamic> item) {
+                                return DropdownMenuItem<String>(
+                                  value: item['id'].toString(),
+                                  child: Text(
+                                    item['kode'] + ' - ' + item['nama'],
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                );
+                              },
+                            ).toList(),
                           ),
                         )
                       : SizedBox(),
@@ -524,7 +605,6 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
-                              controller: editController.namaBarang,
                               readOnly: true,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
@@ -553,15 +633,17 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: selectedNamaBarang,
+                          value: statusNamaBarang,
                           onChanged: (String? newValue) {
                             setState(() {
-                              selectedNamaBarang = newValue ?? "Sesuai";
+                              statusNamaBarang = newValue ?? "1";
                             });
                           },
-                          items: dropdownNamaBarang.map((String item) {
+                          items: keteranganNamaBarang.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: item,
+                              value: keteranganNamaBarang.indexOf(item) == 0
+                                  ? "1"
+                                  : "2",
                               child: Text(item),
                             );
                           }).toList(),
@@ -570,7 +652,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  selectedNamaBarang == "Tidak Sesuai"
+                  statusNamaBarang == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -611,7 +693,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
-                              controller: editController.jumlah,
+                              controller: editController.a_jumlah_awal,
                               readOnly: true,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
@@ -640,15 +722,17 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: selectedJumlah,
+                          value: statusJumlah,
                           onChanged: (String? newValue) {
                             setState(() {
-                              selectedJumlah = newValue ?? "Sesuai";
+                              statusJumlah = newValue ?? "1";
                             });
                           },
-                          items: dropdownJumlah.map((String item) {
+                          items: keteranganJumlah.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: item,
+                              value: keteranganJumlah.indexOf(item) == 0
+                                  ? "1"
+                                  : "2",
                               child: Text(item),
                             );
                           }).toList(),
@@ -657,7 +741,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  selectedJumlah == "Tidak Sesuai"
+                  statusJumlah == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -666,7 +750,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
-                              controller: editController.jumlah,
+                              controller: editController.a_jumlah_akhir,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                               ),
@@ -699,7 +783,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
-                              controller: editController.aLuasM2,
+                              controller: editController.a_luas_m2_awal,
                               readOnly: true,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
@@ -728,15 +812,16 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: selectedLuas,
+                          value: statusLuas,
                           onChanged: (String? newValue) {
                             setState(() {
-                              selectedLuas = newValue ?? "Sesuai";
+                              statusLuas = newValue ?? "1";
                             });
                           },
-                          items: dropdownLuas.map((String item) {
+                          items: keteranganLuas.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: item,
+                              value:
+                                  keteranganLuas.indexOf(item) == 0 ? "1" : "2",
                               child: Text(item),
                             );
                           }).toList(),
@@ -745,7 +830,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  selectedLuas == "Tidak Sesuai"
+                  statusLuas == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -754,7 +839,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
-                              controller: editController.luasBaru,
+                              controller: editController.a_luas_m2_akhir,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                               ),
@@ -775,18 +860,38 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     textAlign: TextAlign.left,
                   ),
                   SizedBox(height: 10),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 15),
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton2(
+                      buttonStyleData: ButtonStyleData(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
+                      isExpanded: true,
+                      iconStyleData: const IconStyleData(
+                        icon: Icon(
+                          Icons.arrow_drop_down_outlined,
+                          color: Colors.grey,
+                          size: 25,
+                        ),
+                        iconEnabledColor: primaryTextColor,
+                      ),
+                      value: selectedSatuan,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedSatuan = newValue ?? "PAKET";
+                        });
+                      },
+                      items: dropdownSatuan.map((String item) {
+                        return DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(item),
+                        );
+                      }).toList(),
                     ),
                   ),
                 ],
@@ -814,7 +919,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
-                              controller: editController.caraPerolehan,
+                              controller: editController.a_cara_perolehan_awal,
                               readOnly: true,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
@@ -843,15 +948,17 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: selectedPerolehanChoose,
+                          value: statusPerolehan,
                           onChanged: (String? newValue) {
                             setState(() {
-                              selectedPerolehanChoose = newValue ?? "Sesuai";
+                              statusPerolehan = newValue ?? "1";
                             });
                           },
-                          items: dropdownPerolehanChoose.map((String item) {
+                          items: keteranganPerolehan.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: item,
+                              value: keteranganPerolehan.indexOf(item) == 0
+                                  ? "1"
+                                  : "2",
                               child: Text(item),
                             );
                           }).toList(),
@@ -860,7 +967,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  selectedPerolehanChoose == "Tidak Sesuai"
+                  statusPerolehan == "2"
                       ? DropdownButtonHideUnderline(
                           child: DropdownButton2(
                             buttonStyleData: ButtonStyleData(
@@ -918,7 +1025,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 15),
                       child: TextFormField(
-                        controller: editController.tglPerolehan,
+                        controller: editController.a_tgl_perolehan,
                         readOnly: true,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -948,7 +1055,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 15),
                       child: TextFormField(
-                        controller: editController.thBeli,
+                        controller: editController.a_tahun_perolehan,
                         readOnly: true,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -981,7 +1088,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
-                              controller: editController.perolehan,
+                              controller: editController.a_perolehan_awal,
                               readOnly: true,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
@@ -1010,15 +1117,17 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: selectedNilaiPerolehan,
+                          value: statusNilaiPerolehan,
                           onChanged: (String? newValue) {
                             setState(() {
-                              selectedNilaiPerolehan = newValue ?? "Sesuai";
+                              statusNilaiPerolehan = newValue ?? "1";
                             });
                           },
-                          items: dropdownNilaiPerolehan.map((String item) {
+                          items: keteranganNilaiPerolehan.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: item,
+                              value: keteranganNilaiPerolehan.indexOf(item) == 0
+                                  ? "1"
+                                  : "2",
                               child: Text(item),
                             );
                           }).toList(),
@@ -1027,7 +1136,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  selectedNilaiPerolehan == "Tidak Sesuai"
+                  statusNilaiPerolehan == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -1036,6 +1145,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
+                              controller: editController.a_perolehan_akhir,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                               ),
@@ -1075,13 +1185,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                         ),
                         iconEnabledColor: primaryTextColor,
                       ),
-                      value: selectedQuestion,
+                      value: statusQuestion,
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedQuestion = newValue ?? "Bukan";
+                          statusQuestion = newValue ?? "Bukan";
                         });
                       },
-                      items: dropdownQuestion.map((String item) {
+                      items: keteranganQuestion.map((String item) {
                         return DropdownMenuItem<String>(
                           value: item,
                           child: Text(item),
@@ -1090,7 +1200,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  selectedQuestion == "Ya" // Memeriksa pilihan dropdown
+                  statusQuestion == "Ya"
                       ? Column(
                           children: [
                             RadioListTile(
@@ -1130,204 +1240,6 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     textAlign: TextAlign.left,
                   ),
                   SizedBox(height: 10),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.grey.shade400,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 15),
-                      child: TextFormField(
-                        controller: editController.aAlamat,
-                        readOnly: true,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ),
-                  // SizedBox(height: 15),
-                  // Text(
-                  //   'Kabupaten/Kota',
-                  //   style: TextStyle(fontSize: 16),
-                  //   textAlign: TextAlign.left,
-                  // ),
-                  // SizedBox(height: 10),
-                  // Container(
-                  //   decoration: BoxDecoration(
-                  //     border: Border.all(color: Colors.grey),
-                  //     borderRadius: BorderRadius.circular(12),
-                  //   ),
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.only(left: 15),
-                  //     child: TextFormField(
-                  //       decoration: const InputDecoration(
-                  //         border: InputBorder.none,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // SizedBox(height: 15),
-                  // Text(
-                  //   'Kecamatan',
-                  //   style: TextStyle(fontSize: 16),
-                  //   textAlign: TextAlign.left,
-                  // ),
-                  // SizedBox(height: 10),
-                  // Container(
-                  //   decoration: BoxDecoration(
-                  //     border: Border.all(color: Colors.grey),
-                  //     borderRadius: BorderRadius.circular(12),
-                  //   ),
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.only(left: 15),
-                  //     child: TextFormField(
-                  //       decoration: const InputDecoration(
-                  //         border: InputBorder.none,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // SizedBox(height: 15),
-                  // Text(
-                  //   'Kelurahan',
-                  //   style: TextStyle(fontSize: 16),
-                  //   textAlign: TextAlign.left,
-                  // ),
-                  // SizedBox(height: 10),
-                  // Container(
-                  //   decoration: BoxDecoration(
-                  //     border: Border.all(color: Colors.grey),
-                  //     borderRadius: BorderRadius.circular(12),
-                  //   ),
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.only(left: 15),
-                  //     child: TextFormField(
-                  //       decoration: const InputDecoration(
-                  //         border: InputBorder.none,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // SizedBox(height: 15),
-                  // Text(
-                  //   'Jalan',
-                  //   style: TextStyle(fontSize: 16),
-                  //   textAlign: TextAlign.left,
-                  // ),
-                  // SizedBox(height: 10),
-                  // Container(
-                  //   decoration: BoxDecoration(
-                  //     border: Border.all(color: Colors.grey),
-                  //     borderRadius: BorderRadius.circular(12),
-                  //   ),
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.only(left: 15),
-                  //     child: TextFormField(
-                  //       decoration: const InputDecoration(
-                  //         border: InputBorder.none,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // SizedBox(height: 15),
-                  // Text(
-                  //   'No.',
-                  //   style: TextStyle(fontSize: 16),
-                  //   textAlign: TextAlign.left,
-                  // ),
-                  // SizedBox(height: 10),
-                  // Container(
-                  //   decoration: BoxDecoration(
-                  //     border: Border.all(color: Colors.grey),
-                  //     borderRadius: BorderRadius.circular(12),
-                  //   ),
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.only(left: 15),
-                  //     child: TextFormField(
-                  //       decoration: const InputDecoration(
-                  //         border: InputBorder.none,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // SizedBox(height: 15),
-                  // Text(
-                  //   'RT',
-                  //   style: TextStyle(fontSize: 16),
-                  //   textAlign: TextAlign.left,
-                  // ),
-                  // SizedBox(height: 10),
-                  // Container(
-                  //   decoration: BoxDecoration(
-                  //     border: Border.all(color: Colors.grey),
-                  //     borderRadius: BorderRadius.circular(12),
-                  //   ),
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.only(left: 15),
-                  //     child: TextFormField(
-                  //       decoration: const InputDecoration(
-                  //         border: InputBorder.none,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // SizedBox(height: 15),
-                  // Text(
-                  //   'RW',
-                  //   style: TextStyle(fontSize: 16),
-                  //   textAlign: TextAlign.left,
-                  // ),
-                  // SizedBox(height: 10),
-                  // Container(
-                  //   decoration: BoxDecoration(
-                  //     border: Border.all(color: Colors.grey),
-                  //     borderRadius: BorderRadius.circular(12),
-                  //   ),
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.only(left: 15),
-                  //     child: TextFormField(
-                  //       decoration: const InputDecoration(
-                  //         border: InputBorder.none,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // SizedBox(height: 15),
-                  // Text(
-                  //   'Kode Pos',
-                  //   style: TextStyle(fontSize: 16),
-                  //   textAlign: TextAlign.left,
-                  // ),
-                  // SizedBox(height: 10),
-                  // Container(
-                  //   decoration: BoxDecoration(
-                  //     border: Border.all(color: Colors.grey),
-                  //     borderRadius: BorderRadius.circular(12),
-                  //   ),
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.only(left: 15),
-                  //     child: TextFormField(
-                  //       decoration: const InputDecoration(
-                  //         border: InputBorder.none,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
-              SizedBox(height: 15),
-              // Hak Tanah
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Hak Tanah',
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.left,
-                  ),
-                  SizedBox(height: 10),
                   Row(
                     children: [
                       Expanded(
@@ -1340,7 +1252,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
-                              controller: editController.aHakTanah,
+                              controller: editController.a_alamat_awal,
                               readOnly: true,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
@@ -1369,15 +1281,264 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: selectedHakTanah,
+                          value: statusAlamat,
                           onChanged: (String? newValue) {
                             setState(() {
-                              selectedHakTanah = newValue ?? "Sesuai";
+                              statusAlamat = newValue ?? "1";
                             });
                           },
-                          items: dropdownHakTanah.map((String item) {
+                          items: keteranganAlamat.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: item,
+                              value: keteranganAlamat.indexOf(item) == 0
+                                  ? "1"
+                                  : "2",
+                              child: Text(item),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 15),
+                  statusAlamat == "2"
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Kabupaten/Kota',
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 15),
+                                child: TextFormField(
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                            Text(
+                              'Kecamatan',
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 15),
+                                child: TextFormField(
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                            Text(
+                              'Kelurahan',
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 15),
+                                child: TextFormField(
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                            Text(
+                              'Jalan',
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 15),
+                                child: TextFormField(
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                            Text(
+                              'No.',
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 15),
+                                child: TextFormField(
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                            Text(
+                              'RT',
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 15),
+                                child: TextFormField(
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                            Text(
+                              'RW',
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 15),
+                                child: TextFormField(
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                            Text(
+                              'Kode Pos',
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 15),
+                                child: TextFormField(
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : SizedBox(),
+                ],
+              ),
+              SizedBox(height: 15),
+              // Hak Tanah
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Hak Tanah',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey.shade400,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              controller: editController.a_hak_tanah_awal,
+                              readOnly: true,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          buttonStyleData: ButtonStyleData(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          iconStyleData: const IconStyleData(
+                            icon: Icon(
+                              Icons.arrow_drop_down_outlined,
+                              color: Colors.grey,
+                              size: 25,
+                            ),
+                            iconEnabledColor: primaryTextColor,
+                          ),
+                          value: statusHakTanah,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              statusHakTanah = newValue ?? "1";
+                            });
+                          },
+                          items: keteranganHakTanah.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: keteranganHakTanah.indexOf(item) == 0
+                                  ? "1"
+                                  : "2",
                               child: Text(item),
                             );
                           }).toList(),
@@ -1386,7 +1547,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  selectedHakTanah == "Tidak Sesuai"
+                  statusHakTanah == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -1395,6 +1556,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
+                              controller: editController.a_hak_tanah_akhir,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                               ),
@@ -1427,7 +1589,8 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
-                              controller: editController.aSertifikatNo,
+                              controller:
+                                  editController.a_sertifikat_nomor_awal,
                               readOnly: true,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
@@ -1456,15 +1619,17 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: selectedNoSertifikat,
+                          value: statusNoSertifikat,
                           onChanged: (String? newValue) {
                             setState(() {
-                              selectedNoSertifikat = newValue ?? "Sesuai";
+                              statusNoSertifikat = newValue ?? "1";
                             });
                           },
-                          items: dropdownNoSertifikat.map((String item) {
+                          items: keteranganNoSertifikat.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: item,
+                              value: keteranganNoSertifikat.indexOf(item) == 0
+                                  ? "1"
+                                  : "2",
                               child: Text(item),
                             );
                           }).toList(),
@@ -1473,7 +1638,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  selectedNoSertifikat == "Tidak Sesuai"
+                  statusNoSertifikat == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -1482,6 +1647,8 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
+                              controller:
+                                  editController.a_sertifikat_nomor_akhir,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                               ),
@@ -1514,7 +1681,8 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
-                              controller: editController.aSertifikatTgl,
+                              controller:
+                                  editController.a_sertifikat_tanggal_awal,
                               readOnly: true,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
@@ -1543,15 +1711,17 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: selectedTglSertifikat,
+                          value: statusTglSertifikat,
                           onChanged: (String? newValue) {
                             setState(() {
-                              selectedTglSertifikat = newValue ?? "Sesuai";
+                              statusTglSertifikat = newValue ?? "1";
                             });
                           },
-                          items: dropdownTglSertifikat.map((String item) {
+                          items: keteranganTglSertifikat.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: item,
+                              value: keteranganTglSertifikat.indexOf(item) == 0
+                                  ? "1"
+                                  : "2",
                               child: Text(item),
                             );
                           }).toList(),
@@ -1560,7 +1730,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  selectedTglSertifikat == "Tidak Sesuai"
+                  statusTglSertifikat == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -1569,6 +1739,8 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
+                              controller:
+                                  editController.a_sertifikat_tanggal_akhir,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                               ),
@@ -1609,13 +1781,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                         ),
                         iconEnabledColor: primaryTextColor,
                       ),
-                      value: selectedKeberadaanBarang,
+                      value: statusKeberadaanBarang,
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedKeberadaanBarang = newValue ?? "Ada";
+                          statusKeberadaanBarang = newValue ?? "Ada";
                         });
                       },
-                      items: dropdownKeberadaanBarang.map((String item) {
+                      items: keteranganKeberadaanBarang.map((String item) {
                         return DropdownMenuItem<String>(
                           value: item,
                           child: Text(item),
@@ -1648,7 +1820,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
-                              controller: editController.kondisi,
+                              controller: editController.a_kondisi_awal,
                               readOnly: true,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
@@ -1677,15 +1849,17 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: selectedKondisi,
+                          value: statusKondisi,
                           onChanged: (String? newValue) {
                             setState(() {
-                              selectedKondisi = newValue ?? "Sesuai";
+                              statusKondisi = newValue ?? "1";
                             });
                           },
-                          items: dropdownKondisi.map((String item) {
+                          items: keteranganKondisi.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: item,
+                              value: keteranganKondisi.indexOf(item) == 0
+                                  ? "1"
+                                  : "2",
                               child: Text(item),
                             );
                           }).toList(),
@@ -1694,19 +1868,39 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  selectedKondisi == "Tidak Sesuai"
-                      ? Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 15),
-                            child: TextFormField(
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
+                  statusKondisi == "2"
+                      ? DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            buttonStyleData: ButtonStyleData(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
                               ),
                             ),
+                            isExpanded: true,
+                            iconStyleData: const IconStyleData(
+                              icon: Icon(
+                                Icons.arrow_drop_down_outlined,
+                                color: Colors.grey,
+                                size: 25,
+                              ),
+                              iconEnabledColor: primaryTextColor,
+                            ),
+                            value: selectedKondisi,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedKondisi = newValue ?? "B";
+                              });
+                            },
+                            items: dropdownKondisi.map((String item) {
+                              return DropdownMenuItem<String>(
+                                value: item,
+                                child: Text(item),
+                              );
+                            }).toList(),
                           ),
                         )
                       : SizedBox(),
@@ -1735,7 +1929,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
-                              controller: editController.asalUsul,
+                              controller: editController.a_asal_usul_awal,
                               readOnly: true,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
@@ -1764,15 +1958,17 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: selectedAsalUsul,
+                          value: statusAsalUsul,
                           onChanged: (String? newValue) {
                             setState(() {
-                              selectedAsalUsul = newValue ?? "Sesuai";
+                              statusAsalUsul = newValue ?? "1";
                             });
                           },
-                          items: dropdownAsalUsul.map((String item) {
+                          items: keteranganAsalUsul.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: item,
+                              value: keteranganAsalUsul.indexOf(item) == 0
+                                  ? "1"
+                                  : "2",
                               child: Text(item),
                             );
                           }).toList(),
@@ -1781,7 +1977,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  selectedAsalUsul == "Tidak Sesuai"
+                  statusAsalUsul == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -1790,6 +1986,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
+                              controller: editController.a_asal_usul_akhir,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                               ),
@@ -1830,13 +2027,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                         ),
                         iconEnabledColor: primaryTextColor,
                       ),
-                      value: selectedStatus,
+                      value: statusStatus,
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedStatus = newValue ?? "Sedang digunakan";
+                          statusStatus = newValue ?? "Sedang digunakan";
                         });
                       },
-                      items: dropdownStatus.map((String item) {
+                      items: keteranganStatus.map((String item) {
                         return DropdownMenuItem<String>(
                           value: item,
                           child: Text(item),
@@ -1865,7 +2062,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 15),
                       child: TextFormField(
-                        controller: editController.aPenggunaan,
+                        controller: editController.a_penggunaan_awal,
                         readOnly: true,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -1955,13 +2152,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                         ),
                         iconEnabledColor: primaryTextColor,
                       ),
-                      value: selectedPenggunaanDaerahPusat,
+                      value: statusPenggunaanDaerahPusat,
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedPenggunaanDaerahPusat = newValue ?? "Tidak";
+                          statusPenggunaanDaerahPusat = newValue ?? "Tidak";
                         });
                       },
-                      items: dropdownPenggunaanDaerahPusat.map((String item) {
+                      items: keteranganPenggunaanDaerahPusat.map((String item) {
                         return DropdownMenuItem<String>(
                           value: item,
                           child: Text(item),
@@ -1969,7 +2166,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       }).toList(),
                     ),
                   ),
-                  selectedPenggunaanDaerahPusat == "Ada"
+                  statusPenggunaanDaerahPusat == "Ada"
                       ? Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: Column(
@@ -2081,13 +2278,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                         ),
                         iconEnabledColor: primaryTextColor,
                       ),
-                      value: selectedPenggunaanDaerahLain,
+                      value: statusPenggunaanDaerahLain,
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedPenggunaanDaerahLain = newValue ?? "Ya";
+                          statusPenggunaanDaerahLain = newValue ?? "Ya";
                         });
                       },
-                      items: dropdownPenggunaanDaerahLain.map((String item) {
+                      items: keteranganPenggunaanDaerahLain.map((String item) {
                         return DropdownMenuItem<String>(
                           value: item,
                           child: Text(item),
@@ -2095,7 +2292,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       }).toList(),
                     ),
                   ),
-                  selectedPenggunaanDaerahLain == "Ada"
+                  statusPenggunaanDaerahLain == "Ada"
                       ? Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: Column(
@@ -2207,13 +2404,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                         ),
                         iconEnabledColor: primaryTextColor,
                       ),
-                      value: selectedPenggunaanPihakLain,
+                      value: statusPenggunaanPihakLain,
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedPenggunaanPihakLain = newValue ?? "Ya";
+                          statusPenggunaanPihakLain = newValue ?? "Ya";
                         });
                       },
-                      items: dropdownPenggunaanPihakLain.map((String item) {
+                      items: keteranganPenggunaanPihakLain.map((String item) {
                         return DropdownMenuItem<String>(
                           value: item,
                           child: Text(item),
@@ -2221,7 +2418,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       }).toList(),
                     ),
                   ),
-                  selectedPenggunaanPihakLain == "Ada"
+                  statusPenggunaanPihakLain == "Ada"
                       ? Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: Column(
@@ -2322,13 +2519,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                         ),
                         iconEnabledColor: primaryTextColor,
                       ),
-                      value: selectedGanda,
+                      value: statusGanda,
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedGanda = newValue ?? "Ya";
+                          statusGanda = newValue ?? "Tidak";
                         });
                       },
-                      items: dropdownGanda.map((String item) {
+                      items: keteranganGanda.map((String item) {
                         return DropdownMenuItem<String>(
                           value: item,
                           child: Text(item),
@@ -2369,13 +2566,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                         ),
                         iconEnabledColor: primaryTextColor,
                       ),
-                      value: selectedAtasNama,
+                      value: statusAtasNama,
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedAtasNama = newValue ?? "Pemerintah Daerah";
+                          statusAtasNama = newValue ?? "Pemerintah Daerah";
                         });
                       },
-                      items: dropdownAtasNama.map((String item) {
+                      items: keteranganAtasNama.map((String item) {
                         return DropdownMenuItem<String>(
                           value: item,
                           child: Text(item),
@@ -2400,7 +2597,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     children: [
                       Expanded(
                         child: TextField(
-                          controller: editController.lat,
+                          controller: editController.a_lat,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius:
@@ -2415,7 +2612,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       SizedBox(width: 10),
                       Expanded(
                         child: TextField(
-                          controller: editController.long,
+                          controller: editController.a_long,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius:
@@ -2569,6 +2766,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                   ),
                 ],
               ),
+              // Button Simpan
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 35),
                 child: GestureDetector(
@@ -2589,7 +2787,11 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       ),
                     )),
                   ),
-                  onTap: () => Navigator.of(context).pop(),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    customSnackBar(
+                        "Success", "Inventarisasi Berhasil", 'success');
+                  },
                 ),
               ),
             ],

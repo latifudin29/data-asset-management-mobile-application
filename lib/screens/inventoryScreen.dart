@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:kib_application/constans/colors.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:kib_application/controllers/appointmentController.dart';
+import 'package:kib_application/controllers/categoryController.dart';
 import 'package:kib_application/controllers/departementController.dart';
 
 class InventoryScreen extends StatefulWidget {
@@ -17,6 +18,7 @@ class InventoryScreen extends StatefulWidget {
 class _InventoryScreenState extends State<InventoryScreen> {
   final departemenController = Get.put(DepartemenController());
   final penetapanController = Get.put(AppointmentController());
+  final kategoriController = Get.put(CategoryController());
 
   final searchDepartement = TextEditingController();
   final departemenSelected = TextEditingController();
@@ -32,6 +34,21 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
   List<DataColumn> columns = [];
   List<DataColumn> rows = [];
+
+  String mapPemilikIdToText(int pemilikId) {
+    switch (pemilikId) {
+      case 1:
+        return 'Pemerintah Daerah';
+      case 2:
+        return 'Pemerintah Daerah Lainnya';
+      case 3:
+        return 'Pemerintah Pusat';
+      case 4:
+        return 'Pihak Lain';
+      default:
+        return 'Tidak Diketahui';
+    }
+  }
 
   void modifyTitle(String originalTitle) {
     if (originalTitle == "Tanah (A)") {
@@ -132,6 +149,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
         DataColumn(label: Text('Kategori Kode')),
         DataColumn(label: Text('Reg.')),
         DataColumn(label: Text('Uraian')),
+        DataColumn(label: Text('Th. Nilai')),
         DataColumn(label: Text('Tgl. Perolehan')),
         DataColumn(label: Text('Th. Beli')),
         DataColumn(label: Text('Ukuran/CC')),
@@ -147,6 +165,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
         DataColumn(label: Text('Kondisi')),
         DataColumn(label: Text('Asal Usul')),
         DataColumn(label: Text('Keterangan')),
+        DataColumn(label: Text('Ruangan')),
         DataColumn(label: Text('Tgl Inventaris')),
         DataColumn(label: Text('Keberadaan Fisik')),
         DataColumn(label: Text('Kondisi Fisik')),
@@ -344,12 +363,21 @@ class _InventoryScreenState extends State<InventoryScreen> {
     }
 
     List<DataRow> generateDataRows() {
+      int currentYear = DateTime.now().year;
       if (modifiedTitle == "A") {
         return List<DataRow>.generate(
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
+            bool isSelected = penetapan['tgl_inventaris_formated'] != null &&
+                penetapan['tgl_inventaris_formated']
+                    .contains(currentYear.toString());
             return DataRow(
+              selected: isSelected,
+              color: isSelected
+                  ? MaterialStateProperty.all(
+                      Color.fromARGB(255, 206, 255, 207))
+                  : null,
               cells: [
                 DataCell(Text(penetapan['nomor'].toString())),
                 DataCell(Row(
@@ -364,10 +392,18 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     SizedBox(width: 8),
                     InkWell(
                       child: Icon(Icons.file_open, color: Colors.red),
-                      onTap: () {
-                        final id = penetapan['id'].toString();
-                        penetapanController.getPenetapanById(id, modifiedTitle);
-                      },
+                      onTap: () {},
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.qr_code, color: Colors.blue),
+                      onTap: () {},
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.qr_code_scanner_rounded,
+                          color: Colors.green),
+                      onTap: () {},
                     ),
                   ],
                 )),
@@ -436,8 +472,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['harga'] != null && penetapan['harga'] != ''
-                      ? penetapan['harga'].toString()
+                  Text(penetapan['harga_formated'] != null &&
+                          penetapan['harga_formated'] != ''
+                      ? penetapan['harga_formated'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -459,15 +496,17 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_inventaris'] != null &&
-                          penetapan['tgl_inventaris'] != ''
-                      ? penetapan['tgl_inventaris'].toString()
+                  Text(penetapan['tgl_inventaris_formated'] != null &&
+                          penetapan['tgl_inventaris_formated'] != ''
+                      ? penetapan['tgl_inventaris_formated'].toString()
                       : '-'),
                 ),
                 DataCell(
                   Text(penetapan['keberadaan_fisik'] != null &&
                           penetapan['keberadaan_fisik'] != ''
-                      ? penetapan['keberadaan_fisik'].toString()
+                      ? (penetapan['keberadaan_fisik'] == 1
+                          ? 'Ada'
+                          : 'Tidak Ada/Tidak Ditemukan')
                       : '-'),
                 ),
                 DataCell(
@@ -477,9 +516,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['penggunaan_status'] != null &&
-                          penetapan['penggunaan_status'] != ''
-                      ? penetapan['penggunaan_status'].toString()
+                  Text(penetapan['penguasaan'] != null &&
+                          penetapan['penguasaan'] != ''
+                      ? mapPemilikIdToText(penetapan['penguasaan'])
                       : '-'),
                 ),
                 DataCell(
@@ -497,7 +536,15 @@ class _InventoryScreenState extends State<InventoryScreen> {
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
+            bool isSelected = penetapan['tgl_inventaris_formated'] != null &&
+                penetapan['tgl_inventaris_formated']
+                    .contains(currentYear.toString());
             return DataRow(
+              selected: isSelected,
+              color: isSelected
+                  ? MaterialStateProperty.all(
+                      Color.fromARGB(255, 206, 255, 207))
+                  : null,
               cells: [
                 DataCell(Text(penetapan['nomor'].toString())),
                 DataCell(Row(
@@ -512,10 +559,18 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     SizedBox(width: 8),
                     InkWell(
                       child: Icon(Icons.file_open, color: Colors.red),
-                      onTap: () {
-                        final id = penetapan['id'].toString();
-                        penetapanController.getPenetapanById(id, modifiedTitle);
-                      },
+                      onTap: () {},
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.qr_code, color: Colors.blue),
+                      onTap: () {},
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.qr_code_scanner_rounded,
+                          color: Colors.green),
+                      onTap: () {},
                     ),
                   ],
                 )),
@@ -533,6 +588,12 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 DataCell(
                   Text(penetapan['nama'] != null && penetapan['nama'] != ''
                       ? penetapan['nama'].toString()
+                      : '-'),
+                ),
+                DataCell(
+                  Text(penetapan['thn_nilai'] != null &&
+                          penetapan['thn_nilai'] != ''
+                      ? penetapan['thn_nilai'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -599,8 +660,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['harga'] != null && penetapan['harga'] != ''
-                      ? penetapan['harga'].toString()
+                  Text(penetapan['harga_formated'] != null &&
+                          penetapan['harga_formated'] != ''
+                      ? penetapan['harga_formated'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -622,15 +684,20 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_inventaris'] != null &&
-                          penetapan['tgl_inventaris'] != ''
-                      ? penetapan['tgl_inventaris'].toString()
+                  Text('-'),
+                ),
+                DataCell(
+                  Text(penetapan['tgl_inventaris_formated'] != null &&
+                          penetapan['tgl_inventaris_formated'] != ''
+                      ? penetapan['tgl_inventaris_formated'].toString()
                       : '-'),
                 ),
                 DataCell(
                   Text(penetapan['keberadaan_fisik'] != null &&
                           penetapan['keberadaan_fisik'] != ''
-                      ? penetapan['keberadaan_fisik'].toString()
+                      ? (penetapan['keberadaan_fisik'] == 1
+                          ? 'Ada'
+                          : 'Tidak Ada/Tidak Ditemukan')
                       : '-'),
                 ),
                 DataCell(
@@ -640,9 +707,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['penggunaan_status'] != null &&
-                          penetapan['penggunaan_status'] != ''
-                      ? penetapan['penggunaan_status'].toString()
+                  Text(penetapan['penguasaan'] != null &&
+                          penetapan['penguasaan'] != ''
+                      ? mapPemilikIdToText(penetapan['penguasaan'])
                       : '-'),
                 ),
                 DataCell(
@@ -660,7 +727,15 @@ class _InventoryScreenState extends State<InventoryScreen> {
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
+            bool isSelected = penetapan['tgl_inventaris_formated'] != null &&
+                penetapan['tgl_inventaris_formated']
+                    .contains(currentYear.toString());
             return DataRow(
+              selected: isSelected,
+              color: isSelected
+                  ? MaterialStateProperty.all(
+                      Color.fromARGB(255, 206, 255, 207))
+                  : null,
               cells: [
                 DataCell(Text(penetapan['nomor'].toString())),
                 DataCell(Row(
@@ -670,11 +745,29 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       onTap: () {
                         final id = penetapan['id'].toString();
                         penetapanController.getPenetapanById(id, modifiedTitle);
+                        kategoriController.getKategori(modifiedTitle);
                       },
                     ),
                     SizedBox(width: 8),
                     InkWell(
                       child: Icon(Icons.file_open, color: Colors.red),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.qr_code, color: Colors.blue),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.qr_code_scanner_rounded,
+                          color: Colors.green),
                       onTap: () {
                         final id = penetapan['id'].toString();
                         penetapanController.getPenetapanById(id, modifiedTitle);
@@ -765,8 +858,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['harga'] != null && penetapan['harga'] != ''
-                      ? penetapan['harga'].toString()
+                  Text(penetapan['harga_formated'] != null &&
+                          penetapan['harga_formated'] != ''
+                      ? penetapan['harga_formated'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -788,15 +882,17 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_inventaris'] != null &&
-                          penetapan['tgl_inventaris'] != ''
-                      ? penetapan['tgl_inventaris'].toString()
+                  Text(penetapan['tgl_inventaris_formated'] != null &&
+                          penetapan['tgl_inventaris_formated'] != ''
+                      ? penetapan['tgl_inventaris_formated'].toString()
                       : '-'),
                 ),
                 DataCell(
                   Text(penetapan['keberadaan_fisik'] != null &&
                           penetapan['keberadaan_fisik'] != ''
-                      ? penetapan['keberadaan_fisik'].toString()
+                      ? (penetapan['keberadaan_fisik'] == 1
+                          ? 'Ada'
+                          : 'Tidak Ada/Tidak Ditemukan')
                       : '-'),
                 ),
                 DataCell(
@@ -806,9 +902,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['penggunaan_status'] != null &&
-                          penetapan['penggunaan_status'] != ''
-                      ? penetapan['penggunaan_status'].toString()
+                  Text(penetapan['penguasaan'] != null &&
+                          penetapan['penguasaan'] != ''
+                      ? mapPemilikIdToText(penetapan['penguasaan'])
                       : '-'),
                 ),
                 DataCell(
@@ -826,7 +922,15 @@ class _InventoryScreenState extends State<InventoryScreen> {
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
+            bool isSelected = penetapan['tgl_inventaris_formated'] != null &&
+                penetapan['tgl_inventaris_formated']
+                    .contains(currentYear.toString());
             return DataRow(
+              selected: isSelected,
+              color: isSelected
+                  ? MaterialStateProperty.all(
+                      Color.fromARGB(255, 206, 255, 207))
+                  : null,
               cells: [
                 DataCell(Text(penetapan['nomor'].toString())),
                 DataCell(Row(
@@ -836,11 +940,29 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       onTap: () {
                         final id = penetapan['id'].toString();
                         penetapanController.getPenetapanById(id, modifiedTitle);
+                        kategoriController.getKategori(modifiedTitle);
                       },
                     ),
                     SizedBox(width: 8),
                     InkWell(
                       child: Icon(Icons.file_open, color: Colors.red),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.qr_code, color: Colors.blue),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.qr_code_scanner_rounded,
+                          color: Colors.green),
                       onTap: () {
                         final id = penetapan['id'].toString();
                         penetapanController.getPenetapanById(id, modifiedTitle);
@@ -924,8 +1046,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['harga'] != null && penetapan['harga'] != ''
-                      ? penetapan['harga'].toString()
+                  Text(penetapan['harga_formated'] != null &&
+                          penetapan['harga_formated'] != ''
+                      ? penetapan['harga_formated'].toString()
                       : '-'),
                 ),
                 DataCell(
@@ -947,15 +1070,17 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['tgl_inventaris'] != null &&
-                          penetapan['tgl_inventaris'] != ''
-                      ? penetapan['tgl_inventaris'].toString()
+                  Text(penetapan['tgl_inventaris_formated'] != null &&
+                          penetapan['tgl_inventaris_formated'] != ''
+                      ? penetapan['tgl_inventaris_formated'].toString()
                       : '-'),
                 ),
                 DataCell(
                   Text(penetapan['keberadaan_fisik'] != null &&
                           penetapan['keberadaan_fisik'] != ''
-                      ? penetapan['keberadaan_fisik'].toString()
+                      ? (penetapan['keberadaan_fisik'] == 1
+                          ? 'Ada'
+                          : 'Tidak Ada/Tidak Ditemukan')
                       : '-'),
                 ),
                 DataCell(
@@ -965,9 +1090,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       : '-'),
                 ),
                 DataCell(
-                  Text(penetapan['penggunaan_status'] != null &&
-                          penetapan['penggunaan_status'] != ''
-                      ? penetapan['penggunaan_status'].toString()
+                  Text(penetapan['penguasaan'] != null &&
+                          penetapan['penguasaan'] != ''
+                      ? mapPemilikIdToText(penetapan['penguasaan'])
                       : '-'),
                 ),
                 DataCell(
@@ -995,11 +1120,29 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       onTap: () {
                         final id = penetapan['id'].toString();
                         penetapanController.getPenetapanById(id, modifiedTitle);
+                        kategoriController.getKategori(modifiedTitle);
                       },
                     ),
                     SizedBox(width: 8),
                     InkWell(
                       child: Icon(Icons.file_open, color: Colors.red),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.qr_code, color: Colors.blue),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.qr_code_scanner_rounded,
+                          color: Colors.green),
                       onTap: () {
                         final id = penetapan['id'].toString();
                         penetapanController.getPenetapanById(id, modifiedTitle);
@@ -1141,11 +1284,29 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       onTap: () {
                         final id = penetapan['id'].toString();
                         penetapanController.getPenetapanById(id, modifiedTitle);
+                        kategoriController.getKategori(modifiedTitle);
                       },
                     ),
                     SizedBox(width: 8),
                     InkWell(
                       child: Icon(Icons.file_open, color: Colors.red),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.qr_code, color: Colors.blue),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.qr_code_scanner_rounded,
+                          color: Colors.green),
                       onTap: () {
                         final id = penetapan['id'].toString();
                         penetapanController.getPenetapanById(id, modifiedTitle);
@@ -1305,6 +1466,23 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         penetapanController.getPenetapanById(id, modifiedTitle);
                       },
                     ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.qr_code, color: Colors.blue),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.qr_code_scanner_rounded,
+                          color: Colors.green),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
                   ],
                 )),
                 DataCell(
@@ -1401,6 +1579,23 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         penetapanController.getPenetapanById(id, modifiedTitle);
                       },
                     ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.qr_code, color: Colors.blue),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.qr_code_scanner_rounded,
+                          color: Colors.green),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
                   ],
                 )),
                 DataCell(
@@ -1491,6 +1686,23 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     SizedBox(width: 8),
                     InkWell(
                       child: Icon(Icons.file_open, color: Colors.red),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.qr_code, color: Colors.blue),
+                      onTap: () {
+                        final id = penetapan['id'].toString();
+                        penetapanController.getPenetapanById(id, modifiedTitle);
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      child: Icon(Icons.qr_code_scanner_rounded,
+                          color: Colors.green),
                       onTap: () {
                         final id = penetapan['id'].toString();
                         penetapanController.getPenetapanById(id, modifiedTitle);
