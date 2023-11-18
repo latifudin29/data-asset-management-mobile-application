@@ -142,4 +142,4 @@ class InventoryAController extends GetxController {
   }
 }
 
-Future<void> getInventarisA() async {}
+Future<void> editInsertInventarisA() async {}

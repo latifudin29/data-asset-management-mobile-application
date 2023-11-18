@@ -47,10 +47,12 @@ class AppointmentController extends GetxController {
     } else {}
   }
 
-  Future<void> getPenetapanById(String id, String title) async {
+  Future<void> getPenetapanById(String id, String kategori) async {
     final response = await _connect.get(ApiEndPoints.baseurl +
         ApiEndPoints.authEndPoints.getPenetapanById +
-        id);
+        id +
+        '/' +
+        kategori);
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = response.body;
@@ -60,23 +62,23 @@ class AppointmentController extends GetxController {
 
       penetapanListById.assignAll(penetapanDataList);
 
-      if (title == "A") {
+      if (kategori == "A") {
         Get.to(EditInventoryAScreen());
-      } else if (title == "B") {
+      } else if (kategori == "B") {
         Get.to(EditInventoryBScreen());
-      } else if (title == "C") {
+      } else if (kategori == "C") {
         Get.to(EditInventoryCScreen());
-      } else if (title == "D") {
+      } else if (kategori == "D") {
         Get.to(EditInventoryDScreen());
-      } else if (title == "E") {
+      } else if (kategori == "E") {
         Get.to(EditInventoryEScreen());
-      } else if (title == "F") {
+      } else if (kategori == "F") {
         Get.to(EditInventoryFScreen());
-      } else if (title == "tgr") {
+      } else if (kategori == "tgr") {
         Get.to(EditInventoryTGRScreen());
-      } else if (title == "atb") {
+      } else if (kategori == "atb") {
         Get.to(EditInventoryATBScreen());
-      } else if (title == "belumTerdaftar") {
+      } else if (kategori == "belumTerdaftar") {
         Get.to(EditInventoryBelumTerdaftarScreen());
       }
     } else {}

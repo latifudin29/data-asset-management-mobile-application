@@ -291,6 +291,27 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                         ),
+                        onTap: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2030),
+                          );
+                          if (pickedDate != null) {
+                            print(pickedDate);
+                            String formattedDate =
+                                DateFormat('dd-MM-yyyy').format(pickedDate);
+                            print(formattedDate);
+
+                            setState(() {
+                              editController.a_tgl_inventaris.text =
+                                  formattedDate;
+                            });
+                          } else {
+                            print("Tanggal tidak dipilih");
+                          }
+                        },
                       ),
                     ),
                   ),
