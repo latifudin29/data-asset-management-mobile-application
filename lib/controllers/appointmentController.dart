@@ -16,6 +16,7 @@ class AppointmentController extends GetxController {
   RxList<Map<String, dynamic>> penetapanList = RxList<Map<String, dynamic>>([]);
   RxList<Map<String, dynamic>> penetapanListById =
       RxList<Map<String, dynamic>>([]);
+  RxInt totalPage = RxInt(0);
 
   late TextEditingController tahun;
 
@@ -42,6 +43,7 @@ class AppointmentController extends GetxController {
 
       penetapanList
           .assignAll(penetapanData.map((item) => item as Map<String, dynamic>));
+      totalPage.value = data['total_page'];
     } else {}
   }
 

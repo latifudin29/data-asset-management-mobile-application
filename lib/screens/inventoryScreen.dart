@@ -6,6 +6,7 @@ import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:kib_application/controllers/appointmentController.dart';
 import 'package:kib_application/controllers/categoryController.dart';
 import 'package:kib_application/controllers/departementController.dart';
+import 'package:number_paginator/number_paginator.dart';
 
 class InventoryScreen extends StatefulWidget {
   final String title;
@@ -30,7 +31,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
   String modifiedTitle = "";
 
   int page = 1;
-  int totalPage = 10;
+  int totalPage = 1;
 
   List<DataColumn> columns = [];
   List<DataColumn> rows = [];
@@ -60,6 +61,11 @@ class _InventoryScreenState extends State<InventoryScreen> {
   @override
   void initState() {
     super.initState();
+    ever(penetapanController.totalPage, (value) {
+      setState(() {
+        totalPage = value;
+      });
+    });
     departemenController.getDepartemen();
     modifyTitle(widget.title);
     String yearNow = DateFormat.y().format(now);
@@ -346,15 +352,12 @@ class _InventoryScreenState extends State<InventoryScreen> {
     }
 
     List<DataRow> generateDataRows() {
-      int currentYear = DateTime.now().year;
       if (modifiedTitle == "A") {
         return List<DataRow>.generate(
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
-            bool isSelected = penetapan['tgl_inventaris_formatted'] != null &&
-                penetapan['tgl_inventaris_formatted']
-                    .contains(currentYear.toString());
+            bool isSelected = penetapan['status_inventaris'] == 1;
             return DataRow(
               selected: isSelected,
               color: isSelected
@@ -368,7 +371,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     InkWell(
                       child: Icon(Icons.edit_document, color: Colors.orange),
                       onTap: () {
-                        final id = penetapan['id'].toString();
+                        final id = penetapan['penetapan_id'].toString();
                         penetapanController.getPenetapanById(id, modifiedTitle);
                       },
                     ),
@@ -521,9 +524,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
-            bool isSelected = penetapan['tgl_inventaris_formatted'] != null &&
-                penetapan['tgl_inventaris_formatted']
-                    .contains(currentYear.toString());
+            bool isSelected = penetapan['status_inventaris'] == 1;
             return DataRow(
               selected: isSelected,
               color: isSelected
@@ -537,7 +538,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     InkWell(
                       child: Icon(Icons.edit_document, color: Colors.orange),
                       onTap: () {
-                        final id = penetapan['id'].toString();
+                        final id = penetapan['penetapan_id'].toString();
                         penetapanController.getPenetapanById(id, modifiedTitle);
                       },
                     ),
@@ -705,9 +706,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
-            bool isSelected = penetapan['tgl_inventaris_formatted'] != null &&
-                penetapan['tgl_inventaris_formatted']
-                    .contains(currentYear.toString());
+            bool isSelected = penetapan['status_inventaris'] == 1;
             return DataRow(
               selected: isSelected,
               color: isSelected
@@ -721,35 +720,25 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     InkWell(
                       child: Icon(Icons.edit_document, color: Colors.orange),
                       onTap: () {
-                        final id = penetapan['id'].toString();
+                        final id = penetapan['penetapan_id'].toString();
                         penetapanController.getPenetapanById(id, modifiedTitle);
-                        kategoriController.getKategori(modifiedTitle);
                       },
                     ),
                     SizedBox(width: 8),
                     InkWell(
                       child: Icon(Icons.file_open, color: Colors.red),
-                      onTap: () {
-                        final id = penetapan['id'].toString();
-                        penetapanController.getPenetapanById(id, modifiedTitle);
-                      },
+                      onTap: () {},
                     ),
                     SizedBox(width: 8),
                     InkWell(
                       child: Icon(Icons.qr_code, color: Colors.blue),
-                      onTap: () {
-                        final id = penetapan['id'].toString();
-                        penetapanController.getPenetapanById(id, modifiedTitle);
-                      },
+                      onTap: () {},
                     ),
                     SizedBox(width: 8),
                     InkWell(
                       child: Icon(Icons.qr_code_scanner_rounded,
                           color: Colors.green),
-                      onTap: () {
-                        final id = penetapan['id'].toString();
-                        penetapanController.getPenetapanById(id, modifiedTitle);
-                      },
+                      onTap: () {},
                     ),
                   ],
                 )),
@@ -902,9 +891,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
-            bool isSelected = penetapan['tgl_inventaris_formatted'] != null &&
-                penetapan['tgl_inventaris_formatted']
-                    .contains(currentYear.toString());
+            bool isSelected = penetapan['status_inventaris'] == 1;
             return DataRow(
               selected: isSelected,
               color: isSelected
@@ -918,35 +905,25 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     InkWell(
                       child: Icon(Icons.edit_document, color: Colors.orange),
                       onTap: () {
-                        final id = penetapan['id'].toString();
+                        final id = penetapan['penetapan_id'].toString();
                         penetapanController.getPenetapanById(id, modifiedTitle);
-                        kategoriController.getKategori(modifiedTitle);
                       },
                     ),
                     SizedBox(width: 8),
                     InkWell(
                       child: Icon(Icons.file_open, color: Colors.red),
-                      onTap: () {
-                        final id = penetapan['id'].toString();
-                        penetapanController.getPenetapanById(id, modifiedTitle);
-                      },
+                      onTap: () {},
                     ),
                     SizedBox(width: 8),
                     InkWell(
                       child: Icon(Icons.qr_code, color: Colors.blue),
-                      onTap: () {
-                        final id = penetapan['id'].toString();
-                        penetapanController.getPenetapanById(id, modifiedTitle);
-                      },
+                      onTap: () {},
                     ),
                     SizedBox(width: 8),
                     InkWell(
                       child: Icon(Icons.qr_code_scanner_rounded,
                           color: Colors.green),
-                      onTap: () {
-                        final id = penetapan['id'].toString();
-                        penetapanController.getPenetapanById(id, modifiedTitle);
-                      },
+                      onTap: () {},
                     ),
                   ],
                 )),
@@ -1092,9 +1069,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
-            bool isSelected = penetapan['tgl_inventaris_formatted'] != null &&
-                penetapan['tgl_inventaris_formatted']
-                    .contains(currentYear.toString());
+            bool isSelected = penetapan['status_inventaris'] == 1;
             return DataRow(
               selected: isSelected,
               color: isSelected
@@ -1108,35 +1083,25 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     InkWell(
                       child: Icon(Icons.edit_document, color: Colors.orange),
                       onTap: () {
-                        final id = penetapan['id'].toString();
+                        final id = penetapan['penetapan_id'].toString();
                         penetapanController.getPenetapanById(id, modifiedTitle);
-                        kategoriController.getKategori(modifiedTitle);
                       },
                     ),
                     SizedBox(width: 8),
                     InkWell(
                       child: Icon(Icons.file_open, color: Colors.red),
-                      onTap: () {
-                        final id = penetapan['id'].toString();
-                        penetapanController.getPenetapanById(id, modifiedTitle);
-                      },
+                      onTap: () {},
                     ),
                     SizedBox(width: 8),
                     InkWell(
                       child: Icon(Icons.qr_code, color: Colors.blue),
-                      onTap: () {
-                        final id = penetapan['id'].toString();
-                        penetapanController.getPenetapanById(id, modifiedTitle);
-                      },
+                      onTap: () {},
                     ),
                     SizedBox(width: 8),
                     InkWell(
                       child: Icon(Icons.qr_code_scanner_rounded,
                           color: Colors.green),
-                      onTap: () {
-                        final id = penetapan['id'].toString();
-                        penetapanController.getPenetapanById(id, modifiedTitle);
-                      },
+                      onTap: () {},
                     ),
                   ],
                 )),
@@ -1269,9 +1234,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
           penetapanController.penetapanList.length,
           (index) {
             final penetapan = penetapanController.penetapanList[index];
-            bool isSelected = penetapan['tgl_inventaris_formatted'] != null &&
-                penetapan['tgl_inventaris_formatted']
-                    .contains(currentYear.toString());
+            bool isSelected = penetapan['status_inventaris'] == 1;
             return DataRow(
               selected: isSelected,
               color: isSelected
@@ -1285,35 +1248,25 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     InkWell(
                       child: Icon(Icons.edit_document, color: Colors.orange),
                       onTap: () {
-                        final id = penetapan['id'].toString();
+                        final id = penetapan['penetapan_id'].toString();
                         penetapanController.getPenetapanById(id, modifiedTitle);
-                        kategoriController.getKategori(modifiedTitle);
                       },
                     ),
                     SizedBox(width: 8),
                     InkWell(
                       child: Icon(Icons.file_open, color: Colors.red),
-                      onTap: () {
-                        final id = penetapan['id'].toString();
-                        penetapanController.getPenetapanById(id, modifiedTitle);
-                      },
+                      onTap: () {},
                     ),
                     SizedBox(width: 8),
                     InkWell(
                       child: Icon(Icons.qr_code, color: Colors.blue),
-                      onTap: () {
-                        final id = penetapan['id'].toString();
-                        penetapanController.getPenetapanById(id, modifiedTitle);
-                      },
+                      onTap: () {},
                     ),
                     SizedBox(width: 8),
                     InkWell(
                       child: Icon(Icons.qr_code_scanner_rounded,
                           color: Colors.green),
-                      onTap: () {
-                        final id = penetapan['id'].toString();
-                        penetapanController.getPenetapanById(id, modifiedTitle);
-                      },
+                      onTap: () {},
                     ),
                   ],
                 )),
@@ -1869,8 +1822,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: DataTable(
-                      headingRowColor: MaterialStateProperty.all(
-                          Color.fromARGB(255, 202, 202, 202)),
+                      headingRowColor: MaterialStateProperty.all(Colors.white),
                       columnSpacing: 30,
                       columns: columns,
                       rows: generateDataRows(),
@@ -1879,50 +1831,21 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 28),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'Page $page of $totalPage',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                    ),
-                  ),
-                  Spacer(),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: buttonColor,
-                    ),
-                    onPressed: () {
-                      if (page > 1) {
-                        setState(() {
-                          page--;
-                        });
-                        loadPenetapanData();
-                      }
-                    },
-                    child: Text('Previous'),
-                  ),
-                  SizedBox(width: 10),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: buttonColor,
-                    ),
-                    onPressed: () {
-                      if (page < totalPage) {
-                        setState(() {
-                          page++;
-                        });
-                        loadPenetapanData();
-                      }
-                    },
-                    child: Text('Next'),
-                  ),
-                ],
+            Container(
+              decoration: BoxDecoration(color: Colors.white),
+              child: NumberPaginator(
+                numberPages: totalPage,
+                onPageChange: (int index) {
+                  setState(() {
+                    page = index + 1;
+                  });
+                  loadPenetapanData();
+                },
+                config: NumberPaginatorUIConfig(
+                    buttonUnselectedForegroundColor:
+                        Color.fromARGB(255, 18, 58, 146),
+                    buttonSelectedBackgroundColor:
+                        Color.fromARGB(255, 18, 58, 146)),
               ),
             ),
           ],
