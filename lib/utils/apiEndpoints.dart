@@ -8,6 +8,7 @@ class _AuthEndPoints {
   final String logout = 'logout';
   final String getDepartemen = 'departements';
   final String getKategori = 'kategori/';
+  final String getSatuan = 'satuan';
   final String getPenetapan = 'penetapan/';
   final String getPenetapanById = 'penetapan/';
 }

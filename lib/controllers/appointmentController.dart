@@ -10,9 +10,14 @@ import 'package:kib_application/screens/forms/editInventoryTGRScreen.dart';
 import 'package:kib_application/screens/forms/editInventoryATBScreen.dart';
 import 'package:kib_application/screens/forms/editInventoryBelumTerdaftarScreen.dart';
 import 'package:kib_application/utils/apiEndpoints.dart';
+import 'package:kib_application/controllers/categoryController.dart';
+import 'package:kib_application/controllers/unitController.dart';
 
 class AppointmentController extends GetxController {
   final _connect = GetConnect();
+  final kategoriController = Get.put(CategoryController());
+  final satuanController = Get.put(UnitController());
+
   RxList<Map<String, dynamic>> penetapanList = RxList<Map<String, dynamic>>([]);
   RxList<Map<String, dynamic>> penetapanListById =
       RxList<Map<String, dynamic>>([]);
@@ -26,41 +31,65 @@ class AppointmentController extends GetxController {
     tahun = TextEditingController();
   }
 
+  Future<void> _initData() async {
+    await kategoriController.getKategori("A");
+    await satuanController.getSatuan();
+  }
+
   Future<void> getPenetapan(String id, String kategori, int page) async {
-    final response = await _connect.get(ApiEndPoints.baseurl +
-        ApiEndPoints.authEndPoints.getPenetapan +
-        id +
-        '/' +
-        kategori +
-        '?perPage=10&page=' +
-        page.toString() +
-        '&tahun=' +
-        tahun.text);
+    try {
+      Get.dialog(Center(child: CircularProgressIndicator()),
+          barrierDismissible: false);
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = response.body;
-      final List<dynamic> penetapanData = data['data'];
+      final response = await _connect.get(
+        ApiEndPoints.baseurl +
+            ApiEndPoints.authEndPoints.getPenetapan +
+            id +
+            '/' +
+            kategori +
+            '?perPage=10&page=' +
+            page.toString() +
+            '&tahun=' +
+            tahun.text,
+      );
 
-      penetapanList
-          .assignAll(penetapanData.map((item) => item as Map<String, dynamic>));
-      totalPage.value = data['total_page'];
-    } else {}
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = response.body;
+        final List<dynamic> penetapanData = data['data'];
+
+        penetapanList.assignAll(
+            penetapanData.map((item) => item as Map<String, dynamic>));
+        totalPage.value = data['total_page'];
+      }
+    } finally {
+      Get.back();
+    }
   }
 
   Future<void> getPenetapanById(String id, String kategori) async {
-    final response = await _connect.get(ApiEndPoints.baseurl +
-        ApiEndPoints.authEndPoints.getPenetapanById +
-        id +
-        '/' +
-        kategori);
+    try {
+      Get.dialog(Center(child: CircularProgressIndicator()),
+          barrierDismissible: false);
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = response.body;
-      final Map<String, dynamic> penetapanDataById = data['data'];
+      final response = await _connect.get(
+        ApiEndPoints.baseurl + ApiEndPoints.authEndPoints.getPenetapanById + id,
+      );
 
-      final List<Map<String, dynamic>> penetapanDataList = [penetapanDataById];
+      print(id);
 
-      penetapanListById.assignAll(penetapanDataList);
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = response.body;
+        final Map<String, dynamic> penetapanDataById = data['data'];
+
+        final List<Map<String, dynamic>> penetapanDataList = [
+          penetapanDataById
+        ];
+
+        penetapanListById.assignAll(penetapanDataList);
+      }
+      _initData();
+    } finally {
+      Get.back();
 
       if (kategori == "A") {
         Get.to(EditInventoryAScreen());
@@ -81,6 +110,6 @@ class AppointmentController extends GetxController {
       } else if (kategori == "belumTerdaftar") {
         Get.to(EditInventoryBelumTerdaftarScreen());
       }
-    } else {}
+    }
   }
 }

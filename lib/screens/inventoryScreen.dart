@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:kib_application/constans/colors.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:kib_application/controllers/appointmentController.dart';
-import 'package:kib_application/controllers/categoryController.dart';
 import 'package:kib_application/controllers/departementController.dart';
 import 'package:number_paginator/number_paginator.dart';
 
@@ -19,7 +18,6 @@ class InventoryScreen extends StatefulWidget {
 class _InventoryScreenState extends State<InventoryScreen> {
   final departemenController = Get.put(DepartemenController());
   final penetapanController = Get.put(AppointmentController());
-  final kategoriController = Get.put(CategoryController());
 
   final searchDepartement = TextEditingController();
   final departemenSelected = TextEditingController();
