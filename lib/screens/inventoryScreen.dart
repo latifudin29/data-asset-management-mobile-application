@@ -1809,7 +1809,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             ),
             SizedBox(height: 30),
             Container(
-              height: 300,
+              height: 395,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey.shade200),
                 color: Colors.white,

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kib_application/screens/homeScreen.dart';
-import 'package:kib_application/utils/apiEndpoints.dart';
+import 'package:kib_application/utils/loader.dart';
 import 'package:kib_application/utils/sharedPrefs.dart';
+import 'package:kib_application/utils/snackbar.dart';
 
 class LoginController extends GetxController {
   final _connect = GetConnect();
@@ -24,24 +25,59 @@ class LoginController extends GetxController {
     passwordController.dispose();
   }
 
-  Future<void> login() async {
-    final response = await _connect.post(
-      ApiEndPoints.baseurl + ApiEndPoints.authEndPoints.login,
-      {
-        "username": usernameController.text,
-        "password": passwordController.text,
-      },
-    );
-
-    if (response.body['success'] == true) {
-      String username = response.body['data'][0]['username'];
-      user.setUsername(username);
-
-      Get.off(HomeScreen());
-      usernameController.clear();
-      passwordController.clear();
+  checkLogin() {
+    if (usernameController.text.isEmpty && passwordController.text.isEmpty) {
+      customSnackBar("Error", 'Username dan password harus diisi!', 'error');
+    } else if (usernameController.text.isEmpty) {
+      customSnackBar("Error", 'Password tidak boleh kosong!', 'error');
+    } else if (passwordController.text.isEmpty) {
+      customSnackBar("Error", 'Password tidak boleh kosong!', 'error');
     } else {
-      print('Login Gagal!');
+      Get.showOverlay(
+          asyncFunction: () => login(), loadingWidget: const Loader());
+    }
+  }
+
+  login() async {
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization':
+          'raFdbSxTHtAwQrRkeLWMBKyRvdxzCfPNUOjlyZVEYGIw0346sabBuzIehV9oiCXh',
+      'Userid': 'ws-inventaris',
+      'Signature': 'MOTGI7vibUgwL6gJyyVDi+DD1YIB7hOzo14jl2F5uGA=',
+      'Key': '1699093787'
+    };
+
+    Map<String, dynamic> body = {
+      "jsonrpc": "2.0",
+      "method": "login",
+      "params": {
+        "data": [
+          {
+            "user_name": usernameController.text,
+            "password": passwordController.text,
+          }
+        ]
+      },
+      "id": 1
+    };
+
+    final response = await _connect.post(
+        'https://aset.bogorkota.net/inventaris/rpc/user', body,
+        headers: headers);
+
+    if (response.statusCode == 200) {
+      if (response.body.containsKey('result')) {
+        String username = response.body['result']['data'][0]['user_name'];
+        user.setUsername(username);
+
+        Get.off(HomeScreen());
+        customSnackBar("Success", 'Login success!', 'success');
+        usernameController.clear();
+        passwordController.clear();
+      } else if (response.body.containsKey('error')) {
+        customSnackBar("Error", 'Invalid username or password!', 'error');
+      }
     }
   }
 }

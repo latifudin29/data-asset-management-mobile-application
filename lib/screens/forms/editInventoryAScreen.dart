@@ -61,48 +61,46 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
     super.initState();
     final data = penetapanController.penetapanListById[0];
 
-    statusNoRegister = data['no_register_status'] != null
+    statusNoRegister = data['no_register_status'] != ""
         ? data['no_register_status'].toString()
         : "1";
-    statusBarang = data['kategori_id_status'] != null
+    statusBarang = data['kategori_id_status'] != ""
         ? data['kategori_id_status'].toString()
         : "1";
-    statusNamaBarang = data['nama_spesifikasi_status'] != null
+    statusNamaBarang = data['nama_spesifikasi_status'] != ""
         ? data['nama_spesifikasi_status'].toString()
         : "1";
     statusJumlah =
-        data['jumlah_status'] != null ? data['jumlah_status'].toString() : "1";
-    statusLuas = data['a_luas_m2_status'] != null
+        data['jumlah_status'] != "" ? data['jumlah_status'].toString() : "1";
+    statusLuas = data['a_luas_m2_status'] != ""
         ? data['a_luas_m2_status'].toString()
         : "1";
-    statusPerolehan = data['cara_perolehan_status'] != null
+    statusPerolehan = data['cara_perolehan_status'] != ""
         ? data['cara_perolehan_status'].toString()
         : "1";
-    statusNilaiPerolehan = data['perolehan_status'] != null
+    statusNilaiPerolehan = data['perolehan_status'] != ""
         ? data['perolehan_status'].toString()
         : "1";
-    statusAlamat = data['a_alamat_status'] != null
+    statusAlamat = data['a_alamat_status'] != ""
         ? data['a_alamat_status'].toString()
         : "1";
-    statusHakTanah = data['a_hak_tanah_status'] != null
+    statusHakTanah = data['a_hak_tanah_status'] != ""
         ? data['a_hak_tanah_status'].toString()
         : "1";
-    statusNoSertifikat = data['a_sertifikat_nomor_status'] != null
+    statusNoSertifikat = data['a_sertifikat_nomor_status'] != ""
         ? data['a_sertifikat_nomor_status'].toString()
         : "1";
-    statusTglSertifikat = data['a_sertifikat_tanggal_status'] != null
+    statusTglSertifikat = data['a_sertifikat_tanggal_status'] != ""
         ? data['a_sertifikat_tanggal_status'].toString()
         : "1";
-    statusKondisi = data['kondisi_status'] != null
-        ? data['kondisi_status'].toString()
-        : "1";
-    statusAsalUsul = data['asal_usul_status'] != null
+    statusKondisi =
+        data['kondisi_status'] != "" ? data['kondisi_status'].toString() : "1";
+    statusAsalUsul = data['asal_usul_status'] != ""
         ? data['asal_usul_status'].toString()
         : "1";
 
     selectedKategori = data['kategori_id_awal'].toString();
-    selectedSatuan =
-        data['satuan'] != null ? data['satuan'].toString() : "PAKET";
+    selectedSatuan = data['satuan'] != "" ? data['satuan'].toString() : "PAKET";
 
     editController.tgl_inventaris.text =
         data['tgl_inventaris_formatted'].toString();

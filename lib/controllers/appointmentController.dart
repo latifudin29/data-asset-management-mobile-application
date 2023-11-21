@@ -10,13 +10,17 @@ import 'package:kib_application/screens/forms/editInventoryTGRScreen.dart';
 import 'package:kib_application/screens/forms/editInventoryATBScreen.dart';
 import 'package:kib_application/screens/forms/editInventoryBelumTerdaftarScreen.dart';
 import 'package:kib_application/utils/apiEndpoints.dart';
+import 'package:kib_application/controllers/addressController.dart';
 import 'package:kib_application/controllers/categoryController.dart';
 import 'package:kib_application/controllers/unitController.dart';
+import 'package:kib_application/controllers/roomController.dart';
 
 class AppointmentController extends GetxController {
   final _connect = GetConnect();
   final kategoriController = Get.put(CategoryController());
   final satuanController = Get.put(UnitController());
+  final ruangController = Get.put(RoomController());
+  final addressController = Get.put(AddressController());
 
   RxList<Map<String, dynamic>> penetapanList = RxList<Map<String, dynamic>>([]);
   RxList<Map<String, dynamic>> penetapanListById =
@@ -34,6 +38,9 @@ class AppointmentController extends GetxController {
   Future<void> _initData() async {
     await kategoriController.getKategori("A");
     await satuanController.getSatuan();
+    await ruangController.getRuang();
+    await addressController.getKecamatan();
+    await addressController.getKelurahan();
   }
 
   Future<void> getPenetapan(String id, String kategori, int page) async {
@@ -72,14 +79,25 @@ class AppointmentController extends GetxController {
           barrierDismissible: false);
 
       final response = await _connect.get(
-        ApiEndPoints.baseurl + ApiEndPoints.authEndPoints.getPenetapanById + id,
+        ApiEndPoints.baseurl +
+            ApiEndPoints.authEndPoints.getPenetapanById +
+            kategori +
+            '/' +
+            id,
       );
 
+      print('INI ID');
       print(id);
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = response.body;
         final Map<String, dynamic> penetapanDataById = data['data'];
+
+        penetapanDataById.forEach((key, value) {
+          if (value == null) {
+            penetapanDataById[key] = "";
+          }
+        });
 
         final List<Map<String, dynamic>> penetapanDataList = [
           penetapanDataById

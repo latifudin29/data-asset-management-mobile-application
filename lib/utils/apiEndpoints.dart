@@ -4,11 +4,13 @@ class ApiEndPoints {
 }
 
 class _AuthEndPoints {
-  final String login = 'login';
   final String logout = 'logout';
   final String getDepartemen = 'departements';
   final String getKategori = 'kategori/';
   final String getSatuan = 'satuan';
+  final String getRuangan = 'ruang';
+  final String getKecamatan = 'kecamatan';
+  final String getKelurahan = 'kelurahan';
   final String getPenetapan = 'penetapan/';
-  final String getPenetapanById = 'penetapan/';
+  final String getPenetapanById = 'penetapan/inventaris/';
 }

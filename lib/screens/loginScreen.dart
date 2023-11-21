@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:kib_application/constans/colors.dart';
+import 'package:kib_application/controllers/loginController.dart';
 import 'package:kib_application/screens/homeScreen.dart';
 
 class LoginScreen extends StatelessWidget {
-  // final loginController = Get.put(LoginController());
+  final loginController = Get.put(LoginController());
   final bool _isObscure = true;
 
   @override
@@ -74,7 +75,7 @@ class LoginScreen extends StatelessWidget {
                                 color: secondaryTextColor,
                               ),
                             ),
-                            // controller: loginController.usernameController,
+                            controller: loginController.usernameController,
                           ),
                         ),
                       ),
@@ -105,7 +106,7 @@ class LoginScreen extends StatelessWidget {
                                 color: secondaryTextColor,
                               ),
                             ),
-                            // controller: loginController.passwordController,
+                            controller: loginController.passwordController,
                           ),
                         ),
                       ),
@@ -131,7 +132,7 @@ class LoginScreen extends StatelessWidget {
                       )),
                     ),
                     onTap: () {
-                      // loginController.login();
+                      // loginController.checkLogin();
                       Get.to(HomeScreen());
                     },
                   ),
