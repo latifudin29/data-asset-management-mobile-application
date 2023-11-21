@@ -21,9 +21,11 @@ class AddressController extends GetxController {
     } else {}
   }
 
-  Future<void> getKelurahan() async {
-    final response = await _connect
-        .get(ApiEndPoints.baseurl + ApiEndPoints.authEndPoints.getKelurahan);
+  Future<void> getKelurahan(String id_kecamatan) async {
+    final response = await _connect.get(ApiEndPoints.baseurl +
+        ApiEndPoints.authEndPoints.getKelurahan +
+        '/' +
+        id_kecamatan);
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = response.body;

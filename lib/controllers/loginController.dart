@@ -40,9 +40,6 @@ class LoginController extends GetxController {
 
   login() async {
     Map<String, String> headers = {
-      'Content-Type': 'application/json',
-      'Authorization':
-          'raFdbSxTHtAwQrRkeLWMBKyRvdxzCfPNUOjlyZVEYGIw0346sabBuzIehV9oiCXh',
       'Userid': 'ws-inventaris',
       'Signature': 'MOTGI7vibUgwL6gJyyVDi+DD1YIB7hOzo14jl2F5uGA=',
       'Key': '1699093787'

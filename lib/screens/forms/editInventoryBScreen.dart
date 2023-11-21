@@ -115,7 +115,9 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
         ? data['asal_usul_status'].toString()
         : "1";
 
-    selectedKategori = data['kategori_id_awal'].toString();
+    selectedKategori = data['kategori_id_awal'] != ""
+        ? data['kategori_id_awal'].toString()
+        : data['kategori_id_akhir'].toString();
     selectedSatuan = data['satuan'] != "" ? data['satuan'].toString() : "PAKET";
 
     editController.tgl_inventaris.text =

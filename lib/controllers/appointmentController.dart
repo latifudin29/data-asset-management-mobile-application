@@ -40,7 +40,6 @@ class AppointmentController extends GetxController {
     await satuanController.getSatuan();
     await ruangController.getRuang();
     await addressController.getKecamatan();
-    await addressController.getKelurahan();
   }
 
   Future<void> getPenetapan(String id, String kategori, int page) async {
