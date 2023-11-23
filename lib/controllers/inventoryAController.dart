@@ -1,8 +1,13 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:kib_application/utils/apiEndpoints.dart';
+import 'package:kib_application/utils/snackbar.dart';
 
 class InventoryAController extends GetxController {
-  late TextEditingController tgl_inventaris,
+  final _connect = GetConnect();
+
+  late TextEditingController kib_id,
+      tgl_inventaris,
       skpd,
       skpd_uraian,
       no_register_awal,
@@ -104,6 +109,7 @@ class InventoryAController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    kib_id = TextEditingController();
     tgl_inventaris = TextEditingController();
     skpd = TextEditingController();
     skpd_uraian = TextEditingController();
@@ -203,6 +209,65 @@ class InventoryAController extends GetxController {
     file_nm = TextEditingController();
     petugas = TextEditingController();
   }
-}
 
-Future<void> editInsertInventarisA() async {}
+  Future<void> editInsertInventarisA(String kib_id, List<String> data) async {
+    String? _getValue(String value) {
+      return value.isNotEmpty ? value : null;
+    }
+
+    String removeDot(String? value) {
+      return value?.replaceAll('.', '') ?? '';
+    }
+
+    Map<String, dynamic> body = {
+      "data": {
+        "tgl_inventaris": _getValue(data[0]),
+        "no_register_awal": int.tryParse(data[1]),
+        "no_register_akhir": int.tryParse(data[2]),
+        "no_register_status": int.tryParse(data[3]),
+        "kategori_id_awal": int.tryParse(data[4]),
+        "kategori_id_akhir": int.tryParse(data[5]),
+        "kategori_id_status": int.tryParse(data[6]),
+        "nama_spesifikasi_awal": _getValue(data[7]),
+        "nama_spesifikasi_akhir": _getValue(data[8]),
+        "nama_spesifikasi_status": int.tryParse(data[9]),
+        "jumlah_awal": int.tryParse(data[10]),
+        "jumlah_akhir": int.tryParse(data[11]),
+        "jumlah_status": int.tryParse(data[12]),
+        "a_luas_m2_awal": int.tryParse(data[13]),
+        "a_luas_m2_akhir": int.tryParse(data[14]),
+        "a_luas_m2_status": int.tryParse(data[15]),
+        "satuan": _getValue(data[16]),
+        "cara_perolehan_awal": _getValue(data[17]),
+        "cara_perolehan_akhir": int.tryParse(data[18]),
+        "cara_perolehan_status": int.tryParse(data[19]),
+        "tgl_perolehan": _getValue(data[20]),
+        "tahun_perolehan": int.tryParse(data[21]),
+        "perolehan_awal": removeDot(_getValue(data[22])),
+        "perolehan_akhir": removeDot(_getValue(data[23])),
+        "perolehan_status": int.tryParse(data[24]),
+      }
+    };
+
+    print(body);
+
+    try {
+      final response = await _connect.put(
+        '${ApiEndPoints.baseurl}${ApiEndPoints.authEndPoints.putInventaris}A/edit/$kib_id',
+        body,
+      );
+
+      if (response.statusCode == 200) {
+        Get.back();
+        customSnackBar("Success", response.body['message'], 'success');
+      } else {
+        print("Error: ${response.statusCode}");
+        print("Response Body: ${response.body}");
+        customSnackBar("Error", "Failed to update data!", 'error');
+      }
+    } catch (error) {
+      print("Error: $error");
+      customSnackBar("Error", "An unexpected error occurred!", 'error');
+    }
+  }
+}

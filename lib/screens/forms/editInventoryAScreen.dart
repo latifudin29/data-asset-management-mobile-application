@@ -5,12 +5,12 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:kib_application/constans/colors.dart';
+import 'package:kib_application/constans/inventoryVariablesA.dart';
 import 'package:kib_application/controllers/addressController.dart';
 import 'package:kib_application/controllers/appointmentController.dart';
 import 'package:kib_application/controllers/categoryController.dart';
 import 'package:kib_application/controllers/inventoryAController.dart';
 import 'package:kib_application/controllers/unitController.dart';
-import 'package:kib_application/utils/snackbar.dart';
 
 class EditInventoryAScreen extends StatefulWidget {
   const EditInventoryAScreen({super.key});
@@ -25,41 +25,8 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
   final kategoriController = Get.put(CategoryController());
   final satuanController = Get.put(UnitController());
   final addressController = Get.put(AddressController());
+  final InventoryVariablesA invA = InventoryVariablesA();
   DateTime now = DateTime.now();
-
-  String statusNoRegister = "";
-  String statusBarang = "";
-  String statusNamaBarang = "";
-  String statusJumlah = "";
-  String statusLuas = "";
-  String statusPerolehan = "";
-  String statusNilaiPerolehan = "";
-  String statusAlamat = "";
-  String statusHakTanah = "";
-  String statusNoSertifikat = "";
-  String statusTglSertifikat = "";
-  String statusKondisi = "";
-  String statusAsalUsul = "";
-
-  String selectedKategori = "";
-  String selectedSatuan = "";
-  String selectedPerolehan = "";
-  String selectedKecamatan = "";
-  String selectedKelurahan = "";
-
-  List<String> keteranganNoRegister = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganBarang = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganNamaBarang = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganJumlah = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganLuas = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganPerolehan = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganNilaiPerolehan = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganAlamat = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganHakTanah = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganNoSertifikat = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganTglSertifikat = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganKondisi = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganAsalUsul = ["Sesuai", "Tidak Sesuai"];
 
   @override
   void initState() {
@@ -67,67 +34,70 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
     final data = penetapanController.penetapanListById[0];
     final filteredList = addressController.kecamatanList.where(
         (kecamatan) => kecamatan['kecamatan_kd'] == data['alamat_kecamatan']);
-
     if (filteredList.isNotEmpty) {
       addressController.getKelurahan(filteredList.first["id"].toString());
     }
 
-    statusNoRegister = data['no_register_status'] != ""
+    editController.kib_id.text = data['kib_id'].toString();
+
+    invA.statusNoRegister = data['no_register_status'] != ""
         ? data['no_register_status'].toString()
         : "1";
-    statusBarang = data['kategori_id_status'] != ""
+    invA.statusBarang = data['kategori_id_status'] != ""
         ? data['kategori_id_status'].toString()
         : "1";
-    statusNamaBarang = data['nama_spesifikasi_status'] != ""
+    invA.statusNamaBarang = data['nama_spesifikasi_status'] != ""
         ? data['nama_spesifikasi_status'].toString()
         : "1";
-    statusJumlah =
+    invA.statusJumlah =
         data['jumlah_status'] != "" ? data['jumlah_status'].toString() : "1";
-    statusLuas = data['a_luas_m2_status'] != ""
+    invA.statusLuas = data['a_luas_m2_status'] != ""
         ? data['a_luas_m2_status'].toString()
         : "1";
-    statusPerolehan = data['cara_perolehan_status'] != ""
+    invA.statusPerolehan = data['cara_perolehan_status'] != ""
         ? data['cara_perolehan_status'].toString()
         : "1";
-    statusNilaiPerolehan = data['perolehan_status'] != ""
+    invA.statusNilaiPerolehan = data['perolehan_status'] != ""
         ? data['perolehan_status'].toString()
         : "1";
-    statusAlamat = data['a_alamat_status'] != ""
+    invA.statusAlamat = data['a_alamat_status'] != ""
         ? data['a_alamat_status'].toString()
         : "1";
-    statusHakTanah = data['a_hak_tanah_status'] != ""
+    invA.statusHakTanah = data['a_hak_tanah_status'] != ""
         ? data['a_hak_tanah_status'].toString()
         : "1";
-    statusNoSertifikat = data['a_sertifikat_nomor_status'] != ""
+    invA.statusNoSertifikat = data['a_sertifikat_nomor_status'] != ""
         ? data['a_sertifikat_nomor_status'].toString()
         : "1";
-    statusTglSertifikat = data['a_sertifikat_tanggal_status'] != ""
+    invA.statusTglSertifikat = data['a_sertifikat_tanggal_status'] != ""
         ? data['a_sertifikat_tanggal_status'].toString()
         : "1";
-    statusKondisi =
+    invA.statusKondisi =
         data['kondisi_status'] != "" ? data['kondisi_status'].toString() : "1";
-    statusAsalUsul = data['asal_usul_status'] != ""
+    invA.statusAsalUsul = data['asal_usul_status'] != ""
         ? data['asal_usul_status'].toString()
         : "1";
 
-    selectedKategori = data['kategori_id_awal'].toString();
-    selectedSatuan = data['satuan'] != "" ? data['satuan'].toString() : "PAKET";
-    String caraPerolehan = data['cara_perolehan_awal'].toString();
+    invA.selectedKategori = data['kategori_id_awal'] != ""
+        ? data['kategori_id_awal'].toString()
+        : data['kategori_id_akhir'].toString();
+    invA.selectedSatuan = data['satuan'] != "" ? data['satuan'].toString() : "";
 
+    String caraPerolehan = data['cara_perolehan_awal'].toString();
     if (caraPerolehan == "Pembelian") {
-      selectedPerolehan = "1";
+      invA.selectedPerolehan = "1";
     } else if (caraPerolehan == "Hibah") {
-      selectedPerolehan = "2";
+      invA.selectedPerolehan = "2";
     } else if (caraPerolehan == "Barang & Jasa") {
-      selectedPerolehan = "3";
+      invA.selectedPerolehan = "3";
     } else if (caraPerolehan == "Hasil Inventarisasi") {
-      selectedPerolehan = "4";
+      invA.selectedPerolehan = "4";
     } else {
-      selectedPerolehan = "";
+      invA.selectedPerolehan = "";
     }
 
-    selectedKecamatan = data['alamat_kecamatan'].toString();
-    selectedKelurahan = data['alamat_kelurahan'].toString();
+    invA.selectedKecamatan = data['alamat_kecamatan'].toString();
+    invA.selectedKelurahan = data['alamat_kelurahan'].toString();
 
     editController.tgl_inventaris.text =
         data['tgl_inventaris_formatted'].toString();
@@ -550,17 +520,19 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                               ),
                               iconEnabledColor: primaryTextColor,
                             ),
-                            value: statusNoRegister,
+                            value: invA.statusNoRegister,
                             onChanged: (String? newValue) {
                               setState(() {
-                                statusNoRegister = newValue ?? statusNoRegister;
+                                invA.statusNoRegister =
+                                    newValue ?? invA.statusNoRegister;
                               });
                             },
-                            items: keteranganNoRegister.map((String item) {
+                            items: invA.keteranganNoRegister.map((String item) {
                               return DropdownMenuItem<String>(
-                                value: keteranganNoRegister.indexOf(item) == 0
-                                    ? "1"
-                                    : "2",
+                                value:
+                                    invA.keteranganNoRegister.indexOf(item) == 0
+                                        ? "1"
+                                        : "2",
                                 child: Text(item),
                               );
                             }).toList(),
@@ -569,7 +541,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       ],
                     ),
                     SizedBox(height: 10),
-                    statusNoRegister == "2"
+                    invA.statusNoRegister == "2"
                         ? Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey),
@@ -640,15 +612,16 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                               ),
                               iconEnabledColor: primaryTextColor,
                             ),
-                            value: statusBarang,
+                            value: invA.statusBarang,
                             onChanged: (String? newValue) {
                               setState(() {
-                                statusBarang = newValue ?? statusBarang;
+                                invA.statusBarang =
+                                    newValue ?? invA.statusBarang;
                               });
                             },
-                            items: keteranganBarang.map((String item) {
+                            items: invA.keteranganBarang.map((String item) {
                               return DropdownMenuItem<String>(
-                                value: keteranganBarang.indexOf(item) == 0
+                                value: invA.keteranganBarang.indexOf(item) == 0
                                     ? "1"
                                     : "2",
                                 child: Text(item),
@@ -679,7 +652,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       ),
                     ),
                     SizedBox(height: 10),
-                    statusBarang == "2"
+                    invA.statusBarang == "2"
                         ? DropdownButtonHideUnderline(
                             child: DropdownButton2(
                               isExpanded: true,
@@ -700,11 +673,11 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                                 ),
                                 iconEnabledColor: primaryTextColor,
                               ),
-                              value: selectedKategori,
+                              value: invA.selectedKategori,
                               onChanged: (String? newValue) {
                                 setState(() {
-                                  selectedKategori =
-                                      newValue ?? selectedKategori;
+                                  invA.selectedKategori =
+                                      newValue ?? invA.selectedKategori;
                                 });
                               },
                               dropdownStyleData:
@@ -779,17 +752,19 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                               ),
                               iconEnabledColor: primaryTextColor,
                             ),
-                            value: statusNamaBarang,
+                            value: invA.statusNamaBarang,
                             onChanged: (String? newValue) {
                               setState(() {
-                                statusNamaBarang = newValue ?? statusNamaBarang;
+                                invA.statusNamaBarang =
+                                    newValue ?? invA.statusNamaBarang;
                               });
                             },
-                            items: keteranganNamaBarang.map((String item) {
+                            items: invA.keteranganNamaBarang.map((String item) {
                               return DropdownMenuItem<String>(
-                                value: keteranganNamaBarang.indexOf(item) == 0
-                                    ? "1"
-                                    : "2",
+                                value:
+                                    invA.keteranganNamaBarang.indexOf(item) == 0
+                                        ? "1"
+                                        : "2",
                                 child: Text(item),
                               );
                             }).toList(),
@@ -798,7 +773,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       ],
                     ),
                     SizedBox(height: 10),
-                    statusNamaBarang == "2"
+                    invA.statusNamaBarang == "2"
                         ? Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey),
@@ -870,15 +845,16 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                               ),
                               iconEnabledColor: primaryTextColor,
                             ),
-                            value: statusJumlah,
+                            value: invA.statusJumlah,
                             onChanged: (String? newValue) {
                               setState(() {
-                                statusJumlah = newValue ?? statusJumlah;
+                                invA.statusJumlah =
+                                    newValue ?? invA.statusJumlah;
                               });
                             },
-                            items: keteranganJumlah.map((String item) {
+                            items: invA.keteranganJumlah.map((String item) {
                               return DropdownMenuItem<String>(
-                                value: keteranganJumlah.indexOf(item) == 0
+                                value: invA.keteranganJumlah.indexOf(item) == 0
                                     ? "1"
                                     : "2",
                                 child: Text(item),
@@ -889,7 +865,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       ],
                     ),
                     SizedBox(height: 10),
-                    statusJumlah == "2"
+                    invA.statusJumlah == "2"
                         ? Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey),
@@ -960,15 +936,15 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                               ),
                               iconEnabledColor: primaryTextColor,
                             ),
-                            value: statusLuas,
+                            value: invA.statusLuas,
                             onChanged: (String? newValue) {
                               setState(() {
-                                statusLuas = newValue ?? statusLuas;
+                                invA.statusLuas = newValue ?? invA.statusLuas;
                               });
                             },
-                            items: keteranganLuas.map((String item) {
+                            items: invA.keteranganLuas.map((String item) {
                               return DropdownMenuItem<String>(
-                                value: keteranganLuas.indexOf(item) == 0
+                                value: invA.keteranganLuas.indexOf(item) == 0
                                     ? "1"
                                     : "2",
                                 child: Text(item),
@@ -979,7 +955,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       ],
                     ),
                     SizedBox(height: 10),
-                    statusLuas == "2"
+                    invA.statusLuas == "2"
                         ? Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey),
@@ -1029,22 +1005,31 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                           ),
                           iconEnabledColor: primaryTextColor,
                         ),
-                        value: selectedSatuan,
+                        value: invA.selectedSatuan != ""
+                            ? invA.selectedSatuan
+                            : "",
                         onChanged: (String? newValue) {
                           setState(() {
-                            selectedSatuan = newValue ?? selectedSatuan;
+                            invA.selectedSatuan =
+                                newValue ?? invA.selectedSatuan;
                           });
                         },
                         dropdownStyleData: DropdownStyleData(maxHeight: 300),
-                        items: satuanController.satuanList
-                            .map<DropdownMenuItem<String>>(
-                          (Map<String, dynamic> item) {
-                            return DropdownMenuItem<String>(
-                              value: item['satuan_kd'].toString(),
-                              child: Text(item['satuan_nm'].toString()),
-                            );
-                          },
-                        ).toList(),
+                        items: [
+                          DropdownMenuItem<String>(
+                            value: "",
+                            child: Text("Pilih satuan"),
+                          ),
+                          ...satuanController.satuanList
+                              .map<DropdownMenuItem<String>>(
+                            (Map<String, dynamic> item) {
+                              return DropdownMenuItem<String>(
+                                value: item['satuan_kd'].toString(),
+                                child: Text(item['satuan_nm'].toString()),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -1101,17 +1086,19 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                               ),
                               iconEnabledColor: primaryTextColor,
                             ),
-                            value: statusPerolehan,
+                            value: invA.statusPerolehan,
                             onChanged: (String? newValue) {
                               setState(() {
-                                statusPerolehan = newValue ?? statusPerolehan;
+                                invA.statusPerolehan =
+                                    newValue ?? invA.statusPerolehan;
                               });
                             },
-                            items: keteranganPerolehan.map((String item) {
+                            items: invA.keteranganPerolehan.map((String item) {
                               return DropdownMenuItem<String>(
-                                value: keteranganPerolehan.indexOf(item) == 0
-                                    ? "1"
-                                    : "2",
+                                value:
+                                    invA.keteranganPerolehan.indexOf(item) == 0
+                                        ? "1"
+                                        : "2",
                                 child: Text(item),
                               );
                             }).toList(),
@@ -1120,7 +1107,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       ],
                     ),
                     SizedBox(height: 10),
-                    statusPerolehan == "2"
+                    invA.statusPerolehan == "2"
                         ? DropdownButtonHideUnderline(
                             child: DropdownButton2(
                               buttonStyleData: ButtonStyleData(
@@ -1142,15 +1129,15 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                                 iconEnabledColor: primaryTextColor,
                               ),
                               value: dropdownPerolehan.keys
-                                      .contains(selectedPerolehan)
-                                  ? selectedPerolehan
+                                      .contains(invA.selectedPerolehan)
+                                  ? invA.selectedPerolehan
                                   : null,
                               onChanged: (String? newValue) {
                                 setState(() {
-                                  selectedPerolehan =
-                                      newValue ?? selectedPerolehan;
+                                  invA.selectedPerolehan =
+                                      newValue ?? invA.selectedPerolehan;
                                 });
-                                print(selectedPerolehan);
+                                print(invA.selectedPerolehan);
                               },
                               items: dropdownPerolehan.keys.map((String item) {
                                 return DropdownMenuItem<String>(
@@ -1275,19 +1262,21 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                               ),
                               iconEnabledColor: primaryTextColor,
                             ),
-                            value: statusNilaiPerolehan,
+                            value: invA.statusNilaiPerolehan,
                             onChanged: (String? newValue) {
                               setState(() {
-                                statusNilaiPerolehan =
-                                    newValue ?? statusNilaiPerolehan;
+                                invA.statusNilaiPerolehan =
+                                    newValue ?? invA.statusNilaiPerolehan;
                               });
                             },
-                            items: keteranganNilaiPerolehan.map((String item) {
+                            items: invA.keteranganNilaiPerolehan
+                                .map((String item) {
                               return DropdownMenuItem<String>(
-                                value:
-                                    keteranganNilaiPerolehan.indexOf(item) == 0
-                                        ? "1"
-                                        : "2",
+                                value: invA.keteranganNilaiPerolehan
+                                            .indexOf(item) ==
+                                        0
+                                    ? "1"
+                                    : "2",
                                 child: Text(item),
                               );
                             }).toList(),
@@ -1296,7 +1285,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       ],
                     ),
                     SizedBox(height: 10),
-                    statusNilaiPerolehan == "2"
+                    invA.statusNilaiPerolehan == "2"
                         ? Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey),
@@ -1442,15 +1431,16 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                               ),
                               iconEnabledColor: primaryTextColor,
                             ),
-                            value: statusAlamat,
+                            value: invA.statusAlamat,
                             onChanged: (String? newValue) {
                               setState(() {
-                                statusAlamat = newValue ?? statusAlamat;
+                                invA.statusAlamat =
+                                    newValue ?? invA.statusAlamat;
                               });
                             },
-                            items: keteranganAlamat.map((String item) {
+                            items: invA.keteranganAlamat.map((String item) {
                               return DropdownMenuItem<String>(
-                                value: keteranganAlamat.indexOf(item) == 0
+                                value: invA.keteranganAlamat.indexOf(item) == 0
                                     ? "1"
                                     : "2",
                                 child: Text(item),
@@ -1461,7 +1451,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       ],
                     ),
                     SizedBox(height: 15),
-                    statusAlamat == "2"
+                    invA.statusAlamat == "2"
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -1513,11 +1503,11 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                                     ),
                                     iconEnabledColor: primaryTextColor,
                                   ),
-                                  value: selectedKecamatan,
+                                  value: invA.selectedKecamatan,
                                   onChanged: (String? newValue) {
                                     setState(() {
-                                      selectedKecamatan =
-                                          newValue ?? selectedKecamatan;
+                                      invA.selectedKecamatan =
+                                          newValue ?? invA.selectedKecamatan;
                                     });
                                   },
                                   dropdownStyleData:
@@ -1563,11 +1553,11 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                                     ),
                                     iconEnabledColor: primaryTextColor,
                                   ),
-                                  value: selectedKelurahan,
+                                  value: invA.selectedKelurahan,
                                   onChanged: (String? newValue) {
                                     setState(() {
-                                      selectedKelurahan =
-                                          newValue ?? selectedKelurahan;
+                                      invA.selectedKelurahan =
+                                          newValue ?? invA.selectedKelurahan;
                                     });
                                   },
                                   dropdownStyleData:
@@ -1753,17 +1743,19 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                               ),
                               iconEnabledColor: primaryTextColor,
                             ),
-                            value: statusHakTanah,
+                            value: invA.statusHakTanah,
                             onChanged: (String? newValue) {
                               setState(() {
-                                statusHakTanah = newValue ?? statusHakTanah;
+                                invA.statusHakTanah =
+                                    newValue ?? invA.statusHakTanah;
                               });
                             },
-                            items: keteranganHakTanah.map((String item) {
+                            items: invA.keteranganHakTanah.map((String item) {
                               return DropdownMenuItem<String>(
-                                value: keteranganHakTanah.indexOf(item) == 0
-                                    ? "1"
-                                    : "2",
+                                value:
+                                    invA.keteranganHakTanah.indexOf(item) == 0
+                                        ? "1"
+                                        : "2",
                                 child: Text(item),
                               );
                             }).toList(),
@@ -1772,7 +1764,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       ],
                     ),
                     SizedBox(height: 10),
-                    statusHakTanah == "2"
+                    invA.statusHakTanah == "2"
                         ? Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey),
@@ -1844,18 +1836,21 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                               ),
                               iconEnabledColor: primaryTextColor,
                             ),
-                            value: statusNoSertifikat,
+                            value: invA.statusNoSertifikat,
                             onChanged: (String? newValue) {
                               setState(() {
-                                statusNoSertifikat =
-                                    newValue ?? statusNoSertifikat;
+                                invA.statusNoSertifikat =
+                                    newValue ?? invA.statusNoSertifikat;
                               });
                             },
-                            items: keteranganNoSertifikat.map((String item) {
+                            items:
+                                invA.keteranganNoSertifikat.map((String item) {
                               return DropdownMenuItem<String>(
-                                value: keteranganNoSertifikat.indexOf(item) == 0
-                                    ? "1"
-                                    : "2",
+                                value:
+                                    invA.keteranganNoSertifikat.indexOf(item) ==
+                                            0
+                                        ? "1"
+                                        : "2",
                                 child: Text(item),
                               );
                             }).toList(),
@@ -1864,7 +1859,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       ],
                     ),
                     SizedBox(height: 10),
-                    statusNoSertifikat == "2"
+                    invA.statusNoSertifikat == "2"
                         ? Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey),
@@ -1937,19 +1932,21 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                               ),
                               iconEnabledColor: primaryTextColor,
                             ),
-                            value: statusTglSertifikat,
+                            value: invA.statusTglSertifikat,
                             onChanged: (String? newValue) {
                               setState(() {
-                                statusTglSertifikat =
-                                    newValue ?? statusTglSertifikat;
+                                invA.statusTglSertifikat =
+                                    newValue ?? invA.statusTglSertifikat;
                               });
                             },
-                            items: keteranganTglSertifikat.map((String item) {
+                            items:
+                                invA.keteranganTglSertifikat.map((String item) {
                               return DropdownMenuItem<String>(
-                                value:
-                                    keteranganTglSertifikat.indexOf(item) == 0
-                                        ? "1"
-                                        : "2",
+                                value: invA.keteranganTglSertifikat
+                                            .indexOf(item) ==
+                                        0
+                                    ? "1"
+                                    : "2",
                                 child: Text(item),
                               );
                             }).toList(),
@@ -1958,7 +1955,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       ],
                     ),
                     SizedBox(height: 10),
-                    statusTglSertifikat == "2"
+                    invA.statusTglSertifikat == "2"
                         ? Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey),
@@ -2077,15 +2074,16 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                               ),
                               iconEnabledColor: primaryTextColor,
                             ),
-                            value: statusKondisi,
+                            value: invA.statusKondisi,
                             onChanged: (String? newValue) {
                               setState(() {
-                                statusKondisi = newValue ?? statusKondisi;
+                                invA.statusKondisi =
+                                    newValue ?? invA.statusKondisi;
                               });
                             },
-                            items: keteranganKondisi.map((String item) {
+                            items: invA.keteranganKondisi.map((String item) {
                               return DropdownMenuItem<String>(
-                                value: keteranganKondisi.indexOf(item) == 0
+                                value: invA.keteranganKondisi.indexOf(item) == 0
                                     ? "1"
                                     : "2",
                                 child: Text(item),
@@ -2096,7 +2094,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       ],
                     ),
                     SizedBox(height: 10),
-                    statusKondisi == "2"
+                    invA.statusKondisi == "2"
                         ? DropdownButtonHideUnderline(
                             child: DropdownButton2(
                               buttonStyleData: ButtonStyleData(
@@ -2186,17 +2184,19 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                               ),
                               iconEnabledColor: primaryTextColor,
                             ),
-                            value: statusAsalUsul,
+                            value: invA.statusAsalUsul,
                             onChanged: (String? newValue) {
                               setState(() {
-                                statusAsalUsul = newValue ?? statusAsalUsul;
+                                invA.statusAsalUsul =
+                                    newValue ?? invA.statusAsalUsul;
                               });
                             },
-                            items: keteranganAsalUsul.map((String item) {
+                            items: invA.keteranganAsalUsul.map((String item) {
                               return DropdownMenuItem<String>(
-                                value: keteranganAsalUsul.indexOf(item) == 0
-                                    ? "1"
-                                    : "2",
+                                value:
+                                    invA.keteranganAsalUsul.indexOf(item) == 0
+                                        ? "1"
+                                        : "2",
                                 child: Text(item),
                               );
                             }).toList(),
@@ -2205,7 +2205,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       ],
                     ),
                     SizedBox(height: 10),
-                    statusAsalUsul == "2"
+                    invA.statusAsalUsul == "2"
                         ? Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey),
@@ -3030,9 +3030,37 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       )),
                     ),
                     onTap: () {
-                      Navigator.of(context).pop();
-                      customSnackBar(
-                          "Success", "Inventarisasi Berhasil", 'success');
+                      List<String> data = [
+                        editController.tgl_inventaris.text,
+                        editController.no_register_awal.text,
+                        editController.no_register_akhir.text,
+                        invA.statusNoRegister,
+                        editController.kategori_id_awal.text,
+                        invA.selectedKategori,
+                        invA.statusBarang,
+                        editController.nama_spesifikasi_awal.text,
+                        editController.nama_spesifikasi_akhir.text,
+                        invA.statusNamaBarang,
+                        editController.jumlah_awal.text,
+                        editController.jumlah_akhir.text,
+                        invA.statusJumlah,
+                        editController.a_luas_m2_awal.text,
+                        editController.a_luas_m2_akhir.text,
+                        invA.statusLuas,
+                        invA.selectedSatuan,
+                        editController.cara_perolehan_awal.text,
+                        invA.selectedPerolehan,
+                        invA.statusPerolehan,
+                        editController.tgl_perolehan.text,
+                        editController.tahun_perolehan.text,
+                        editController.perolehan_awal.text,
+                        editController.perolehan_akhir.text,
+                        invA.statusNilaiPerolehan
+                      ];
+                      print(editController.kib_id.text);
+                      print(data);
+                      editController.editInsertInventarisA(
+                          editController.kib_id.text, data);
                     },
                   ),
                 ),

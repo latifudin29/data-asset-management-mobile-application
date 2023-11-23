@@ -47,17 +47,32 @@ class AppointmentController extends GetxController {
       Get.dialog(Center(child: CircularProgressIndicator()),
           barrierDismissible: false);
 
-      final response = await _connect.get(
-        ApiEndPoints.baseurl +
-            ApiEndPoints.authEndPoints.getPenetapan +
-            id +
-            '/' +
-            kategori +
-            '?perPage=10&page=' +
-            page.toString() +
-            '&tahun=' +
-            tahun.text,
-      );
+      final response = await _connect.get(ApiEndPoints.baseurl +
+          ApiEndPoints.authEndPoints.getPenetapan +
+          id +
+          '/' +
+          kategori +
+          '?perPage=10&page=' +
+          page.toString() +
+          '&tahun=' +
+          tahun.text);
+
+      print('INI ENDPOINT');
+      print(ApiEndPoints.baseurl +
+          ApiEndPoints.authEndPoints.getPenetapan +
+          id +
+          '/' +
+          kategori +
+          '?perPage=10&page=' +
+          page.toString() +
+          '&tahun=' +
+          tahun.text);
+
+      print('INI STATUS CODE');
+      print(response.statusCode);
+
+      print('INI RESPON BODY');
+      print(response.body);
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = response.body;
@@ -66,6 +81,7 @@ class AppointmentController extends GetxController {
         penetapanList.assignAll(
             penetapanData.map((item) => item as Map<String, dynamic>));
         totalPage.value = data['total_page'];
+        print('INI LIST PENETAPAN: ${penetapanList}');
       }
     } finally {
       Get.back();
@@ -77,13 +93,11 @@ class AppointmentController extends GetxController {
       Get.dialog(Center(child: CircularProgressIndicator()),
           barrierDismissible: false);
 
-      final response = await _connect.get(
-        ApiEndPoints.baseurl +
-            ApiEndPoints.authEndPoints.getPenetapanById +
-            kategori +
-            '/' +
-            id,
-      );
+      final response = await _connect.get(ApiEndPoints.baseurl +
+          ApiEndPoints.authEndPoints.getPenetapanById +
+          kategori +
+          '/' +
+          id);
 
       print('INI ID');
       print(id);
