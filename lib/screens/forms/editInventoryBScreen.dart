@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:kib_application/constans/colors.dart';
+import 'package:kib_application/constans/inventoryVariablesB.dart';
+import 'package:kib_application/controllers/addressController.dart';
 import 'package:kib_application/controllers/appointmentController.dart';
 import 'package:kib_application/controllers/categoryController.dart';
 import 'package:kib_application/controllers/inventoryBController.dart';
@@ -19,275 +21,166 @@ class EditInventoryBScreen extends StatefulWidget {
 
 class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
   final penetapanController = Get.put(AppointmentController());
-  final editController = Get.put(InventoryBController());
-  final kategoriController = Get.put(CategoryController());
-  final satuanController = Get.put(UnitController());
+  final editController      = Get.put(InventoryBController());
+  final kategoriController  = Get.put(CategoryController());
+  final satuanController    = Get.put(UnitController());
+  final addressController   = Get.put(AddressController());
+  final invB                = Get.put(InventoryVariablesB());
+
   DateTime now = DateTime.now();
-
-  String statusNoRegister = "";
-  String statusBarang = "";
-  String statusNamaBarang = "";
-  String statusPerolehan = "";
-  String statusNilaiPerolehan = "";
-  String statusAlamat = "";
-  String statusKondisi = "";
-  String statusAsalUsul = "";
-  String statusMerk = "";
-  String statusCC = "";
-  String statusNoPolisi = "";
-  String statusNoRangka = "";
-  String statusNoMesin = "";
-  String statusNoBPKB = "";
-  String statusBahan = "";
-  String statusNoPabrik = "";
-  String statusKartuRuangan = "";
-
-  String selectedKategori = "";
-  String selectedSatuan = "";
-
-  List<String> keteranganNoRegister = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganBarang = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganNamaBarang = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganPerolehan = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganNilaiPerolehan = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganAlamat = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganMerk = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganCC = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganNoPolisi = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganNoRangka = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganNoMesin = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganNoBPKB = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganBahan = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganNoPabrik = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganKartuRuangan = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganKondisi = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganAsalUsul = ["Sesuai", "Tidak Sesuai"];
 
   @override
   void initState() {
     super.initState();
-    final data = penetapanController.penetapanListById[0];
+    final data         = penetapanController.penetapanListById[0];
+    final filteredList = addressController.kecamatanList.where( (kecamatan) => kecamatan['kecamatan_kd'] == data['alamat_kecamatan']);
+    if (filteredList.isNotEmpty) { addressController.getKelurahan(filteredList.first["id"].toString()); }
 
-    statusNoRegister = data['no_register_status'] != ""
-        ? data['no_register_status'].toString()
-        : "1";
-    statusBarang = data['kategori_id_status'] != ""
-        ? data['kategori_id_status'].toString()
-        : "1";
-    statusNamaBarang = data['nama_spesifikasi_status'] != ""
-        ? data['nama_spesifikasi_status'].toString()
-        : "1";
-    statusPerolehan = data['cara_perolehan_status'] != ""
-        ? data['cara_perolehan_status'].toString()
-        : "1";
-    statusNilaiPerolehan = data['perolehan_status'] != ""
-        ? data['perolehan_status'].toString()
-        : "1";
-    statusAlamat = data['a_alamat_status'] != ""
-        ? data['a_alamat_status'].toString()
-        : "1";
-    statusMerk =
-        data['b_merk_status'] != "" ? data['b_merk_status'].toString() : "1";
-    statusCC = data['b_cc_status'] != "" ? data['b_cc_status'].toString() : "1";
-    statusNoPolisi = data['b_nomor_polisi_status'] != ""
-        ? data['b_nomor_polisi_status'].toString()
-        : "1";
-    statusNoRangka = data['b_nomor_rangka_status'] != ""
-        ? data['b_nomor_rangka_status'].toString()
-        : "1";
-    statusNoMesin = data['b_nomor_mesin_status'] != ""
-        ? data['b_nomor_mesin_status'].toString()
-        : "1";
-    statusNoBPKB = data['b_nomor_bpkb_status'] != ""
-        ? data['b_nomor_bpkb_status'].toString()
-        : "1";
-    statusBahan =
-        data['b_bahan_status'] != "" ? data['b_bahan_status'].toString() : "1";
-    statusNoPabrik = data['b_nomor_pabrik_status'] != ""
-        ? data['b_nomor_pabrik_status'].toString()
-        : "1";
-    statusKartuRuangan = data['kartu_inv_status'] != ""
-        ? data['kartu_inv_status'].toString()
-        : "1";
-    statusKondisi =
-        data['kondisi_status'] != "" ? data['kondisi_status'].toString() : "1";
-    statusAsalUsul = data['asal_usul_status'] != ""
-        ? data['asal_usul_status'].toString()
-        : "1";
+    editController.kib_id.text = data['kib_id'].toString();
 
-    selectedKategori = data['kategori_id_awal'] != ""
-        ? data['kategori_id_awal'].toString()
-        : data['kategori_id_akhir'].toString();
-    selectedSatuan = data['satuan'] != "" ? data['satuan'].toString() : "PAKET";
+    invB.statusNoRegister     = data['no_register_status']      != "" ? data['no_register_status'].toString() : "1";
+    invB.statusBarang         = data['kategori_id_status']      != "" ? data['kategori_id_status'].toString() : "1";
+    invB.statusNamaBarang     = data['nama_spesifikasi_status'] != "" ? data['nama_spesifikasi_status'].toString() : "1";
+    invB.statusPerolehan      = data['cara_perolehan_status']   != "" ? data['cara_perolehan_status'].toString() : "1";
+    invB.statusNilaiPerolehan = data['perolehan_status']        != "" ? data['perolehan_status'].toString() : "1";
+    invB.statusAlamat         = data['a_alamat_status']         != "" ? data['a_alamat_status'].toString() : "1";
+    invB.statusKondisi        = data['kondisi_status']          != "" ? data['kondisi_status'].toString() : "1";
+    invB.statusAsalUsul       = data['asal_usul_status']        != "" ? data['asal_usul_status'].toString() : "1";
+    invB.statusMerk           = data['b_merk_status']           != "" ? data['b_merk_status'].toString() : "1";
+    invB.statusCC             = data['b_cc_status']             != "" ? data['b_cc_status'].toString() : "1";
+    invB.statusNoPolisi       = data['b_nomor_polisi_status']   != "" ? data['b_nomor_polisi_status'].toString() : "1";
+    invB.statusNoRangka       = data['b_nomor_rangka_status']   != "" ? data['b_nomor_rangka_status'].toString() : "1";
+    invB.statusNoMesin        = data['b_nomor_mesin_status']    != "" ? data['b_nomor_mesin_status'].toString() : "1";
+    invB.statusNoBPKB         = data['b_nomor_bpkb_status']     != "" ? data['b_nomor_bpkb_status'].toString() : "1";
+    invB.statusBahan          = data['b_bahan_status']          != "" ? data['b_bahan_status'].toString() : "1";
+    invB.statusNoPabrik       = data['b_nomor_pabrik_status']   != "" ? data['b_nomor_pabrik_status'].toString() : "1";
+    invB.statusKartuRuangan   = data['kartu_inv_status']        != "" ? data['kartu_inv_status'].toString() : "1";
+    invB.statusKondisi        = data['kondisi_status']          != "" ? data['kondisi_status'].toString() : "1";
+    invB.statusAsalUsul       = data['asal_usul_status']        != "" ? data['asal_usul_status'].toString() : "1";
 
-    editController.tgl_inventaris.text =
-        data['tgl_inventaris_formatted'].toString();
-    editController.skpd.text = data['departemen_kd'].toString();
-    editController.skpd_uraian.text = data['departemen_nm'].toString();
-    editController.no_register_awal.text = data['no_register_awal'].toString();
-    editController.no_register_akhir.text =
-        data['no_register_akhir'].toString();
-    editController.barang.text =
-        data['kategori_kd'].toString() + ' - ' + data['kategori_nm'].toString();
-    editController.kategori_id_awal.text = data['kategori_id_awal'].toString();
-    editController.kategori_id_akhir.text =
-        data['kategori_id_akhir'].toString();
-    editController.nama_spesifikasi_awal.text =
-        data['nama_spesifikasi_awal'] != null
-            ? data['nama_spesifikasi_awal'].toString()
-            : '';
-    editController.nama_spesifikasi_akhir.text =
-        data['nama_spesifikasi_akhir'].toString();
-    editController.jumlah_awal.text = data['jumlah_awal'].toString();
-    editController.jumlah_akhir.text = data['jumlah_akhir'].toString();
-    editController.satuan.text = data['satuan'].toString();
-    editController.cara_perolehan_awal.text =
-        data['cara_perolehan_awal'].toString();
-    editController.cara_perolehan_akhir.text =
-        data['cara_perolehan_akhir'].toString();
-    editController.tgl_perolehan.text =
-        data['tgl_perolehan_formatted'].toString();
-    editController.tahun_perolehan.text = data['tahun_perolehan'].toString();
-    editController.perolehan_awal.text =
-        data['perolehan_awal_formatted'].toString();
-    editController.perolehan_akhir.text =
-        data['perolehan_akhir_formatted'].toString();
-    editController.atribusi_status.text = data['atribusi_status'].toString();
-    editController.atribusi_nibar.text = data['atribusi_nibar'].toString();
-    editController.atribusi_kode_barang.text =
-        data['atribusi_kode_barang'].toString();
-    editController.atribusi_kode_lokasi.text =
-        data['atribusi_kode_lokasi'].toString();
-    editController.atribusi_no_register.text =
-        data['atribusi_no_register'].toString();
-    editController.atribusi_nama_barang.text =
-        data['atribusi_nama_barang'].toString();
-    editController.atribusi_spesifikasi_barang.text =
-        data['atribusi_spesifikasi_barang'].toString();
-    editController.a_alamat_awal.text = data['a_alamat_awal'].toString();
-    editController.a_alamat_akhir.text = data['a_alamat_akhir'].toString();
-    editController.alamat_kota.text = data['alamat_kota'].toString();
-    editController.alamat_kecamatan.text = data['alamat_kecamatan'].toString();
-    editController.alamat_kelurahan.text = data['alamat_kelurahan'].toString();
-    editController.alamat_jalan.text = data['alamat_jalan'].toString();
-    editController.alamat_no.text = data['alamat_no'].toString();
-    editController.alamat_rt.text = data['alamat_rt'].toString();
-    editController.alamat_rw.text = data['alamat_rw'].toString();
-    editController.alamat_kodepos.text = data['alamat_kodepos'].toString();
-    //
-    editController.b_merk_awal.text = data['b_merk_awal'].toString();
-    editController.b_merk_akhir.text = data['b_merk_akhir'].toString();
-    editController.b_cc_awal.text = data['b_cc_awal'].toString();
-    editController.b_cc_akhir.text = data['b_cc_akhir'].toString();
-    editController.b_nomor_polisi_awal.text =
-        data['b_nomor_polisi_awal'].toString();
-    editController.b_nomor_polisi_akhir.text =
-        data['b_nomor_polisi_akhir'].toString();
-    editController.b_nomor_rangka_awal.text =
-        data['b_nomor_rangka_awal'].toString();
-    editController.b_nomor_rangka_akhir.text =
-        data['b_nomor_rangka_akhir'].toString();
-    editController.b_nomor_mesin_awal.text =
-        data['b_nomor_mesin_awal'].toString();
-    editController.b_nomor_mesin_akhir.text =
-        data['b_nomor_mesin_akhir'].toString();
-    editController.b_nomor_bpkb_awal.text =
-        data['b_nomor_bpkb_awal'].toString();
-    editController.b_nomor_bpkb_akhir.text =
-        data['b_nomor_bpkb_akhir'].toString();
-    editController.b_bahan_awal.text = data['b_bahan_awal'].toString();
-    editController.b_bahan_akhir.text = data['b_bahan_akhir'].toString();
-    editController.b_nomor_pabrik_awal.text =
-        data['b_nomor_pabrik_awal'].toString();
-    editController.b_nomor_pabrik_akhir.text =
-        data['b_nomor_pabrik_akhir'].toString();
-    editController.kartu_inv_awal.text = data['kartu_inv_awal'].toString();
-    editController.kartu_inv_akhir.text = data['kartu_inv_akhir'].toString();
-    //
-    editController.keberadaan_barang_status.text =
-        data['keberadaan_barang_status'].toString();
-    editController.kondisi_awal.text = data['kondisi_awal'].toString();
-    editController.kondisi_akhir.text = data['kondisi_akhir'].toString();
-    editController.asal_usul_awal.text = data['asal_usul_awal'].toString();
-    editController.asal_usul_akhir.text = data['asal_usul_akhir'].toString();
-    editController.penggunaan_status.text =
-        data['penggunaan_status'].toString();
-    editController.penggunaan_awal.text = data['penggunaan_awal'].toString();
-    editController.penggunaan_pemda_status.text =
-        data['penggunaan_pemda_status'].toString();
-    editController.penggunaan_pemda_akhir.text =
-        data['penggunaan_pemda_akhir'].toString();
-    editController.penggunaan_pempus_status.text =
-        data['penggunaan_pempus_status'].toString();
-    editController.penggunaan_pempus_yt.text =
-        data['penggunaan_pempus_yt'].toString();
-    editController.penggunaan_pempus_y_nm.text =
-        data['penggunaan_pempus_y_nm'].toString();
-    editController.penggunaan_pempus_y_doc.text =
-        data['penggunaan_pempus_y_doc'].toString();
-    editController.penggunaan_pempus_t_nm.text =
-        data['penggunaan_pempus_t_nm'].toString();
-    editController.penggunaan_pdl_status.text =
-        data['penggunaan_pdl_status'].toString();
-    editController.penggunaan_pdl_yt.text =
-        data['penggunaan_pdl_yt'].toString();
-    editController.penggunaan_pdl_y_nm.text =
-        data['penggunaan_pdl_y_nm'].toString();
-    editController.penggunaan_pdl_y_doc.text =
-        data['penggunaan_pdl_y_doc'].toString();
-    editController.penggunaan_pdl_t_nm.text =
-        data['penggunaan_pdl_t_nm'].toString();
-    editController.penggunaan_pl_status.text =
-        data['penggunaan_pl_status'].toString();
-    editController.penggunaan_pl_yt.text = data['penggunaan_pl_yt'].toString();
-    editController.penggunaan_pl_y_nm.text =
-        data['penggunaan_pl_y_nm'].toString();
-    editController.penggunaan_pl_y_doc.text =
-        data['penggunaan_pl_y_doc'].toString();
-    editController.penggunaan_pl_t_nm.text =
-        data['penggunaan_pl_t_nm'].toString();
-    editController.tercatat_ganda.text = data['tercatat_ganda'].toString();
-    editController.tercatat_ganda_nibar.text =
-        data['tercatat_ganda_nibar'].toString();
-    editController.tercatat_ganda_no_register.text =
-        data['tercatat_ganda_no_register'].toString();
-    editController.tercatat_ganda_kode_barang.text =
-        data['tercatat_ganda_kode_barang'].toString();
-    editController.tercatat_ganda_nama_barang.text =
-        data['tercatat_ganda_nama_barang'].toString();
-    editController.tercatat_ganda_spesifikasi_barang.text =
-        data['tercatat_ganda_spesifikasi_barang'].toString();
-    editController.tercatat_ganda_luas.text =
-        data['tercatat_ganda_luas'].toString();
-    editController.tercatat_ganda_satuan.text =
-        data['tercatat_ganda_satuan'].toString();
-    editController.tercatat_ganda_perolehan.text =
-        data['tercatat_ganda_perolehan'].toString();
-    editController.tercatat_ganda_tanggal_perolehan.text =
-        data['tercatat_ganda_tanggal_perolehan'].toString();
-    editController.tercatat_ganda_kuasa_pengguna.text =
-        data['tercatat_ganda_kuasa_pengguna'].toString();
-    editController.pemilik_id.text = data['pemilik_id'].toString();
-    editController.lainnya.text = data['lainnya'].toString();
-    editController.keterangan.text = data['keterangan'].toString();
-    editController.file_nm.text = data['file_nm'].toString();
-    editController.petugas.text = data['petugas'].toString();
+    invB.selectedKategori = data['kategori_id_awal'] != "" ? data['kategori_id_awal'].toString() : data['kategori_id_akhir'].toString();
+    invB.selectedSatuan   = data['satuan']           != "" ? data['satuan'].toString() : "";
+
+    String caraPerolehan = data['cara_perolehan_awal'].toString();
+    if (caraPerolehan == "Pembelian") {
+      invB.selectedPerolehan = "1";
+    } else if (caraPerolehan == "Hibah") {
+      invB.selectedPerolehan = "2";
+    } else if (caraPerolehan == "Barang & Jasa") {
+      invB.selectedPerolehan = "3";
+    } else if (caraPerolehan == "Hasil Inventarisasi") {
+      invB.selectedPerolehan = "4";
+    } else {
+      invB.selectedPerolehan = "";
+    }
+
+    invB.selectedKecamatan = data['alamat_kecamatan'].toString();
+    invB.selectedKelurahan = data['alamat_kelurahan'].toString();
+    invB.selectedKondisi   = data['kondisi_awal'].toString();
+
+    editController.tgl_inventaris.text                    = data['tgl_inventaris_formatted'].toString();
+    editController.skpd.text                              = data['departemen_kd'].toString();
+    editController.skpd_uraian.text                       = data['departemen_nm'].toString();
+    editController.no_register_awal.text                  = data['no_register_awal'].toString();
+    editController.no_register_akhir.text                 = data['no_register_akhir'].toString();
+    editController.barang.text                            = data['kategori_kd'].toString() + ' - ' + data['kategori_nm'].toString();
+    editController.kategori_id_awal.text                  = data['kategori_id_awal'].toString();
+    editController.kategori_id_akhir.text                 = data['kategori_id_akhir'].toString();
+    editController.nama_spesifikasi_awal.text             = data['nama_spesifikasi_awal'] != null ? data['nama_spesifikasi_awal'].toString() : '';
+    editController.nama_spesifikasi_akhir.text            = data['nama_spesifikasi_akhir'].toString();
+    editController.jumlah_awal.text                       = data['jumlah_awal'].toString();
+    editController.jumlah_akhir.text                      = data['jumlah_akhir'].toString();
+    editController.cara_perolehan_awal.text               = data['cara_perolehan_awal'].toString();
+    editController.cara_perolehan_akhir.text              = data['cara_perolehan_akhir'].toString();
+    editController.tgl_perolehan.text                     = data['tgl_perolehan_formatted'].toString();
+    editController.tahun_perolehan.text                   = data['tahun_perolehan'].toString();
+    editController.perolehan_awal.text                    = data['perolehan_awal_formatted'].toString();
+    editController.perolehan_akhir.text                   = data['perolehan_akhir_formatted'].toString();
+    editController.atribusi_status.text                   = data['atribusi_status'].toString();
+    editController.atribusi_nibar.text                    = data['atribusi_nibar'].toString();
+    editController.atribusi_kode_barang.text              = data['atribusi_kode_barang'].toString();
+    editController.atribusi_kode_lokasi.text              = data['atribusi_kode_lokasi'].toString();
+    editController.atribusi_no_register.text              = data['atribusi_no_register'].toString();
+    editController.atribusi_nama_barang.text              = data['atribusi_nama_barang'].toString();
+    editController.atribusi_spesifikasi_barang.text       = data['atribusi_spesifikasi_barang'].toString();
+    editController.a_alamat_awal.text                     = data['a_alamat_awal'].toString();
+    editController.a_alamat_akhir.text                    = data['a_alamat_akhir'].toString();
+    editController.alamat_kota.text                       = data['alamat_kota'].toString();
+    editController.alamat_jalan.text                      = data['alamat_jalan'].toString();
+    editController.alamat_no.text                         = data['alamat_no'].toString();
+    editController.alamat_rt.text                         = data['alamat_rt'].toString();
+    editController.alamat_rw.text                         = data['alamat_rw'].toString();
+    editController.alamat_kodepos.text                    = data['alamat_kodepos'].toString();
+    // 
+    editController.b_merk_awal.text                       = data['b_merk_awal'].toString();
+    editController.b_merk_akhir.text                      = data['b_merk_akhir'].toString();
+    editController.b_cc_awal.text                         = data['b_cc_awal'].toString();
+    editController.b_cc_akhir.text                        = data['b_cc_akhir'].toString();
+    editController.b_nomor_polisi_awal.text               = data['b_nomor_polisi_awal'].toString();
+    editController.b_nomor_polisi_akhir.text              = data['b_nomor_polisi_akhir'].toString();
+    editController.b_nomor_rangka_awal.text               = data['b_nomor_rangka_awal'].toString();
+    editController.b_nomor_rangka_akhir.text              = data['b_nomor_rangka_akhir'].toString();
+    editController.b_nomor_mesin_awal.text                = data['b_nomor_mesin_awal'].toString();
+    editController.b_nomor_mesin_akhir.text               = data['b_nomor_mesin_akhir'].toString();
+    editController.b_nomor_bpkb_awal.text                 = data['b_nomor_bpkb_awal'].toString();
+    editController.b_nomor_bpkb_akhir.text                = data['b_nomor_bpkb_akhir'].toString();
+    editController.b_bahan_awal.text                      = data['b_bahan_awal'].toString();
+    editController.b_bahan_akhir.text                     = data['b_bahan_akhir'].toString();
+    editController.b_nomor_pabrik_awal.text               = data['b_nomor_pabrik_awal'].toString();
+    editController.b_nomor_pabrik_akhir.text              = data['b_nomor_pabrik_akhir'].toString();
+    editController.kartu_inv_awal.text                    = data['kartu_inv_awal'].toString();
+    editController.kartu_inv_akhir.text                   = data['kartu_inv_akhir'].toString();
+    // 
+    editController.keberadaan_barang_status.text          = data['keberadaan_barang_status'].toString();
+    editController.kondisi_awal.text                      = data['kondisi_awal'].toString();
+    editController.kondisi_akhir.text                     = data['kondisi_akhir'].toString();
+    editController.asal_usul_awal.text                    = data['asal_usul_awal'].toString();
+    editController.asal_usul_akhir.text                   = data['asal_usul_akhir'].toString();
+    editController.penggunaan_status.text                 = data['penggunaan_status'].toString();
+    editController.penggunaan_awal.text                   = data['penggunaan_awal'].toString();
+    editController.penggunaan_pemda_status.text           = data['penggunaan_pemda_status'].toString();
+    editController.penggunaan_pemda_akhir.text            = data['penggunaan_pemda_akhir'].toString();
+    editController.penggunaan_pempus_status.text          = data['penggunaan_pempus_status'].toString();
+    editController.penggunaan_pempus_yt.text              = data['penggunaan_pempus_yt'].toString();
+    editController.penggunaan_pempus_y_nm.text            = data['penggunaan_pempus_y_nm'].toString();
+    editController.penggunaan_pempus_y_doc.text           = data['penggunaan_pempus_y_doc'].toString();
+    editController.penggunaan_pempus_t_nm.text            = data['penggunaan_pempus_t_nm'].toString();
+    editController.penggunaan_pdl_status.text             = data['penggunaan_pdl_status'].toString();
+    editController.penggunaan_pdl_yt.text                 = data['penggunaan_pdl_yt'].toString();
+    editController.penggunaan_pdl_y_nm.text               = data['penggunaan_pdl_y_nm'].toString();
+    editController.penggunaan_pdl_y_doc.text              = data['penggunaan_pdl_y_doc'].toString();
+    editController.penggunaan_pdl_t_nm.text               = data['penggunaan_pdl_t_nm'].toString();
+    editController.penggunaan_pl_status.text              = data['penggunaan_pl_status'].toString();
+    editController.penggunaan_pl_yt.text                  = data['penggunaan_pl_yt'].toString();
+    editController.penggunaan_pl_y_nm.text                = data['penggunaan_pl_y_nm'].toString();
+    editController.penggunaan_pl_y_doc.text               = data['penggunaan_pl_y_doc'].toString();
+    editController.penggunaan_pl_t_nm.text                = data['penggunaan_pl_t_nm'].toString();
+    editController.tercatat_ganda.text                    = data['tercatat_ganda'].toString();
+    editController.tercatat_ganda_nibar.text              = data['tercatat_ganda_nibar'].toString();
+    editController.tercatat_ganda_no_register.text        = data['tercatat_ganda_no_register'].toString();
+    editController.tercatat_ganda_kode_barang.text        = data['tercatat_ganda_kode_barang'].toString();
+    editController.tercatat_ganda_nama_barang.text        = data['tercatat_ganda_nama_barang'].toString();
+    editController.tercatat_ganda_spesifikasi_barang.text = data['tercatat_ganda_spesifikasi_barang'].toString();
+    editController.tercatat_ganda_luas.text               = data['tercatat_ganda_luas'].toString();
+    editController.tercatat_ganda_satuan.text             = data['tercatat_ganda_satuan'].toString();
+    editController.tercatat_ganda_perolehan.text          = data['tercatat_ganda_perolehan'].toString();
+    editController.tercatat_ganda_tanggal_perolehan.text  = data['tercatat_ganda_tanggal_perolehan'].toString();
+    editController.tercatat_ganda_kuasa_pengguna.text     = data['tercatat_ganda_kuasa_pengguna'].toString();
+    editController.pemilik_id.text                        = data['pemilik_id'].toString();
+    editController.lainnya.text                           = data['lainnya'].toString();
+    editController.keterangan.text                        = data['keterangan'].toString();
+    editController.file_nm.text                           = data['file_nm'].toString();
+    editController.petugas.text                           = data['petugas'].toString();
   }
 
-  List<String> dropdownPerolehan = [
-    "Pembelian",
-    "Hibah",
-    "Barang & Jasa",
-    "Hasil Inventarisasi",
-  ];
-  String selectedPerolehan = "Pembelian";
+  Map<String, String> dropdownPerolehan = {
+    "1": "Pembelian",
+    "2": "Hibah",
+    "3": "Barang & Jasa",
+    "4": "Hasil Inventarisasi",
+  };
 
-  List<String> dropdownKondisi = [
-    "B",
-    "RR",
-    "RB",
-  ];
-  String selectedKondisi = "B";
+  List<String> dropdownKondisi = ["B", "RR", "RB"];
 
   List<String> keteranganQuestion = ["Ya", "Bukan"];
   String statusQuestion = "Bukan";
@@ -564,15 +457,15 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: statusNoRegister,
+                          value: invB.statusNoRegister,
                           onChanged: (String? newValue) {
                             setState(() {
-                              statusNoRegister = newValue ?? statusNoRegister;
+                              invB.statusNoRegister = newValue ?? invB.statusNoRegister;
                             });
                           },
-                          items: keteranganNoRegister.map((String item) {
+                          items: invB.keteranganNoRegister.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: keteranganNoRegister.indexOf(item) == 0
+                              value: invB.keteranganNoRegister.indexOf(item) == 0
                                   ? "1"
                                   : "2",
                               child: Text(item),
@@ -583,7 +476,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  statusNoRegister == "2"
+                  invB.statusNoRegister == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -654,15 +547,15 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: statusBarang,
+                          value: invB.statusBarang,
                           onChanged: (String? newValue) {
                             setState(() {
-                              statusBarang = newValue ?? statusBarang;
+                              invB.statusBarang = newValue ?? invB.statusBarang;
                             });
                           },
-                          items: keteranganBarang.map((String item) {
+                          items: invB.keteranganBarang.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: keteranganBarang.indexOf(item) == 0
+                              value: invB.keteranganBarang.indexOf(item) == 0
                                   ? "1"
                                   : "2",
                               child: Text(item),
@@ -693,7 +586,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  statusBarang == "2"
+                  invB.statusBarang == "2"
                       ? DropdownButtonHideUnderline(
                           child: DropdownButton2(
                             isExpanded: true,
@@ -714,10 +607,10 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                               ),
                               iconEnabledColor: primaryTextColor,
                             ),
-                            value: selectedKategori,
+                            value: invB.selectedKategori,
                             onChanged: (String? newValue) {
                               setState(() {
-                                selectedKategori = newValue ?? selectedKategori;
+                                invB.selectedKategori = newValue ?? invB.selectedKategori;
                               });
                             },
                             dropdownStyleData:
@@ -791,15 +684,15 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: statusNamaBarang,
+                          value: invB.statusNamaBarang,
                           onChanged: (String? newValue) {
                             setState(() {
-                              statusNamaBarang = newValue ?? statusNamaBarang;
+                              invB.statusNamaBarang = newValue ?? invB.statusNamaBarang;
                             });
                           },
-                          items: keteranganNamaBarang.map((String item) {
+                          items: invB.keteranganNamaBarang.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: keteranganNamaBarang.indexOf(item) == 0
+                              value: invB.keteranganNamaBarang.indexOf(item) == 0
                                   ? "1"
                                   : "2",
                               child: Text(item),
@@ -810,7 +703,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  statusNamaBarang == "2"
+                  invB.statusNamaBarang == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -890,22 +783,31 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                         ),
                         iconEnabledColor: primaryTextColor,
                       ),
-                      value: selectedSatuan,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedSatuan = newValue ?? selectedSatuan;
-                        });
-                      },
-                      dropdownStyleData: DropdownStyleData(maxHeight: 300),
-                      items: satuanController.satuanList
-                          .map<DropdownMenuItem<String>>(
-                        (Map<String, dynamic> item) {
-                          return DropdownMenuItem<String>(
-                            value: item['satuan_kd'].toString(),
-                            child: Text(item['satuan_nm'].toString()),
-                          );
+                      value: invB.selectedSatuan != ""
+                            ? invB.selectedSatuan
+                            : "",
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            invB.selectedSatuan =
+                                newValue ?? invB.selectedSatuan;
+                          });
                         },
-                      ).toList(),
+                        dropdownStyleData: DropdownStyleData(maxHeight: 300),
+                        items: [
+                          DropdownMenuItem<String>(
+                            value: "",
+                            child: Text("Pilih satuan"),
+                          ),
+                          ...satuanController.satuanList
+                              .map<DropdownMenuItem<String>>(
+                            (Map<String, dynamic> item) {
+                              return DropdownMenuItem<String>(
+                                value: item['satuan_kd'],
+                                child: Text(item['satuan_nm']),
+                              );
+                            },
+                          ),
+                        ],
                     ),
                   ),
                 ],
@@ -962,15 +864,15 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: statusPerolehan,
+                          value: invB.statusPerolehan,
                           onChanged: (String? newValue) {
                             setState(() {
-                              statusPerolehan = newValue ?? statusPerolehan;
+                              invB.statusPerolehan = newValue ?? invB.statusPerolehan;
                             });
                           },
-                          items: keteranganPerolehan.map((String item) {
+                          items: invB.keteranganPerolehan.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: keteranganPerolehan.indexOf(item) == 0
+                              value: invB.keteranganPerolehan.indexOf(item) == 0
                                   ? "1"
                                   : "2",
                               child: Text(item),
@@ -981,42 +883,47 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  statusPerolehan == "2"
+                  invB.statusPerolehan == "2"
                       ? DropdownButtonHideUnderline(
-                          child: DropdownButton2(
-                            buttonStyleData: ButtonStyleData(
-                              height: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: Colors.grey,
+                            child: DropdownButton2(
+                              buttonStyleData: ButtonStyleData(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               ),
-                            ),
-                            isExpanded: true,
-                            iconStyleData: const IconStyleData(
-                              icon: Icon(
-                                Icons.arrow_drop_down_outlined,
-                                color: Colors.grey,
-                                size: 25,
+                              isExpanded: true,
+                              iconStyleData: const IconStyleData(
+                                icon: Icon(
+                                  Icons.arrow_drop_down_outlined,
+                                  color: Colors.grey,
+                                  size: 25,
+                                ),
+                                iconEnabledColor: primaryTextColor,
                               ),
-                              iconEnabledColor: primaryTextColor,
+                              value: dropdownPerolehan.keys
+                                      .contains(invB.selectedPerolehan)
+                                  ? invB.selectedPerolehan
+                                  : null,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  invB.selectedPerolehan =
+                                      newValue ?? invB.selectedPerolehan;
+                                });
+                                print(invB.selectedPerolehan);
+                              },
+                              items: dropdownPerolehan.keys.map((String item) {
+                                return DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(dropdownPerolehan[item]!),
+                                );
+                              }).toList(),
                             ),
-                            value: selectedPerolehan,
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                selectedPerolehan = newValue ?? "Pembelian";
-                              });
-                            },
-                            items: dropdownPerolehan.map((String item) {
-                              return DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(item),
-                              );
-                            }).toList(),
-                          ),
-                        )
-                      : SizedBox(),
+                          )
+                        : SizedBox(),
                 ],
               ),
               SizedBox(height: 15),
@@ -1131,16 +1038,16 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: statusNilaiPerolehan,
+                          value: invB.statusNilaiPerolehan,
                           onChanged: (String? newValue) {
                             setState(() {
-                              statusNilaiPerolehan =
-                                  newValue ?? statusNilaiPerolehan;
+                              invB.statusNilaiPerolehan =
+                                  newValue ?? invB.statusNilaiPerolehan;
                             });
                           },
-                          items: keteranganNilaiPerolehan.map((String item) {
+                          items: invB.keteranganNilaiPerolehan.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: keteranganNilaiPerolehan.indexOf(item) == 0
+                              value: invB.keteranganNilaiPerolehan.indexOf(item) == 0
                                   ? "1"
                                   : "2",
                               child: Text(item),
@@ -1151,7 +1058,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  statusNilaiPerolehan == "2"
+                  invB.statusNilaiPerolehan == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -1247,251 +1154,316 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
               SizedBox(height: 15),
               // Alamat
               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Alamat',
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.left,
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(12),
-                            color: Colors.grey.shade400,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 15),
-                            child: TextFormField(
-                              controller: editController.a_alamat_awal,
-                              readOnly: true,
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      DropdownButtonHideUnderline(
-                        child: DropdownButton2(
-                          buttonStyleData: ButtonStyleData(
-                            height: 50,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Alamat',
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
                             decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: Colors.grey,
+                              color: Colors.grey.shade400,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 15),
+                              child: TextFormField(
+                                controller: editController.a_alamat_awal,
+                                readOnly: true,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                ),
                               ),
                             ),
                           ),
-                          iconStyleData: const IconStyleData(
-                            icon: Icon(
-                              Icons.arrow_drop_down_outlined,
-                              color: Colors.grey,
-                              size: 25,
-                            ),
-                            iconEnabledColor: primaryTextColor,
-                          ),
-                          value: statusAlamat,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              statusAlamat = newValue ?? statusAlamat;
-                            });
-                          },
-                          items: keteranganAlamat.map((String item) {
-                            return DropdownMenuItem<String>(
-                              value: keteranganAlamat.indexOf(item) == 0
-                                  ? "1"
-                                  : "2",
-                              child: Text(item),
-                            );
-                          }).toList(),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 15),
-                  statusAlamat == "2"
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Kabupaten/Kota',
-                              style: TextStyle(fontSize: 16),
-                              textAlign: TextAlign.left,
-                            ),
-                            SizedBox(height: 10),
-                            Container(
+                        SizedBox(width: 10),
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            buttonStyleData: ButtonStyleData(
+                              height: 50,
                               decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
                                 borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 15),
-                                child: TextFormField(
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                  ),
+                                border: Border.all(
+                                  color: Colors.grey,
                                 ),
                               ),
                             ),
-                            SizedBox(height: 15),
-                            Text(
-                              'Kecamatan',
-                              style: TextStyle(fontSize: 16),
-                              textAlign: TextAlign.left,
-                            ),
-                            SizedBox(height: 10),
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(12),
+                            iconStyleData: const IconStyleData(
+                              icon: Icon(
+                                Icons.arrow_drop_down_outlined,
+                                color: Colors.grey,
+                                size: 25,
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 15),
-                                child: TextFormField(
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
+                              iconEnabledColor: primaryTextColor,
+                            ),
+                            value: invB.statusAlamat,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                invB.statusAlamat =
+                                    newValue ?? invB.statusAlamat;
+                              });
+                            },
+                            items: invB.keteranganAlamat.map((String item) {
+                              return DropdownMenuItem<String>(
+                                value: invB.keteranganAlamat.indexOf(item) == 0
+                                    ? "1"
+                                    : "2",
+                                child: Text(item),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 15),
+                    invB.statusAlamat == "2"
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Kabupaten/Kota',
+                                style: TextStyle(fontSize: 16),
+                                textAlign: TextAlign.left,
+                              ),
+                              SizedBox(height: 10),
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 15),
+                                  child: TextFormField(
+                                    controller: editController.alamat_kota,
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 15),
-                            Text(
-                              'Kelurahan',
-                              style: TextStyle(fontSize: 16),
-                              textAlign: TextAlign.left,
-                            ),
-                            SizedBox(height: 10),
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(12),
+                              SizedBox(height: 15),
+                              Text(
+                                'Kecamatan',
+                                style: TextStyle(fontSize: 16),
+                                textAlign: TextAlign.left,
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 15),
-                                child: TextFormField(
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
+                              SizedBox(height: 10),
+                              DropdownButtonHideUnderline(
+                                child: DropdownButton2(
+                                  buttonStyleData: ButtonStyleData(
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                  isExpanded: true,
+                                  iconStyleData: const IconStyleData(
+                                    icon: Icon(
+                                      Icons.arrow_drop_down_outlined,
+                                      color: Colors.grey,
+                                      size: 25,
+                                    ),
+                                    iconEnabledColor: primaryTextColor,
+                                  ),
+                                  value: invB.selectedKecamatan,
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      invB.selectedKecamatan =
+                                          newValue ?? invB.selectedKecamatan;
+                                    });
+                                  },
+                                  dropdownStyleData:
+                                      DropdownStyleData(maxHeight: 300),
+                                  items: addressController.kecamatanList
+                                      .map<DropdownMenuItem<String>>(
+                                    (Map<String, dynamic> item) {
+                                      return DropdownMenuItem<String>(
+                                        value: item['kecamatan_kd'].toString(),
+                                        child: Text(item['kecamatan_kd']
+                                                .toString() +
+                                            ' - ' +
+                                            item['kecamatan_nm'].toString()),
+                                      );
+                                    },
+                                  ).toList(),
+                                ),
+                              ),
+                              SizedBox(height: 15),
+                              Text(
+                                'Kelurahan',
+                                style: TextStyle(fontSize: 16),
+                                textAlign: TextAlign.left,
+                              ),
+                              SizedBox(height: 10),
+                              DropdownButtonHideUnderline(
+                                child: DropdownButton2(
+                                  buttonStyleData: ButtonStyleData(
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                  isExpanded: true,
+                                  iconStyleData: const IconStyleData(
+                                    icon: Icon(
+                                      Icons.arrow_drop_down_outlined,
+                                      color: Colors.grey,
+                                      size: 25,
+                                    ),
+                                    iconEnabledColor: primaryTextColor,
+                                  ),
+                                  value: invB.selectedKelurahan,
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      invB.selectedKelurahan =
+                                          newValue ?? invB.selectedKelurahan;
+                                    });
+                                  },
+                                  dropdownStyleData:
+                                      DropdownStyleData(maxHeight: 300),
+                                  items: addressController.kelurahanList
+                                      .map<DropdownMenuItem<String>>(
+                                    (Map<String, dynamic> item) {
+                                      return DropdownMenuItem<String>(
+                                        value: item['kelurahan_kd'].toString(),
+                                        child: Text(item['kelurahan_kd']
+                                                .toString() +
+                                            ' - ' +
+                                            item['kelurahan_nm'].toString()),
+                                      );
+                                    },
+                                  ).toList(),
+                                ),
+                              ),
+                              SizedBox(height: 15),
+                              Text(
+                                'Jalan',
+                                style: TextStyle(fontSize: 16),
+                                textAlign: TextAlign.left,
+                              ),
+                              SizedBox(height: 10),
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 15),
+                                  child: TextFormField(
+                                    controller: editController.alamat_jalan,
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 15),
-                            Text(
-                              'Jalan',
-                              style: TextStyle(fontSize: 16),
-                              textAlign: TextAlign.left,
-                            ),
-                            SizedBox(height: 10),
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(12),
+                              SizedBox(height: 15),
+                              Text(
+                                'No.',
+                                style: TextStyle(fontSize: 16),
+                                textAlign: TextAlign.left,
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 15),
-                                child: TextFormField(
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
+                              SizedBox(height: 10),
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 15),
+                                  child: TextFormField(
+                                    controller: editController.alamat_no,
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 15),
-                            Text(
-                              'No.',
-                              style: TextStyle(fontSize: 16),
-                              textAlign: TextAlign.left,
-                            ),
-                            SizedBox(height: 10),
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(12),
+                              SizedBox(height: 15),
+                              Text(
+                                'RT',
+                                style: TextStyle(fontSize: 16),
+                                textAlign: TextAlign.left,
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 15),
-                                child: TextFormField(
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
+                              SizedBox(height: 10),
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 15),
+                                  child: TextFormField(
+                                    controller: editController.alamat_rt,
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 15),
-                            Text(
-                              'RT',
-                              style: TextStyle(fontSize: 16),
-                              textAlign: TextAlign.left,
-                            ),
-                            SizedBox(height: 10),
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(12),
+                              SizedBox(height: 15),
+                              Text(
+                                'RW',
+                                style: TextStyle(fontSize: 16),
+                                textAlign: TextAlign.left,
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 15),
-                                child: TextFormField(
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
+                              SizedBox(height: 10),
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 15),
+                                  child: TextFormField(
+                                    controller: editController.alamat_rw,
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 15),
-                            Text(
-                              'RW',
-                              style: TextStyle(fontSize: 16),
-                              textAlign: TextAlign.left,
-                            ),
-                            SizedBox(height: 10),
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(12),
+                              SizedBox(height: 15),
+                              Text(
+                                'Kode Pos',
+                                style: TextStyle(fontSize: 16),
+                                textAlign: TextAlign.left,
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 15),
-                                child: TextFormField(
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
+                              SizedBox(height: 10),
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 15),
+                                  child: TextFormField(
+                                    controller: editController.alamat_kodepos,
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 15),
-                            Text(
-                              'Kode Pos',
-                              style: TextStyle(fontSize: 16),
-                              textAlign: TextAlign.left,
-                            ),
-                            SizedBox(height: 10),
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 15),
-                                child: TextFormField(
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : SizedBox(),
-                ],
-              ),
-              SizedBox(height: 15),
+                            ],
+                          )
+                        : SizedBox(),
+                  ],
+                ),
+                SizedBox(height: 15),
               // Merk/Tipe
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1543,16 +1515,16 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: statusMerk,
+                          value: invB.statusMerk,
                           onChanged: (String? newValue) {
                             setState(() {
-                              statusMerk = newValue ?? statusMerk;
+                              invB.statusMerk = newValue ?? invB.statusMerk;
                             });
                           },
-                          items: keteranganMerk.map((String item) {
+                          items: invB.keteranganMerk.map((String item) {
                             return DropdownMenuItem<String>(
                               value:
-                                  keteranganMerk.indexOf(item) == 0 ? "1" : "2",
+                                  invB.keteranganMerk.indexOf(item) == 0 ? "1" : "2",
                               child: Text(item),
                             );
                           }).toList(),
@@ -1561,7 +1533,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  statusMerk == "2"
+                  invB.statusMerk == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -1632,16 +1604,16 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: statusCC,
+                          value: invB.statusCC,
                           onChanged: (String? newValue) {
                             setState(() {
-                              statusCC = newValue ?? statusCC;
+                              invB.statusCC = newValue ?? invB.statusCC;
                             });
                           },
-                          items: keteranganCC.map((String item) {
+                          items: invB.keteranganCC.map((String item) {
                             return DropdownMenuItem<String>(
                               value:
-                                  keteranganCC.indexOf(item) == 0 ? "1" : "2",
+                                  invB.keteranganCC.indexOf(item) == 0 ? "1" : "2",
                               child: Text(item),
                             );
                           }).toList(),
@@ -1650,7 +1622,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  statusCC == "2"
+                  invB.statusCC == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -1721,15 +1693,15 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: statusNoPolisi,
+                          value: invB.statusNoPolisi,
                           onChanged: (String? newValue) {
                             setState(() {
-                              statusNoPolisi = newValue ?? statusNoPolisi;
+                              invB.statusNoPolisi = newValue ?? invB.statusNoPolisi;
                             });
                           },
-                          items: keteranganNoPolisi.map((String item) {
+                          items: invB.keteranganNoPolisi.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: keteranganNoPolisi.indexOf(item) == 0
+                              value: invB.keteranganNoPolisi.indexOf(item) == 0
                                   ? "1"
                                   : "2",
                               child: Text(item),
@@ -1740,7 +1712,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  statusNoPolisi == "2"
+                  invB.statusNoPolisi == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -1811,15 +1783,15 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: statusNoRangka,
+                          value: invB.statusNoRangka,
                           onChanged: (String? newValue) {
                             setState(() {
-                              statusNoRangka = newValue ?? statusNoRangka;
+                              invB.statusNoRangka = newValue ?? invB.statusNoRangka;
                             });
                           },
-                          items: keteranganNoRangka.map((String item) {
+                          items: invB.keteranganNoRangka.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: keteranganNoRangka.indexOf(item) == 0
+                              value: invB.keteranganNoRangka.indexOf(item) == 0
                                   ? "1"
                                   : "2",
                               child: Text(item),
@@ -1830,7 +1802,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  statusNoRangka == "2"
+                  invB.statusNoRangka == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -1901,15 +1873,15 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: statusNoMesin,
+                          value: invB.statusNoMesin,
                           onChanged: (String? newValue) {
                             setState(() {
-                              statusNoMesin = newValue ?? statusNoMesin;
+                              invB.statusNoMesin = newValue ?? invB.statusNoMesin;
                             });
                           },
-                          items: keteranganNoMesin.map((String item) {
+                          items: invB.keteranganNoMesin.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: keteranganNoMesin.indexOf(item) == 0
+                              value: invB.keteranganNoMesin.indexOf(item) == 0
                                   ? "1"
                                   : "2",
                               child: Text(item),
@@ -1920,7 +1892,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  statusNoMesin == "2"
+                  invB.statusNoMesin == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -1991,15 +1963,15 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: statusNoBPKB,
+                          value: invB.statusNoBPKB,
                           onChanged: (String? newValue) {
                             setState(() {
-                              statusNoBPKB = newValue ?? statusNoBPKB;
+                              invB.statusNoBPKB = newValue ?? invB.statusNoBPKB;
                             });
                           },
-                          items: keteranganNoBPKB.map((String item) {
+                          items: invB.keteranganNoBPKB.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: keteranganNoBPKB.indexOf(item) == 0
+                              value: invB.keteranganNoBPKB.indexOf(item) == 0
                                   ? "1"
                                   : "2",
                               child: Text(item),
@@ -2010,7 +1982,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  statusNoBPKB == "2"
+                  invB.statusNoBPKB == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -2081,15 +2053,15 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: statusBahan,
+                          value: invB.statusBahan,
                           onChanged: (String? newValue) {
                             setState(() {
-                              statusBahan = newValue ?? statusBahan;
+                              invB.statusBahan = newValue ?? invB.statusBahan;
                             });
                           },
-                          items: keteranganBahan.map((String item) {
+                          items: invB.keteranganBahan.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: keteranganBahan.indexOf(item) == 0
+                              value: invB.keteranganBahan.indexOf(item) == 0
                                   ? "1"
                                   : "2",
                               child: Text(item),
@@ -2100,7 +2072,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  statusBahan == "2"
+                  invB.statusBahan == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -2171,15 +2143,15 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: statusNoPabrik,
+                          value: invB.statusNoPabrik,
                           onChanged: (String? newValue) {
                             setState(() {
-                              statusNoPabrik = newValue ?? statusNoPabrik;
+                              invB.statusNoPabrik = newValue ?? invB.statusNoPabrik;
                             });
                           },
-                          items: keteranganNoPabrik.map((String item) {
+                          items: invB.keteranganNoPabrik.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: keteranganNoPabrik.indexOf(item) == 0
+                              value: invB.keteranganNoPabrik.indexOf(item) == 0
                                   ? "1"
                                   : "2",
                               child: Text(item),
@@ -2190,7 +2162,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  statusNoPabrik == "2"
+                  invB.statusNoPabrik == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -2261,16 +2233,16 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: statusKartuRuangan,
+                          value: invB.statusKartuRuangan,
                           onChanged: (String? newValue) {
                             setState(() {
-                              statusKartuRuangan =
-                                  newValue ?? statusKartuRuangan;
+                              invB.statusKartuRuangan =
+                                  newValue ?? invB.statusKartuRuangan;
                             });
                           },
-                          items: keteranganKartuRuangan.map((String item) {
+                          items: invB.keteranganKartuRuangan.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: keteranganKartuRuangan.indexOf(item) == 0
+                              value: invB.keteranganKartuRuangan.indexOf(item) == 0
                                   ? "1"
                                   : "2",
                               child: Text(item),
@@ -2281,7 +2253,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  statusKartuRuangan == "2"
+                  invB.statusKartuRuangan == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -2495,15 +2467,15 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: statusKondisi,
+                          value: invB.statusKondisi,
                           onChanged: (String? newValue) {
                             setState(() {
-                              statusKondisi = newValue ?? statusKondisi;
+                              invB.statusKondisi = newValue ?? invB.statusKondisi;
                             });
                           },
-                          items: keteranganKondisi.map((String item) {
+                          items: invB.keteranganKondisi.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: keteranganKondisi.indexOf(item) == 0
+                              value: invB.keteranganKondisi.indexOf(item) == 0
                                   ? "1"
                                   : "2",
                               child: Text(item),
@@ -2514,7 +2486,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  statusKondisi == "2"
+                  invB.statusKondisi == "2"
                       ? DropdownButtonHideUnderline(
                           child: DropdownButton2(
                             buttonStyleData: ButtonStyleData(
@@ -2535,10 +2507,10 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                               ),
                               iconEnabledColor: primaryTextColor,
                             ),
-                            value: selectedKondisi,
+                            value: invB.selectedKondisi,
                             onChanged: (String? newValue) {
                               setState(() {
-                                selectedKondisi = newValue ?? "B";
+                                invB.selectedKondisi = newValue ?? invB.selectedKondisi;
                               });
                             },
                             items: dropdownKondisi.map((String item) {
@@ -2604,15 +2576,15 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                             ),
                             iconEnabledColor: primaryTextColor,
                           ),
-                          value: statusAsalUsul,
+                          value: invB.statusAsalUsul,
                           onChanged: (String? newValue) {
                             setState(() {
-                              statusAsalUsul = newValue ?? statusAsalUsul;
+                              invB.statusAsalUsul = newValue ?? invB.statusAsalUsul;
                             });
                           },
-                          items: keteranganAsalUsul.map((String item) {
+                          items: invB.keteranganAsalUsul.map((String item) {
                             return DropdownMenuItem<String>(
-                              value: keteranganAsalUsul.indexOf(item) == 0
+                              value: invB.keteranganAsalUsul.indexOf(item) == 0
                                   ? "1"
                                   : "2",
                               child: Text(item),
@@ -2623,7 +2595,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  statusAsalUsul == "2"
+                  invB.statusAsalUsul == "2"
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -3386,7 +3358,32 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                       ),
                     )),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                      List<String> data = [
+                        editController.tgl_inventaris.text,
+                        editController.no_register_awal.text,
+                        editController.no_register_akhir.text,
+                        invB.statusNoRegister,
+                        editController.kategori_id_awal.text,
+                        invB.selectedKategori,
+                        invB.statusBarang,
+                        editController.nama_spesifikasi_awal.text,
+                        editController.nama_spesifikasi_akhir.text,
+                        invB.statusNamaBarang,
+                        editController.jumlah_awal.text,
+                        invB.selectedSatuan,
+                        editController.cara_perolehan_awal.text,
+                        invB.selectedPerolehan,
+                        invB.statusPerolehan,
+                        editController.tgl_perolehan.text,
+                        editController.tahun_perolehan.text,
+                        editController.perolehan_awal.text,
+                        editController.perolehan_akhir.text,
+                        invB.statusNilaiPerolehan
+                      ];
+                      editController.editInsertInventarisB(
+                          editController.kib_id.text, data);
+                    },
                 ),
               ),
             ],

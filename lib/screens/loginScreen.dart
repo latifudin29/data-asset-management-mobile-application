@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:kib_application/constans/colors.dart';
 import 'package:kib_application/controllers/loginController.dart';
-// import 'package:kib_application/screens/homeScreen.dart';
+import 'package:kib_application/screens/homeScreen.dart';
 
 class LoginScreen extends StatelessWidget {
   final loginController = Get.put(LoginController());
@@ -132,8 +132,8 @@ class LoginScreen extends StatelessWidget {
                       )),
                     ),
                     onTap: () {
-                      loginController.checkLogin();
-                      // Get.to(HomeScreen());
+                      // loginController.checkLogin();
+                      Get.to(HomeScreen());
                     },
                   ),
                 ],

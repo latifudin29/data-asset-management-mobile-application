@@ -1,17 +1,21 @@
-class InventoryVariablesA {
+class InventoryVariablesB {
   String statusNoRegister     = "";
   String statusBarang         = "";
   String statusNamaBarang     = "";
-  String statusJumlah         = "";
-  String statusLuas           = "";
   String statusPerolehan      = "";
   String statusNilaiPerolehan = "";
   String statusAlamat         = "";
-  String statusHakTanah       = "";
-  String statusNoSertifikat   = "";
-  String statusTglSertifikat  = "";
   String statusKondisi        = "";
   String statusAsalUsul       = "";
+  String statusMerk           = "";
+  String statusCC             = "";
+  String statusNoPolisi       = "";
+  String statusNoRangka       = "";
+  String statusNoMesin        = "";
+  String statusNoBPKB         = "";
+  String statusBahan          = "";
+  String statusNoPabrik       = "";
+  String statusKartuRuangan   = "";
 
   String selectedKategori  = "";
   String selectedSatuan    = "";
@@ -23,14 +27,18 @@ class InventoryVariablesA {
   List<String> keteranganNoRegister     = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganBarang         = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganNamaBarang     = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganJumlah         = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganLuas           = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganPerolehan      = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganNilaiPerolehan = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganAlamat         = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganHakTanah       = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganNoSertifikat   = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganTglSertifikat  = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganMerk           = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganCC             = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganNoPolisi       = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganNoRangka       = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganNoMesin        = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganNoBPKB         = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganBahan          = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganNoPabrik       = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganKartuRuangan   = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganKondisi        = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganAsalUsul       = ["Sesuai", "Tidak Sesuai"];
 }

@@ -36,7 +36,6 @@ class AppointmentController extends GetxController {
   }
 
   Future<void> _initData() async {
-    await kategoriController.getKategori("A");
     await satuanController.getSatuan();
     await ruangController.getRuang();
     await addressController.getKecamatan();
@@ -57,23 +56,6 @@ class AppointmentController extends GetxController {
           '&tahun=' +
           tahun.text);
 
-      print('INI ENDPOINT');
-      print(ApiEndPoints.baseurl +
-          ApiEndPoints.authEndPoints.getPenetapan +
-          id +
-          '/' +
-          kategori +
-          '?perPage=10&page=' +
-          page.toString() +
-          '&tahun=' +
-          tahun.text);
-
-      print('INI STATUS CODE');
-      print(response.statusCode);
-
-      print('INI RESPON BODY');
-      print(response.body);
-
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = response.body;
         final List<dynamic> penetapanData = data['data'];
@@ -81,8 +63,8 @@ class AppointmentController extends GetxController {
         penetapanList.assignAll(
             penetapanData.map((item) => item as Map<String, dynamic>));
         totalPage.value = data['total_page'];
-        print('INI LIST PENETAPAN: ${penetapanList}');
       }
+      _initData();
     } finally {
       Get.back();
     }
@@ -118,7 +100,16 @@ class AppointmentController extends GetxController {
 
         penetapanListById.assignAll(penetapanDataList);
       }
-      _initData();
+
+      if (kategori == "A") {
+        await kategoriController.getKategori("A");
+      } else if (kategori == "B"){
+        await kategoriController.getKategori("B");
+      } else if (kategori == "C"){
+        await kategoriController.getKategori("C");
+      } else if (kategori == "D"){
+        await kategoriController.getKategori("D");
+      }
     } finally {
       Get.back();
 

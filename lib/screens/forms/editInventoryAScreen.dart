@@ -21,67 +21,39 @@ class EditInventoryAScreen extends StatefulWidget {
 
 class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
   final penetapanController = Get.put(AppointmentController());
-  final editController = Get.put(InventoryAController());
-  final kategoriController = Get.put(CategoryController());
-  final satuanController = Get.put(UnitController());
-  final addressController = Get.put(AddressController());
-  final InventoryVariablesA invA = InventoryVariablesA();
+  final editController      = Get.put(InventoryAController());
+  final kategoriController  = Get.put(CategoryController());
+  final satuanController    = Get.put(UnitController());
+  final addressController   = Get.put(AddressController());
+  final invA                = Get.put(InventoryVariablesA());
+
   DateTime now = DateTime.now();
 
   @override
   void initState() {
     super.initState();
-    final data = penetapanController.penetapanListById[0];
-    final filteredList = addressController.kecamatanList.where(
-        (kecamatan) => kecamatan['kecamatan_kd'] == data['alamat_kecamatan']);
-    if (filteredList.isNotEmpty) {
-      addressController.getKelurahan(filteredList.first["id"].toString());
-    }
+    final data         = penetapanController.penetapanListById[0];
+    final filteredList = addressController.kecamatanList.where( (kecamatan) => kecamatan['kecamatan_kd'] == data['alamat_kecamatan']);
+    if (filteredList.isNotEmpty) { addressController.getKelurahan(filteredList.first["id"].toString()); }
 
     editController.kib_id.text = data['kib_id'].toString();
 
-    invA.statusNoRegister = data['no_register_status'] != ""
-        ? data['no_register_status'].toString()
-        : "1";
-    invA.statusBarang = data['kategori_id_status'] != ""
-        ? data['kategori_id_status'].toString()
-        : "1";
-    invA.statusNamaBarang = data['nama_spesifikasi_status'] != ""
-        ? data['nama_spesifikasi_status'].toString()
-        : "1";
-    invA.statusJumlah =
-        data['jumlah_status'] != "" ? data['jumlah_status'].toString() : "1";
-    invA.statusLuas = data['a_luas_m2_status'] != ""
-        ? data['a_luas_m2_status'].toString()
-        : "1";
-    invA.statusPerolehan = data['cara_perolehan_status'] != ""
-        ? data['cara_perolehan_status'].toString()
-        : "1";
-    invA.statusNilaiPerolehan = data['perolehan_status'] != ""
-        ? data['perolehan_status'].toString()
-        : "1";
-    invA.statusAlamat = data['a_alamat_status'] != ""
-        ? data['a_alamat_status'].toString()
-        : "1";
-    invA.statusHakTanah = data['a_hak_tanah_status'] != ""
-        ? data['a_hak_tanah_status'].toString()
-        : "1";
-    invA.statusNoSertifikat = data['a_sertifikat_nomor_status'] != ""
-        ? data['a_sertifikat_nomor_status'].toString()
-        : "1";
-    invA.statusTglSertifikat = data['a_sertifikat_tanggal_status'] != ""
-        ? data['a_sertifikat_tanggal_status'].toString()
-        : "1";
-    invA.statusKondisi =
-        data['kondisi_status'] != "" ? data['kondisi_status'].toString() : "1";
-    invA.statusAsalUsul = data['asal_usul_status'] != ""
-        ? data['asal_usul_status'].toString()
-        : "1";
+    invA.statusNoRegister     = data['no_register_status']          != "" ? data['no_register_status'].toString() : "1";
+    invA.statusBarang         = data['kategori_id_status']          != "" ? data['kategori_id_status'].toString() : "1";
+    invA.statusNamaBarang     = data['nama_spesifikasi_status']     != "" ? data['nama_spesifikasi_status'].toString() : "1";
+    invA.statusJumlah         = data['jumlah_status']               != "" ? data['jumlah_status'].toString() : "1";
+    invA.statusLuas           = data['a_luas_m2_status']            != "" ? data['a_luas_m2_status'].toString() : "1";
+    invA.statusPerolehan      = data['cara_perolehan_status']       != "" ? data['cara_perolehan_status'].toString() : "1";
+    invA.statusNilaiPerolehan = data['perolehan_status']            != "" ? data['perolehan_status'].toString() : "1";
+    invA.statusAlamat         = data['a_alamat_status']             != "" ? data['a_alamat_status'].toString() : "1";
+    invA.statusHakTanah       = data['a_hak_tanah_status']          != "" ? data['a_hak_tanah_status'].toString() : "1";
+    invA.statusNoSertifikat   = data['a_sertifikat_nomor_status']   != "" ? data['a_sertifikat_nomor_status'].toString() : "1";
+    invA.statusTglSertifikat  = data['a_sertifikat_tanggal_status'] != "" ? data['a_sertifikat_tanggal_status'].toString() : "1";
+    invA.statusKondisi        = data['kondisi_status']              != "" ? data['kondisi_status'].toString() : "1";
+    invA.statusAsalUsul       = data['asal_usul_status']            != "" ? data['asal_usul_status'].toString() : "1";
 
-    invA.selectedKategori = data['kategori_id_awal'] != ""
-        ? data['kategori_id_awal'].toString()
-        : data['kategori_id_akhir'].toString();
-    invA.selectedSatuan = data['satuan'] != "" ? data['satuan'].toString() : "";
+    invA.selectedKategori = data['kategori_id_awal'] != "" ? data['kategori_id_awal'].toString() : data['kategori_id_akhir'].toString();
+    invA.selectedSatuan   = data['satuan']           != "" ? data['satuan'].toString() : "";
 
     String caraPerolehan = data['cara_perolehan_awal'].toString();
     if (caraPerolehan == "Pembelian") {
@@ -98,142 +70,119 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
 
     invA.selectedKecamatan = data['alamat_kecamatan'].toString();
     invA.selectedKelurahan = data['alamat_kelurahan'].toString();
+    invA.selectedKondisi   = data['kondisi_awal'].toString();
 
-    editController.tgl_inventaris.text =
-        data['tgl_inventaris_formatted'].toString();
-    editController.skpd.text = data['departemen_kd'].toString();
+    editController.skpd.text        = data['departemen_kd'].toString();
     editController.skpd_uraian.text = data['departemen_nm'].toString();
-    editController.no_register_awal.text = data['no_register_awal'].toString();
-    editController.no_register_akhir.text =
-        data['no_register_akhir'].toString();
-    editController.barang.text =
-        data['kategori_kd'].toString() + ' - ' + data['kategori_nm'].toString();
-    editController.kategori_id_awal.text = data['kategori_id_awal'].toString();
-    editController.kategori_id_akhir.text =
-        data['kategori_id_akhir'].toString();
-    editController.nama_spesifikasi_awal.text =
-        data['nama_spesifikasi_awal'] != null
-            ? data['nama_spesifikasi_awal'].toString()
-            : '';
-    editController.nama_spesifikasi_akhir.text =
-        data['nama_spesifikasi_akhir'].toString();
-    editController.jumlah_awal.text = data['jumlah_awal'].toString();
-    editController.jumlah_akhir.text = data['jumlah_akhir'].toString();
-    editController.a_luas_m2_awal.text = data['a_luas_m2_awal'].toString();
-    editController.a_luas_m2_akhir.text = data['a_luas_m2_akhir'].toString();
-    editController.satuan.text = data['satuan'].toString();
-    editController.cara_perolehan_awal.text =
-        data['cara_perolehan_awal'].toString();
-    editController.cara_perolehan_akhir.text =
-        data['cara_perolehan_akhir'].toString();
-    editController.tgl_perolehan.text =
-        data['tgl_perolehan_formatted'].toString();
-    editController.tahun_perolehan.text = data['tahun_perolehan'].toString();
-    editController.perolehan_awal.text =
-        data['perolehan_awal_formatted'].toString();
-    editController.perolehan_akhir.text =
-        data['perolehan_akhir_formatted'].toString();
-    editController.atribusi_status.text = data['atribusi_status'].toString();
-    editController.atribusi_nibar.text = data['atribusi_nibar'].toString();
-    editController.atribusi_kode_barang.text =
-        data['atribusi_kode_barang'].toString();
-    editController.atribusi_kode_lokasi.text =
-        data['atribusi_kode_lokasi'].toString();
-    editController.atribusi_no_register.text =
-        data['atribusi_no_register'].toString();
-    editController.atribusi_nama_barang.text =
-        data['atribusi_nama_barang'].toString();
-    editController.atribusi_spesifikasi_barang.text =
-        data['atribusi_spesifikasi_barang'].toString();
-    editController.a_alamat_awal.text = data['a_alamat_awal'].toString();
-    editController.a_alamat_akhir.text = data['a_alamat_akhir'].toString();
-    editController.alamat_kota.text = data['alamat_kota'].toString();
-    editController.alamat_jalan.text = data['alamat_jalan'].toString();
-    editController.alamat_no.text = data['alamat_no'].toString();
-    editController.alamat_rt.text = data['alamat_rt'].toString();
-    editController.alamat_rw.text = data['alamat_rw'].toString();
-    editController.alamat_kodepos.text = data['alamat_kodepos'].toString();
-    editController.a_hak_tanah_awal.text = data['a_hak_tanah_awal'].toString();
-    editController.a_hak_tanah_akhir.text =
-        data['a_hak_tanah_akhir'].toString();
-    editController.a_sertifikat_nomor_awal.text =
-        data['a_sertifikat_nomor_awal'].toString();
-    editController.a_sertifikat_nomor_akhir.text =
-        data['a_sertifikat_nomor_akhir'].toString();
-    editController.a_sertifikat_tanggal_awal.text =
-        data['a_sertifikat_tanggal_awal_formatted'].toString();
-    editController.a_sertifikat_tanggal_akhir.text =
-        data['a_sertifikat_tanggal_akhir_formatted'].toString();
-    editController.keberadaan_barang_status.text =
-        data['keberadaan_barang_status'].toString();
-    editController.kondisi_awal.text = data['kondisi_awal'].toString();
-    editController.kondisi_akhir.text = data['kondisi_akhir'].toString();
-    editController.asal_usul_awal.text = data['asal_usul_awal'].toString();
-    editController.asal_usul_akhir.text = data['asal_usul_akhir'].toString();
-    editController.penggunaan_status.text =
-        data['penggunaan_status'].toString();
-    editController.penggunaan_awal.text = data['penggunaan_awal'].toString();
-    editController.penggunaan_pemda_status.text =
-        data['penggunaan_pemda_status'].toString();
-    editController.penggunaan_pemda_akhir.text =
-        data['penggunaan_pemda_akhir'].toString();
-    editController.penggunaan_pempus_status.text =
-        data['penggunaan_pempus_status'].toString();
-    editController.penggunaan_pempus_yt.text =
-        data['penggunaan_pempus_yt'].toString();
-    editController.penggunaan_pempus_y_nm.text =
-        data['penggunaan_pempus_y_nm'].toString();
-    editController.penggunaan_pempus_y_doc.text =
-        data['penggunaan_pempus_y_doc'].toString();
-    editController.penggunaan_pempus_t_nm.text =
-        data['penggunaan_pempus_t_nm'].toString();
-    editController.penggunaan_pdl_status.text =
-        data['penggunaan_pdl_status'].toString();
-    editController.penggunaan_pdl_yt.text =
-        data['penggunaan_pdl_yt'].toString();
-    editController.penggunaan_pdl_y_nm.text =
-        data['penggunaan_pdl_y_nm'].toString();
-    editController.penggunaan_pdl_y_doc.text =
-        data['penggunaan_pdl_y_doc'].toString();
-    editController.penggunaan_pdl_t_nm.text =
-        data['penggunaan_pdl_t_nm'].toString();
-    editController.penggunaan_pl_status.text =
-        data['penggunaan_pl_status'].toString();
-    editController.penggunaan_pl_yt.text = data['penggunaan_pl_yt'].toString();
-    editController.penggunaan_pl_y_nm.text =
-        data['penggunaan_pl_y_nm'].toString();
-    editController.penggunaan_pl_y_doc.text =
-        data['penggunaan_pl_y_doc'].toString();
-    editController.penggunaan_pl_t_nm.text =
-        data['penggunaan_pl_t_nm'].toString();
-    editController.tercatat_ganda.text = data['tercatat_ganda'].toString();
-    editController.tercatat_ganda_nibar.text =
-        data['tercatat_ganda_nibar'].toString();
-    editController.tercatat_ganda_no_register.text =
-        data['tercatat_ganda_no_register'].toString();
-    editController.tercatat_ganda_kode_barang.text =
-        data['tercatat_ganda_kode_barang'].toString();
-    editController.tercatat_ganda_nama_barang.text =
-        data['tercatat_ganda_nama_barang'].toString();
-    editController.tercatat_ganda_spesifikasi_barang.text =
-        data['tercatat_ganda_spesifikasi_barang'].toString();
-    editController.tercatat_ganda_luas.text =
-        data['tercatat_ganda_luas'].toString();
-    editController.tercatat_ganda_satuan.text =
-        data['tercatat_ganda_satuan'].toString();
-    editController.tercatat_ganda_perolehan.text =
-        data['tercatat_ganda_perolehan'].toString();
-    editController.tercatat_ganda_tanggal_perolehan.text =
-        data['tercatat_ganda_tanggal_perolehan'].toString();
-    editController.tercatat_ganda_kuasa_pengguna.text =
-        data['tercatat_ganda_kuasa_pengguna'].toString();
-    editController.pemilik_id.text = data['pemilik_id'].toString();
-    editController.lat.text = data['lat'].toString();
-    editController.long.text = data['long'].toString();
-    editController.lainnya.text = data['lainnya'].toString();
-    editController.keterangan.text = data['keterangan'].toString();
-    editController.file_nm.text = data['file_nm'].toString();
-    editController.petugas.text = data['petugas'].toString();
+    editController.barang.text      = data['kategori_kd'].toString() + ' - ' + data['kategori_nm'].toString();
+
+    String statusInventaris = data['status_inventaris'].toString();
+    if (statusInventaris == "0"){
+      editController.tgl_inventaris.text         = DateFormat('dd-MM-yyyy').format(now);
+      editController.no_register_awal.text       = data['no_register'].toString();
+      editController.no_register_akhir.text      = data['no_register'].toString();
+      editController.kategori_id_awal.text       = data['kategori_id'].toString();
+      editController.kategori_id_akhir.text      = data['kategori_id'].toString();
+      editController.nama_spesifikasi_awal.text  = data['nama_spesifikasi_awal'].toString();
+      editController.nama_spesifikasi_akhir.text = data['nama_spesifikasi_akhir'].toString();
+      editController.jumlah_awal.text            = data['jumlah'].toString();
+      editController.jumlah_akhir.text           = data['jumlah'].toString();
+      editController.a_luas_m2_awal.text         = data['a_luas_m2'].toString();
+      editController.a_luas_m2_akhir.text        = data['a_luas_m2'].toString();
+      editController.satuan.text                 = data['satuan_awal'].toString();
+      editController.cara_perolehan_awal.text    = data['cara_perolehan'].toString();
+      editController.cara_perolehan_akhir.text   = data['cara_perolehan'].toString();
+      editController.tgl_perolehan.text          = data['tgl_perolehan_penetapan'].toString();
+      editController.tahun_perolehan.text        = data['th_beli'].toString();
+      editController.perolehan_awal.text         = data['perolehan_formatted'].toString();
+      editController.perolehan_akhir.text        = data['perolehan_formatted'].toString();
+    } else {
+      editController.tgl_inventaris.text         = data['tgl_inventaris_formatted'].toString();
+      editController.no_register_awal.text       = data['no_register_awal'].toString();
+      editController.no_register_akhir.text      = data['no_register_akhir'].toString();
+      editController.kategori_id_awal.text       = data['kategori_id_awal'].toString();
+      editController.kategori_id_akhir.text      = data['kategori_id_akhir'].toString();
+      editController.nama_spesifikasi_awal.text  = data['nama_spesifikasi_awal'].toString();
+      editController.nama_spesifikasi_akhir.text = data['nama_spesifikasi_akhir'].toString();
+      editController.jumlah_awal.text            = data['jumlah_awal'].toString();
+      editController.jumlah_akhir.text           = data['jumlah_akhir'].toString();
+      editController.a_luas_m2_awal.text         = data['a_luas_m2_awal'].toString();
+      editController.a_luas_m2_akhir.text        = data['a_luas_m2_akhir'].toString();
+      editController.satuan.text                 = data['satuan_akhir'].toString();
+      editController.cara_perolehan_awal.text    = data['cara_perolehan_awal'].toString();
+      editController.cara_perolehan_akhir.text   = data['cara_perolehan_akhir'].toString();
+      editController.tgl_perolehan.text          = data['tgl_perolehan_formatted'].toString();
+      editController.tahun_perolehan.text        = data['tahun_perolehan'].toString();
+      editController.perolehan_awal.text         = data['perolehan_awal_formatted'].toString();
+      editController.perolehan_akhir.text        = data['perolehan_akhir_formatted'].toString();
+    }
+
+    editController.atribusi_status.text                   = data['atribusi_status'].toString();
+    editController.atribusi_nibar.text                    = data['atribusi_nibar'].toString();
+    editController.atribusi_kode_barang.text              = data['atribusi_kode_barang'].toString();
+    editController.atribusi_kode_lokasi.text              = data['atribusi_kode_lokasi'].toString();
+    editController.atribusi_no_register.text              = data['atribusi_no_register'].toString();
+    editController.atribusi_nama_barang.text              = data['atribusi_nama_barang'].toString();
+    editController.atribusi_spesifikasi_barang.text       = data['atribusi_spesifikasi_barang'].toString();
+
+    editController.a_alamat_awal.text                     = data['a_alamat_awal'].toString();
+    editController.a_alamat_akhir.text                    = data['a_alamat_akhir'].toString();
+    editController.alamat_kota.text                       = data['alamat_kota'].toString();
+    editController.alamat_jalan.text                      = data['alamat_jalan'].toString();
+    editController.alamat_no.text                         = data['alamat_no'].toString();
+    editController.alamat_rt.text                         = data['alamat_rt'].toString();
+    editController.alamat_rw.text                         = data['alamat_rw'].toString();
+    editController.alamat_kodepos.text                    = data['alamat_kodepos'].toString();
+    // 
+    editController.a_hak_tanah_awal.text                  = data['a_hak_tanah_awal'].toString();
+    editController.a_hak_tanah_akhir.text                 = data['a_hak_tanah_akhir'].toString();
+    editController.a_sertifikat_nomor_awal.text           = data['a_sertifikat_nomor_awal'].toString();
+    editController.a_sertifikat_nomor_akhir.text          = data['a_sertifikat_nomor_akhir'].toString();
+    editController.a_sertifikat_tanggal_awal.text         = data['a_sertifikat_tanggal_awal_formatted'].toString();
+    editController.a_sertifikat_tanggal_akhir.text        = data['a_sertifikat_tanggal_akhir_formatted'].toString();
+    // 
+    editController.keberadaan_barang_status.text          = data['keberadaan_barang_status'].toString();
+    editController.kondisi_awal.text                      = data['kondisi_awal'].toString();
+    editController.kondisi_akhir.text                     = data['kondisi_akhir'].toString();
+    editController.asal_usul_awal.text                    = data['asal_usul_awal'].toString();
+    editController.asal_usul_akhir.text                   = data['asal_usul_akhir'].toString();
+    editController.penggunaan_status.text                 = data['penggunaan_status'].toString();
+    editController.penggunaan_awal.text                   = data['penggunaan_awal'].toString();
+    editController.penggunaan_pemda_status.text           = data['penggunaan_pemda_status'].toString();
+    editController.penggunaan_pemda_akhir.text            = data['penggunaan_pemda_akhir'].toString();
+    editController.penggunaan_pempus_status.text          = data['penggunaan_pempus_status'].toString();
+    editController.penggunaan_pempus_yt.text              = data['penggunaan_pempus_yt'].toString();
+    editController.penggunaan_pempus_y_nm.text            = data['penggunaan_pempus_y_nm'].toString();
+    editController.penggunaan_pempus_y_doc.text           = data['penggunaan_pempus_y_doc'].toString();
+    editController.penggunaan_pempus_t_nm.text            = data['penggunaan_pempus_t_nm'].toString();
+    editController.penggunaan_pdl_status.text             = data['penggunaan_pdl_status'].toString();
+    editController.penggunaan_pdl_yt.text                 = data['penggunaan_pdl_yt'].toString();
+    editController.penggunaan_pdl_y_nm.text               = data['penggunaan_pdl_y_nm'].toString();
+    editController.penggunaan_pdl_y_doc.text              = data['penggunaan_pdl_y_doc'].toString();
+    editController.penggunaan_pdl_t_nm.text               = data['penggunaan_pdl_t_nm'].toString();
+    editController.penggunaan_pl_status.text              = data['penggunaan_pl_status'].toString();
+    editController.penggunaan_pl_yt.text                  = data['penggunaan_pl_yt'].toString();
+    editController.penggunaan_pl_y_nm.text                = data['penggunaan_pl_y_nm'].toString();
+    editController.penggunaan_pl_y_doc.text               = data['penggunaan_pl_y_doc'].toString();
+    editController.penggunaan_pl_t_nm.text                = data['penggunaan_pl_t_nm'].toString();
+    editController.tercatat_ganda.text                    = data['tercatat_ganda'].toString();
+    editController.tercatat_ganda_nibar.text              = data['tercatat_ganda_nibar'].toString();
+    editController.tercatat_ganda_no_register.text        = data['tercatat_ganda_no_register'].toString();
+    editController.tercatat_ganda_kode_barang.text        = data['tercatat_ganda_kode_barang'].toString();
+    editController.tercatat_ganda_nama_barang.text        = data['tercatat_ganda_nama_barang'].toString();
+    editController.tercatat_ganda_spesifikasi_barang.text = data['tercatat_ganda_spesifikasi_barang'].toString();
+    editController.tercatat_ganda_luas.text               = data['tercatat_ganda_luas'].toString();
+    editController.tercatat_ganda_satuan.text             = data['tercatat_ganda_satuan'].toString();
+    editController.tercatat_ganda_perolehan.text          = data['tercatat_ganda_perolehan'].toString();
+    editController.tercatat_ganda_tanggal_perolehan.text  = data['tercatat_ganda_tanggal_perolehan'].toString();
+    editController.tercatat_ganda_kuasa_pengguna.text     = data['tercatat_ganda_kuasa_pengguna'].toString();
+    editController.pemilik_id.text                        = data['pemilik_id'].toString();
+    editController.lat.text                               = data['lat'].toString();
+    editController.long.text                              = data['long'].toString();
+    editController.lainnya.text                           = data['lainnya'].toString();
+    editController.keterangan.text                        = data['keterangan'].toString();
+    editController.file_nm.text                           = data['file_nm'].toString();
+    editController.petugas.text                           = data['petugas'].toString();
   }
 
   Map<String, String> dropdownPerolehan = {
@@ -243,12 +192,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
     "4": "Hasil Inventarisasi",
   };
 
-  List<String> dropdownKondisi = [
-    "B",
-    "RR",
-    "RB",
-  ];
-  String selectedKondisi = "B";
+  List<String> dropdownKondisi = ["B", "RR", "RB"];
 
   List<String> keteranganQuestion = ["Ya", "Bukan"];
   String statusQuestion = "Bukan";
@@ -2115,10 +2059,10 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                                 ),
                                 iconEnabledColor: primaryTextColor,
                               ),
-                              value: selectedKondisi,
+                              value: invA.selectedKondisi,
                               onChanged: (String? newValue) {
                                 setState(() {
-                                  selectedKondisi = newValue ?? "B";
+                                  invA.selectedKondisi = newValue ?? invA.selectedKondisi;
                                 });
                               },
                               items: dropdownKondisi.map((String item) {

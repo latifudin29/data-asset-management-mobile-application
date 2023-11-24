@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:kib_application/utils/apiEndpoints.dart';
 import 'package:kib_application/utils/snackbar.dart';
 
-class InventoryAController extends GetxController {
+class InventoryCController extends GetxController {
   final _connect = GetConnect();
 
-  late TextEditingController kib_id,
+  late TextEditingController kib_id, 
       tgl_inventaris,
       skpd,
       skpd_uraian,
@@ -22,9 +22,6 @@ class InventoryAController extends GetxController {
       jumlah_awal,
       jumlah_akhir,
       jumlah_status,
-      a_luas_m2_awal,
-      a_luas_m2_akhir,
-      a_luas_m2_status,
       satuan,
       cara_perolehan_awal,
       cara_perolehan_akhir,
@@ -52,15 +49,37 @@ class InventoryAController extends GetxController {
       alamat_rt,
       alamat_rw,
       alamat_kodepos,
-      a_hak_tanah_awal,
-      a_hak_tanah_akhir,
-      a_hak_tanah_status,
-      a_sertifikat_nomor_awal,
-      a_sertifikat_nomor_akhir,
-      a_sertifikat_nomor_status,
-      a_sertifikat_tanggal_awal,
-      a_sertifikat_tanggal_akhir,
-      a_sertifikat_tanggal_status,
+      b_merk_awal,
+      b_merk_akhir,
+      b_merk_status,
+      b_cc_awal,
+      b_cc_akhir,
+      b_cc_status,
+      b_nomor_polisi_awal,
+      b_nomor_polisi_akhir,
+      b_nomor_polisi_status,
+      b_nomor_rangka_awal,
+      b_nomor_rangka_akhir,
+      b_nomor_rangka_status,
+      b_nomor_mesin_awal,
+      b_nomor_mesin_akhir,
+      b_nomor_mesin_status,
+      b_nomor_bpkb_awal,
+      b_nomor_bpkb_akhir,
+      b_nomor_bpkb_status,
+      b_bahan_awal,
+      b_bahan_akhir,
+      b_bahan_status,
+      b_nomor_pabrik_awal,
+      b_nomor_pabrik_akhir,
+      b_nomor_pabrik_status,
+      kartu_inv_awal,
+      kartu_inv_akhir,
+      kartu_inv_status,
+      barcode_barang,
+      barcode_barang_akhir,
+      barcode_ruangan,
+      barcode_ruangan_akhir,
       keberadaan_barang_status,
       kondisi_awal,
       kondisi_akhir,
@@ -99,8 +118,6 @@ class InventoryAController extends GetxController {
       tercatat_ganda_tanggal_perolehan,
       tercatat_ganda_kuasa_pengguna,
       pemilik_id,
-      lat,
-      long,
       lainnya,
       keterangan,
       file_nm,
@@ -125,9 +142,6 @@ class InventoryAController extends GetxController {
     jumlah_awal                       = TextEditingController();
     jumlah_akhir                      = TextEditingController();
     jumlah_status                     = TextEditingController();
-    a_luas_m2_awal                    = TextEditingController();
-    a_luas_m2_akhir                   = TextEditingController();
-    a_luas_m2_status                  = TextEditingController();
     satuan                            = TextEditingController();
     cara_perolehan_awal               = TextEditingController();
     cara_perolehan_akhir              = TextEditingController();
@@ -155,15 +169,37 @@ class InventoryAController extends GetxController {
     alamat_rt                         = TextEditingController();
     alamat_rw                         = TextEditingController();
     alamat_kodepos                    = TextEditingController();
-    a_hak_tanah_awal                  = TextEditingController();
-    a_hak_tanah_akhir                 = TextEditingController();
-    a_hak_tanah_status                = TextEditingController();
-    a_sertifikat_nomor_awal           = TextEditingController();
-    a_sertifikat_nomor_akhir          = TextEditingController();
-    a_sertifikat_nomor_status         = TextEditingController();
-    a_sertifikat_tanggal_awal         = TextEditingController();
-    a_sertifikat_tanggal_akhir        = TextEditingController();
-    a_sertifikat_tanggal_status       = TextEditingController();
+    b_merk_awal                       = TextEditingController();
+    b_merk_akhir                      = TextEditingController();
+    b_merk_status                     = TextEditingController();
+    b_cc_awal                         = TextEditingController();
+    b_cc_akhir                        = TextEditingController();
+    b_cc_status                       = TextEditingController();
+    b_nomor_polisi_awal               = TextEditingController();
+    b_nomor_polisi_akhir              = TextEditingController();
+    b_nomor_polisi_status             = TextEditingController();
+    b_nomor_rangka_awal               = TextEditingController();
+    b_nomor_rangka_akhir              = TextEditingController();
+    b_nomor_rangka_status             = TextEditingController();
+    b_nomor_mesin_awal                = TextEditingController();
+    b_nomor_mesin_akhir               = TextEditingController();
+    b_nomor_mesin_status              = TextEditingController();
+    b_nomor_bpkb_awal                 = TextEditingController();
+    b_nomor_bpkb_akhir                = TextEditingController();
+    b_nomor_bpkb_status               = TextEditingController();
+    b_bahan_awal                      = TextEditingController();
+    b_bahan_akhir                     = TextEditingController();
+    b_bahan_status                    = TextEditingController();
+    b_nomor_pabrik_awal               = TextEditingController();
+    b_nomor_pabrik_akhir              = TextEditingController();
+    b_nomor_pabrik_status             = TextEditingController();
+    kartu_inv_awal                    = TextEditingController();
+    kartu_inv_akhir                   = TextEditingController();
+    kartu_inv_status                  = TextEditingController();
+    barcode_barang                    = TextEditingController();
+    barcode_barang_akhir              = TextEditingController();
+    barcode_ruangan                   = TextEditingController();
+    barcode_ruangan_akhir             = TextEditingController();
     keberadaan_barang_status          = TextEditingController();
     kondisi_awal                      = TextEditingController();
     kondisi_akhir                     = TextEditingController();
@@ -202,15 +238,13 @@ class InventoryAController extends GetxController {
     tercatat_ganda_tanggal_perolehan  = TextEditingController();
     tercatat_ganda_kuasa_pengguna     = TextEditingController();
     pemilik_id                        = TextEditingController();
-    lat                               = TextEditingController();
-    long                              = TextEditingController();
     lainnya                           = TextEditingController();
     keterangan                        = TextEditingController();
     file_nm                           = TextEditingController();
     petugas                           = TextEditingController();
   }
 
-  Future<void> editInsertInventarisA(String kib_id, List<String> data) async {
+  Future<void> editInsertInventarisC(String kib_id, List<String> data) async {
     String? _getValue(String value) {
       return value.isNotEmpty ? value : null;
     }
@@ -232,20 +266,15 @@ class InventoryAController extends GetxController {
         "nama_spesifikasi_akhir" : _getValue(data[8]),
         "nama_spesifikasi_status": int.tryParse(data[9]),
         "jumlah_awal"            : int.tryParse(data[10]),
-        "jumlah_akhir"           : int.tryParse(data[11]),
-        "jumlah_status"          : int.tryParse(data[12]),
-        "a_luas_m2_awal"         : int.tryParse(data[13]),
-        "a_luas_m2_akhir"        : int.tryParse(data[14]),
-        "a_luas_m2_status"       : int.tryParse(data[15]),
-        "satuan"                 : _getValue(data[16]),
-        "cara_perolehan_awal"    : _getValue(data[17]),
-        "cara_perolehan_akhir"   : int.tryParse(data[18]),
-        "cara_perolehan_status"  : int.tryParse(data[19]),
-        "tgl_perolehan"          : _getValue(data[20]),
-        "tahun_perolehan"        : int.tryParse(data[21]),
-        "perolehan_awal"         : removeDot(_getValue(data[22])),
-        "perolehan_akhir"        : removeDot(_getValue(data[23])),
-        "perolehan_status"       : int.tryParse(data[24]),
+        "satuan"                 : _getValue(data[11]),
+        "cara_perolehan_awal"    : _getValue(data[12]),
+        "cara_perolehan_akhir"   : _getValue(data[13]),
+        "cara_perolehan_status"  : int.tryParse(data[14]),
+        "tgl_perolehan"          : _getValue(data[15]),
+        "tahun_perolehan"        : int.tryParse(data[16]),
+        "perolehan_awal"         : removeDot(_getValue(data[17])),
+        "perolehan_akhir"        : removeDot(_getValue(data[18])),
+        "perolehan_status"       : int.tryParse(data[19]),
       }
     };
 
@@ -253,7 +282,7 @@ class InventoryAController extends GetxController {
 
     try {
       final response = await _connect.put(
-        '${ApiEndPoints.baseurl}${ApiEndPoints.authEndPoints.putInventaris}A/edit/$kib_id',
+        '${ApiEndPoints.baseurl}${ApiEndPoints.authEndPoints.putInventaris}C/edit/$kib_id',
         body,
       );
 
@@ -271,3 +300,4 @@ class InventoryAController extends GetxController {
     }
   }
 }
+
