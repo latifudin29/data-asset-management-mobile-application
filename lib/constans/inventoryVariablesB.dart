@@ -41,4 +41,10 @@ class InventoryVariablesB {
   List<String> keteranganKartuRuangan   = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganKondisi        = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganAsalUsul       = ["Sesuai", "Tidak Sesuai"];
+
+  List<String> barcodeBarang = ["Tidak", "Ada"];
+  List<String> barcodeRuang  = ["Tidak", "Ada"];
+
+  String statusQRBarang  = "";
+  String statusQRRuangan = "";
 }

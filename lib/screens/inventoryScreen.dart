@@ -7,6 +7,7 @@ import 'package:kib_application/controllers/addressController.dart';
 import 'package:kib_application/controllers/appointmentController.dart';
 import 'package:kib_application/controllers/departementController.dart';
 import 'package:kib_application/controllers/unitController.dart';
+import 'package:kib_application/utils/sharedPrefs.dart';
 import 'package:number_paginator/number_paginator.dart';
 
 class InventoryScreen extends StatefulWidget {
@@ -18,26 +19,26 @@ class InventoryScreen extends StatefulWidget {
 }
 
 class _InventoryScreenState extends State<InventoryScreen> {
+  final SharedPrefs user     = Get.put(SharedPrefs());
   final departemenController = Get.put(DepartemenController());
-  final penetapanController = Get.put(AppointmentController());
-  final addressController = Get.put(AddressController());
+  final penetapanController  = Get.put(AppointmentController());
+  final addressController    = Get.put(AddressController());
+  final satuan               = Get.put(UnitController());
 
-  final satuan = Get.put(UnitController());
-
-  final searchDepartement = TextEditingController();
-  final departemenSelected = TextEditingController();
+  final searchDepartement    = TextEditingController();
+  final departemenSelected   = TextEditingController();
 
   DateTime now = DateTime.now();
 
-  String selectedSKPD = '0.00.000';
-  String selectedId = '';
-  String modifiedTitle = "";
+  String selectedSKPD  = '0.00.000';
+  String selectedId    = '';
+  String modifiedTitle = '';
 
-  int page = 1;
+  int page      = 1;
   int totalPage = 1;
 
   List<DataColumn> columns = [];
-  List<DataColumn> rows = [];
+  List<DataColumn> rows    = [];
 
   void modifyTitle(String originalTitle) {
     if (originalTitle == "Tanah (A)") {
@@ -69,15 +70,25 @@ class _InventoryScreenState extends State<InventoryScreen> {
         totalPage = value;
       });
     });
+
     departemenController.getDepartemen();
+    departemenSelected.text = user.departemen_nm.value;
+    selectedSKPD            = user.departemen_kd.value;
+
     modifyTitle(widget.title);
+    
     String yearNow = DateFormat.y().format(now);
     penetapanController.tahun.text = yearNow;
+
+    if (user.departemen_id.value.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        loadPenetapanData();
+      });
+    }
   }
 
   Future<List<String>> getDepartementData(String query) async {
     RxList<Map<String, dynamic>> data = departemenController.departemenList;
-
     await Future.delayed(const Duration(seconds: 1));
 
     List<String> matchingDepartments = data
@@ -96,12 +107,18 @@ class _InventoryScreenState extends State<InventoryScreen> {
     await penetapanController.getPenetapan(selectedId, modifiedTitle, page);
   }
 
+  // Future<void> loadPenetapanData() async {
+  //   page = page;
+  //   String departemenID = user.departemen_id.value;
+  //   await penetapanController.getPenetapan(departemenID, modifiedTitle, page);
+  // }
+
   void selectDepartemen(String selectedItem) {
     final department = departemenController.departemenList.firstWhere(
       (dept) => dept['nama'] == selectedItem,
       orElse: () => {'nama': '', 'kode': '', 'id': ''},
     );
-
+    
     setState(() {
       departemenSelected.text = department['nama'].toString();
       selectedSKPD = department['kode'].toString();
@@ -1761,6 +1778,24 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     hintText: 'Pilih Departemen',
                     onChanged: selectDepartemen,
                   ),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     border: Border.all(color: Colors.grey),
+                  //     borderRadius: BorderRadius.circular(12),
+                  //     color: Colors.grey.shade400,
+                  //   ),
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(left: 15),
+                  //     child: TextFormField(
+                  //       controller: departemenSelected,
+                  //       readOnly: true,
+                  //       decoration: const InputDecoration(
+                  //         border: InputBorder.none,
+                  //       ),
+                  //       style: TextStyle(fontWeight: FontWeight.bold),
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(height: 10),
                   RichText(
                     text: TextSpan(
@@ -1845,10 +1880,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   loadPenetapanData();
                 },
                 config: NumberPaginatorUIConfig(
-                    buttonUnselectedForegroundColor:
-                        Color.fromARGB(255, 18, 58, 146),
-                    buttonSelectedBackgroundColor:
-                        Color.fromARGB(255, 18, 58, 146)),
+                  buttonUnselectedForegroundColor:Color.fromARGB(255, 18, 58, 146),
+                  buttonSelectedBackgroundColor:Color.fromARGB(255, 18, 58, 146),
+                ),
               ),
             ),
           ],

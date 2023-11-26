@@ -35,16 +35,14 @@ class AppointmentController extends GetxController {
     tahun = TextEditingController();
   }
 
-  Future<void> _initData() async {
-    await satuanController.getSatuan();
-    await ruangController.getRuang();
-    await addressController.getKecamatan();
-  }
-
   Future<void> getPenetapan(String id, String kategori, int page) async {
     try {
       Get.dialog(Center(child: CircularProgressIndicator()),
           barrierDismissible: false);
+
+      satuanController.getSatuan();
+      ruangController.getRuang(id);
+      addressController.getKecamatan();
 
       final response = await _connect.get(ApiEndPoints.baseurl +
           ApiEndPoints.authEndPoints.getPenetapan +
@@ -64,7 +62,6 @@ class AppointmentController extends GetxController {
             penetapanData.map((item) => item as Map<String, dynamic>));
         totalPage.value = data['total_page'];
       }
-      _initData();
     } finally {
       Get.back();
     }
@@ -81,15 +78,14 @@ class AppointmentController extends GetxController {
           '/' +
           id);
 
-      print('INI ID');
-      print(id);
+      print('INI ID PENETAPAN: ${id}');
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = response.body;
         final Map<String, dynamic> penetapanDataById = data['data'];
 
         penetapanDataById.forEach((key, value) {
-          if (value == null) {
+          if (value == null || value == "-" || value == "_") {
             penetapanDataById[key] = "";
           }
         });
@@ -99,6 +95,15 @@ class AppointmentController extends GetxController {
         ];
 
         penetapanListById.assignAll(penetapanDataList);
+
+        final filteredList = addressController.kecamatanList.where((kecamatan) =>
+          kecamatan['kecamatan_kd'].toString() == penetapanListById[0]['alamat_kecamatan'].toString());
+
+        if (filteredList.isNotEmpty) {
+          Map<String, dynamic> kecamatanData = filteredList.first;
+          int idKecamatan = kecamatanData['id'];
+          await addressController.getKelurahan(idKecamatan.toString());
+        }
       }
 
       if (kategori == "A") {

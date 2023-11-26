@@ -5,9 +5,9 @@ class RoomController extends GetxController {
   final _connect = GetConnect();
   RxList<Map<String, dynamic>> ruangList = RxList<Map<String, dynamic>>([]);
 
-  Future<void> getRuang() async {
+  Future<void> getRuang(String id_departemen) async {
     final response = await _connect
-        .get(ApiEndPoints.baseurl + ApiEndPoints.authEndPoints.getRuangan);
+        .get(ApiEndPoints.baseurl + ApiEndPoints.authEndPoints.getRuangan + id_departemen);
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = response.body;

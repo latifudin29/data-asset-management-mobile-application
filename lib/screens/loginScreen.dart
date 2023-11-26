@@ -4,9 +4,11 @@ import 'package:get/get.dart';
 import 'package:kib_application/constans/colors.dart';
 import 'package:kib_application/controllers/loginController.dart';
 import 'package:kib_application/screens/homeScreen.dart';
+import 'package:kib_application/utils/sharedPrefs.dart';
 
 class LoginScreen extends StatelessWidget {
   final loginController = Get.put(LoginController());
+  final SharedPrefs user = Get.put(SharedPrefs());
   final bool _isObscure = true;
 
   @override
