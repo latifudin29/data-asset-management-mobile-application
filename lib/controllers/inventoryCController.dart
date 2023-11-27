@@ -6,7 +6,7 @@ import 'package:kib_application/utils/snackbar.dart';
 class InventoryCController extends GetxController {
   final _connect = GetConnect();
 
-  late TextEditingController kib_id, 
+  late TextEditingController kib_id,
       tgl_inventaris,
       skpd,
       skpd_uraian,
@@ -20,8 +20,7 @@ class InventoryCController extends GetxController {
       nama_spesifikasi_akhir,
       nama_spesifikasi_status,
       jumlah_awal,
-      jumlah_akhir,
-      jumlah_status,
+      c_luas_lantai,
       satuan,
       cara_perolehan_awal,
       cara_perolehan_akhir,
@@ -49,37 +48,15 @@ class InventoryCController extends GetxController {
       alamat_rt,
       alamat_rw,
       alamat_kodepos,
-      b_merk_awal,
-      b_merk_akhir,
-      b_merk_status,
-      b_cc_awal,
-      b_cc_akhir,
-      b_cc_status,
-      b_nomor_polisi_awal,
-      b_nomor_polisi_akhir,
-      b_nomor_polisi_status,
-      b_nomor_rangka_awal,
-      b_nomor_rangka_akhir,
-      b_nomor_rangka_status,
-      b_nomor_mesin_awal,
-      b_nomor_mesin_akhir,
-      b_nomor_mesin_status,
-      b_nomor_bpkb_awal,
-      b_nomor_bpkb_akhir,
-      b_nomor_bpkb_status,
-      b_bahan_awal,
-      b_bahan_akhir,
-      b_bahan_status,
-      b_nomor_pabrik_awal,
-      b_nomor_pabrik_akhir,
-      b_nomor_pabrik_status,
-      kartu_inv_awal,
-      kartu_inv_akhir,
-      kartu_inv_status,
-      barcode_barang,
-      barcode_barang_akhir,
-      barcode_ruangan,
-      barcode_ruangan_akhir,
+      // 
+      c_bertingkat,
+      c_beton,
+      c_luas_tanah_awal,
+      c_luas_tanah_akhir,
+      c_luas_tanah_status,
+      c_satuan_tanah,
+      c_status_tanah,
+      // 
       keberadaan_barang_status,
       kondisi_awal,
       kondisi_akhir,
@@ -118,6 +95,8 @@ class InventoryCController extends GetxController {
       tercatat_ganda_tanggal_perolehan,
       tercatat_ganda_kuasa_pengguna,
       pemilik_id,
+      lat,
+      long,
       lainnya,
       keterangan,
       file_nm,
@@ -140,8 +119,7 @@ class InventoryCController extends GetxController {
     nama_spesifikasi_akhir            = TextEditingController();
     nama_spesifikasi_status           = TextEditingController();
     jumlah_awal                       = TextEditingController();
-    jumlah_akhir                      = TextEditingController();
-    jumlah_status                     = TextEditingController();
+    c_luas_lantai                     = TextEditingController();
     satuan                            = TextEditingController();
     cara_perolehan_awal               = TextEditingController();
     cara_perolehan_akhir              = TextEditingController();
@@ -169,37 +147,13 @@ class InventoryCController extends GetxController {
     alamat_rt                         = TextEditingController();
     alamat_rw                         = TextEditingController();
     alamat_kodepos                    = TextEditingController();
-    b_merk_awal                       = TextEditingController();
-    b_merk_akhir                      = TextEditingController();
-    b_merk_status                     = TextEditingController();
-    b_cc_awal                         = TextEditingController();
-    b_cc_akhir                        = TextEditingController();
-    b_cc_status                       = TextEditingController();
-    b_nomor_polisi_awal               = TextEditingController();
-    b_nomor_polisi_akhir              = TextEditingController();
-    b_nomor_polisi_status             = TextEditingController();
-    b_nomor_rangka_awal               = TextEditingController();
-    b_nomor_rangka_akhir              = TextEditingController();
-    b_nomor_rangka_status             = TextEditingController();
-    b_nomor_mesin_awal                = TextEditingController();
-    b_nomor_mesin_akhir               = TextEditingController();
-    b_nomor_mesin_status              = TextEditingController();
-    b_nomor_bpkb_awal                 = TextEditingController();
-    b_nomor_bpkb_akhir                = TextEditingController();
-    b_nomor_bpkb_status               = TextEditingController();
-    b_bahan_awal                      = TextEditingController();
-    b_bahan_akhir                     = TextEditingController();
-    b_bahan_status                    = TextEditingController();
-    b_nomor_pabrik_awal               = TextEditingController();
-    b_nomor_pabrik_akhir              = TextEditingController();
-    b_nomor_pabrik_status             = TextEditingController();
-    kartu_inv_awal                    = TextEditingController();
-    kartu_inv_akhir                   = TextEditingController();
-    kartu_inv_status                  = TextEditingController();
-    barcode_barang                    = TextEditingController();
-    barcode_barang_akhir              = TextEditingController();
-    barcode_ruangan                   = TextEditingController();
-    barcode_ruangan_akhir             = TextEditingController();
+    c_bertingkat                      = TextEditingController();
+    c_beton                           = TextEditingController();
+    c_luas_tanah_awal                 = TextEditingController();
+    c_luas_tanah_akhir                = TextEditingController();
+    c_luas_tanah_status               = TextEditingController();
+    c_satuan_tanah                    = TextEditingController();
+    c_status_tanah                    = TextEditingController();
     keberadaan_barang_status          = TextEditingController();
     kondisi_awal                      = TextEditingController();
     kondisi_akhir                     = TextEditingController();
@@ -238,6 +192,8 @@ class InventoryCController extends GetxController {
     tercatat_ganda_tanggal_perolehan  = TextEditingController();
     tercatat_ganda_kuasa_pengguna     = TextEditingController();
     pemilik_id                        = TextEditingController();
+    lat                               = TextEditingController();
+    long                              = TextEditingController();
     lainnya                           = TextEditingController();
     keterangan                        = TextEditingController();
     file_nm                           = TextEditingController();
@@ -266,15 +222,15 @@ class InventoryCController extends GetxController {
         "nama_spesifikasi_akhir" : _getValue(data[8]),
         "nama_spesifikasi_status": int.tryParse(data[9]),
         "jumlah_awal"            : int.tryParse(data[10]),
-        "satuan"                 : _getValue(data[11]),
-        "cara_perolehan_awal"    : _getValue(data[12]),
-        "cara_perolehan_akhir"   : _getValue(data[13]),
-        "cara_perolehan_status"  : int.tryParse(data[14]),
-        "tgl_perolehan"          : _getValue(data[15]),
-        "tahun_perolehan"        : int.tryParse(data[16]),
-        "perolehan_awal"         : removeDot(_getValue(data[17])),
-        "perolehan_akhir"        : removeDot(_getValue(data[18])),
-        "perolehan_status"       : int.tryParse(data[19]),
+        "satuan"                 : _getValue(data[16]),
+        "cara_perolehan_awal"    : _getValue(data[17]),
+        "cara_perolehan_akhir"   : int.tryParse(data[18]),
+        "cara_perolehan_status"  : int.tryParse(data[19]),
+        "tgl_perolehan"          : _getValue(data[20]),
+        "tahun_perolehan"        : int.tryParse(data[21]),
+        "perolehan_awal"         : removeDot(_getValue(data[22])),
+        "perolehan_akhir"        : removeDot(_getValue(data[23])),
+        "perolehan_status"       : int.tryParse(data[24]),
       }
     };
 
@@ -300,4 +256,3 @@ class InventoryCController extends GetxController {
     }
   }
 }
-
