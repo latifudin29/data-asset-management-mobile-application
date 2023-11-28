@@ -5,7 +5,6 @@ import 'package:kib_application/screens/forms/editInventoryBScreen.dart';
 import 'package:kib_application/screens/forms/editInventoryCScreen.dart';
 import 'package:kib_application/screens/forms/editInventoryDScreen.dart';
 import 'package:kib_application/screens/forms/editInventoryEScreen.dart';
-import 'package:kib_application/screens/forms/editInventoryFScreen.dart';
 import 'package:kib_application/screens/forms/editInventoryTGRScreen.dart';
 import 'package:kib_application/screens/forms/editInventoryATBScreen.dart';
 import 'package:kib_application/screens/forms/editInventoryBelumTerdaftarScreen.dart';
@@ -128,8 +127,6 @@ class AppointmentController extends GetxController {
         Get.to(EditInventoryDScreen());
       } else if (kategori == "E") {
         Get.to(EditInventoryEScreen());
-      } else if (kategori == "F") {
-        Get.to(EditInventoryFScreen());
       } else if (kategori == "tgr") {
         Get.to(EditInventoryTGRScreen());
       } else if (kategori == "atb") {

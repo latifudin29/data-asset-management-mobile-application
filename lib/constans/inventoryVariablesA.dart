@@ -17,7 +17,6 @@ class InventoryVariablesA {
   String statusStatus           = "";
   String statusAtasNama         = "";
   String statusNamaPemakai      = "";
-  String statusBast             = "";
   String statusPempus           = "";
   String statusPdl              = "";
   String statusPl               = "";

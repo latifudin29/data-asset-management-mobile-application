@@ -50,7 +50,6 @@ class HomeScreen extends StatelessWidget {
       "Gedung/Bangunan (C)",
       "Jalan/Jaringan/Irigasi (D)",
       "Aset Tetap Lainnya (E)",
-      "KDP (F)",
       "Aset Lain-lain (TGR/RB/AK)",
       "Aset Lain-lain (ATB)",
       "Belum Terdaftar",

@@ -12,6 +12,7 @@ import 'package:kib_application/controllers/categoryController.dart';
 import 'package:kib_application/controllers/inventoryBController.dart';
 import 'package:kib_application/controllers/roomController.dart';
 import 'package:kib_application/controllers/unitController.dart';
+import 'package:kib_application/utils/snackbar.dart';
 
 class EditInventoryBScreen extends StatefulWidget {
   const EditInventoryBScreen({super.key});
@@ -4199,6 +4200,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     )),
                   ),
                   onTap: () {
+                    customSnackBar("Success", 'Berhasil Inventarisasi', 'success');
                       // List<String> data = [
                       //   editController.tgl_inventaris.text,
                       //   editController.no_register_awal.text,

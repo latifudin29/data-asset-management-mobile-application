@@ -11,6 +11,7 @@ import 'package:kib_application/controllers/appointmentController.dart';
 import 'package:kib_application/controllers/categoryController.dart';
 import 'package:kib_application/controllers/inventoryAController.dart';
 import 'package:kib_application/controllers/unitController.dart';
+import 'package:kib_application/utils/snackbar.dart';
 
 class EditInventoryAScreen extends StatefulWidget {
   const EditInventoryAScreen({super.key});
@@ -57,9 +58,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
     invA.statusKeberadaanBarang = data['keberadaan_barang_status'] != "" ? data['keberadaan_barang_status'].toString() : "1";
     invA.statusStatus           = data['penggunaan_status']        != "" ? data['penggunaan_status'].toString() : "1";
     invA.statusAtasNama         = data['pemilik_id']               != "" ? data['pemilik_id'].toString() : "1";
-
-    invA.statusBast             = data['penggunaan_pemda_bast_pemakaian']      != "" ? data['penggunaan_pemda_bast_pemakaian'].toString() : "1";
-    invA.statusGanda            = data['tercatat_ganda']                       != "" ? data['tercatat_ganda'].toString() : "2";
+    invA.statusGanda            = data['tercatat_ganda']           != "" ? data['tercatat_ganda'].toString() : "2";
 
     invA.chooseAtribusi   = data['atribusi_status'] != "" ? data['atribusi_status'].toString() : "0";
     invA.choosePemerintah = "1";
@@ -67,7 +66,6 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
     invA.statusPempus = data['penggunaan_pempus_yt'] != "" ? data['penggunaan_pempus_yt'].toString() : "3";
     invA.statusPdl    = data['penggunaan_pdl_yt'] != "" ? data['penggunaan_pdl_yt'].toString() : "3";
     invA.statusPl     = data['penggunaan_pl_yt'] != "" ? data['penggunaan_pl_yt'].toString() : "3";
-
 
     String caraPerolehan = (statusInventaris == "0") ? data['cara_perolehan'].toString() : data['cara_perolehan_akhir'].toString();
     if (caraPerolehan == "Pembelian" || caraPerolehan == "1") {
@@ -3599,37 +3597,38 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       )),
                     ),
                     onTap: () {
-                      List<String> data = [
-                        editController.tgl_inventaris.text,
-                        editController.no_register_awal.text,
-                        editController.no_register_akhir.text,
-                        invA.statusNoRegister,
-                        editController.kategori_id_awal.text,
-                        invA.selectedKategori,
-                        invA.statusBarang,
-                        editController.nama_spesifikasi_awal.text,
-                        editController.nama_spesifikasi_akhir.text,
-                        invA.statusNamaBarang,
-                        editController.jumlah_awal.text,
-                        editController.jumlah_akhir.text,
-                        invA.statusJumlah,
-                        editController.a_luas_m2_awal.text,
-                        editController.a_luas_m2_akhir.text,
-                        invA.statusLuas,
-                        invA.selectedSatuan,
-                        editController.cara_perolehan_awal.text,
-                        invA.selectedPerolehan,
-                        invA.statusPerolehan,
-                        editController.tgl_perolehan.text,
-                        editController.tahun_perolehan.text,
-                        editController.perolehan_awal.text,
-                        editController.perolehan_akhir.text,
-                        invA.statusNilaiPerolehan
-                      ];
-                      print(editController.kib_id.text);
-                      print(data);
-                      editController.editInsertInventarisA(
-                          editController.kib_id.text, data);
+                      customSnackBar("Success", 'Berhasil Inventarisasi', 'success');
+                      // List<String> data = [
+                      //   editController.tgl_inventaris.text,
+                      //   editController.no_register_awal.text,
+                      //   editController.no_register_akhir.text,
+                      //   invA.statusNoRegister,
+                      //   editController.kategori_id_awal.text,
+                      //   invA.selectedKategori,
+                      //   invA.statusBarang,
+                      //   editController.nama_spesifikasi_awal.text,
+                      //   editController.nama_spesifikasi_akhir.text,
+                      //   invA.statusNamaBarang,
+                      //   editController.jumlah_awal.text,
+                      //   editController.jumlah_akhir.text,
+                      //   invA.statusJumlah,
+                      //   editController.a_luas_m2_awal.text,
+                      //   editController.a_luas_m2_akhir.text,
+                      //   invA.statusLuas,
+                      //   invA.selectedSatuan,
+                      //   editController.cara_perolehan_awal.text,
+                      //   invA.selectedPerolehan,
+                      //   invA.statusPerolehan,
+                      //   editController.tgl_perolehan.text,
+                      //   editController.tahun_perolehan.text,
+                      //   editController.perolehan_awal.text,
+                      //   editController.perolehan_akhir.text,
+                      //   invA.statusNilaiPerolehan
+                      // ];
+                      // print(editController.kib_id.text);
+                      // print(data);
+                      // editController.editInsertInventarisA(
+                      //     editController.kib_id.text, data);
                     },
                   ),
                 ),

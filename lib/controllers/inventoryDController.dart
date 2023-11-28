@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kib_application/utils/apiEndpoints.dart';
 import 'package:kib_application/utils/snackbar.dart';
 
-class InventoryCController extends GetxController {
+class InventoryDController extends GetxController {
   final _connect = GetConnect();
 
   late TextEditingController kib_id,
@@ -20,7 +20,6 @@ class InventoryCController extends GetxController {
       nama_spesifikasi_akhir,
       nama_spesifikasi_status,
       jumlah_awal,
-      c_luas_lantai,
       satuan,
       cara_perolehan_awal,
       cara_perolehan_akhir,
@@ -48,15 +47,6 @@ class InventoryCController extends GetxController {
       alamat_rt,
       alamat_rw,
       alamat_kodepos,
-      // 
-      c_bertingkat,
-      c_beton,
-      c_luas_tanah_awal,
-      c_luas_tanah_akhir,
-      c_luas_tanah_status,
-      c_satuan_tanah,
-      c_status_tanah,
-      // 
       keberadaan_barang_status,
       kondisi_awal,
       kondisi_akhir,
@@ -88,6 +78,41 @@ class InventoryCController extends GetxController {
       penggunaan_pl_y_nm,
       penggunaan_pl_y_doc,
       penggunaan_pl_t_nm,
+      d_status_tanah_awal,
+      d_status_tanah_akhir,
+      d_status_tanah_status,
+      d_lokasi_awal,
+      d_lokasi_akhir,
+      d_lokasi_status,
+      d_jenis_pengkerasan_jln_awal,
+      d_jenis_pengkerasan_jln_akhir,
+      d_jenis_pengkerasan_jln_status,
+      d_jenis_bahan_jembatan_awal,
+      d_jenis_bahan_jembatan_akhir,
+      d_jenis_bahan_jembatan_status,
+      d_nomor_ruas_jln_awal,
+      d_nomor_ruas_jln_akhir,
+      d_nomor_ruas_jln_status,
+      d_nomor_jaringan_irigasi_awal,
+      d_nomor_jaringan_irigasi_akhir,
+      d_nomor_jaringan_irigasi_status,
+      d_konstruksi_awal,
+      d_konstruksi_akhir,
+      d_konstruksi_status,
+      d_panjang_awal,
+      d_panjang_akhir,
+      d_panjang_status,
+      d_panjang_satuan,
+      d_lebar_awal,
+      d_lebar_akhir,
+      d_lebar_status,
+      d_lebar_satuan,
+      d_luas_awal,
+      d_luas_akhir,
+      d_luas_status,
+      d_luas_satuan,
+      d_luas_tanah,
+      d_status_tanah,
       tercatat_ganda,
       tercatat_ganda_nibar,
       tercatat_ganda_no_register,
@@ -124,7 +149,6 @@ class InventoryCController extends GetxController {
     nama_spesifikasi_akhir               = TextEditingController();
     nama_spesifikasi_status              = TextEditingController();
     jumlah_awal                          = TextEditingController();
-    c_luas_lantai                        = TextEditingController();
     satuan                               = TextEditingController();
     cara_perolehan_awal                  = TextEditingController();
     cara_perolehan_akhir                 = TextEditingController();
@@ -152,13 +176,6 @@ class InventoryCController extends GetxController {
     alamat_rt                            = TextEditingController();
     alamat_rw                            = TextEditingController();
     alamat_kodepos                       = TextEditingController();
-    c_bertingkat                         = TextEditingController();
-    c_beton                              = TextEditingController();
-    c_luas_tanah_awal                    = TextEditingController();
-    c_luas_tanah_akhir                   = TextEditingController();
-    c_luas_tanah_status                  = TextEditingController();
-    c_satuan_tanah                       = TextEditingController();
-    c_status_tanah                       = TextEditingController();
     keberadaan_barang_status             = TextEditingController();
     kondisi_awal                         = TextEditingController();
     kondisi_akhir                        = TextEditingController();
@@ -190,6 +207,41 @@ class InventoryCController extends GetxController {
     penggunaan_pl_y_nm                   = TextEditingController();
     penggunaan_pl_y_doc                  = TextEditingController();
     penggunaan_pl_t_nm                   = TextEditingController();
+    d_status_tanah_awal                  = TextEditingController();
+    d_status_tanah_akhir                 = TextEditingController();
+    d_status_tanah_status                = TextEditingController();
+    d_lokasi_awal                        = TextEditingController();
+    d_lokasi_akhir                       = TextEditingController();
+    d_lokasi_status                      = TextEditingController();
+    d_jenis_pengkerasan_jln_awal         = TextEditingController();
+    d_jenis_pengkerasan_jln_akhir        = TextEditingController();
+    d_jenis_pengkerasan_jln_status       = TextEditingController();
+    d_jenis_bahan_jembatan_awal          = TextEditingController();
+    d_jenis_bahan_jembatan_akhir         = TextEditingController();
+    d_jenis_bahan_jembatan_status        = TextEditingController();
+    d_nomor_ruas_jln_awal                = TextEditingController();
+    d_nomor_ruas_jln_akhir               = TextEditingController();
+    d_nomor_ruas_jln_status              = TextEditingController();
+    d_nomor_jaringan_irigasi_awal        = TextEditingController();
+    d_nomor_jaringan_irigasi_akhir       = TextEditingController();
+    d_nomor_jaringan_irigasi_status      = TextEditingController();
+    d_konstruksi_awal                    = TextEditingController();
+    d_konstruksi_akhir                   = TextEditingController();
+    d_konstruksi_status                  = TextEditingController();
+    d_panjang_awal                       = TextEditingController();
+    d_panjang_akhir                      = TextEditingController();
+    d_panjang_status                     = TextEditingController();
+    d_panjang_satuan                     = TextEditingController();
+    d_lebar_awal                         = TextEditingController();
+    d_lebar_akhir                        = TextEditingController();
+    d_lebar_status                       = TextEditingController();
+    d_lebar_satuan                       = TextEditingController();
+    d_luas_awal                          = TextEditingController();
+    d_luas_akhir                         = TextEditingController();
+    d_luas_status                        = TextEditingController();
+    d_luas_satuan                        = TextEditingController();
+    d_luas_tanah                         = TextEditingController();
+    d_status_tanah                       = TextEditingController();
     tercatat_ganda                       = TextEditingController();
     tercatat_ganda_nibar                 = TextEditingController();
     tercatat_ganda_no_register           = TextEditingController();

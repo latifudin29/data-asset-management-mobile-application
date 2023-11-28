@@ -11,6 +11,7 @@ import 'package:kib_application/controllers/appointmentController.dart';
 import 'package:kib_application/controllers/categoryController.dart';
 import 'package:kib_application/controllers/inventoryCController.dart';
 import 'package:kib_application/controllers/unitController.dart';
+import 'package:kib_application/utils/snackbar.dart';
 
 class EditInventoryCScreen extends StatefulWidget {
   const EditInventoryCScreen({super.key});
@@ -21,11 +22,11 @@ class EditInventoryCScreen extends StatefulWidget {
 
 class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
   final penetapanController = Get.put(AppointmentController());
+  final editController      = Get.put(InventoryCController());
   final kategoriController  = Get.put(CategoryController());
   final satuanController    = Get.put(UnitController());
   final addressController   = Get.put(AddressController());
   final invC                = Get.put(InventoryVariablesC());
-  final editController      = Get.put(InventoryCController());
 
   DateTime now = DateTime.now();
 
@@ -33,34 +34,64 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
   void initState() {
     super.initState();
     final data         = penetapanController.penetapanListById[0];
+    final filteredList = addressController.kecamatanList
+      .where((kecamatan) => kecamatan['kecamatan_kd'].toString() == data['alamat_kecamatan'].toString());
 
     String statusInventaris = data['status_inventaris'].toString();
     editController.kib_id.text = data['kib_id'].toString();
 
-    invC.statusNoRegister     = data['no_register_status']      != "" ? data['no_register_status'].toString() : "1";
-    invC.statusBarang         = data['kategori_id_status']      != "" ? data['kategori_id_status'].toString() : "1";
-    invC.statusNamaBarang     = data['nama_spesifikasi_status'] != "" ? data['nama_spesifikasi_status'].toString() : "1";
-    invC.statusLuasLantai     = "";
-    invC.statusPerolehan      = data['cara_perolehan_status']   != "" ? data['cara_perolehan_status'].toString() : "1";
-    invC.statusNilaiPerolehan = data['perolehan_status']        != "" ? data['perolehan_status'].toString() : "1";
-    invC.statusAlamat         = data['a_alamat_status']         != "" ? data['a_alamat_status'].toString() : "1";
-    invC.statusLuasTanah      = "";
-    invC.statusKondisi        = data['kondisi_status']          != "" ? data['kondisi_status'].toString() : "1";
-    invC.statusAsalUsul       = data['asal_usul_status']        != "" ? data['asal_usul_status'].toString() : "1";
+    invC.statusNoRegister       = data['no_register_status']                   != "" ? data['no_register_status'].toString() : "1";
+    invC.statusBarang           = data['kategori_id_status']                   != "" ? data['kategori_id_status'].toString() : "1";
+    invC.statusNamaBarang       = data['nama_spesifikasi_status']              != "" ? data['nama_spesifikasi_status'].toString() : "1";
+    invC.statusLuasLantai       = "1";
+    invC.statusPerolehan        = data['cara_perolehan_status']                != "" ? data['cara_perolehan_status'].toString() : "1";
+    invC.statusNilaiPerolehan   = data['perolehan_status']                     != "" ? data['perolehan_status'].toString() : "1";
+    invC.statusAlamat           = data['a_alamat_status']                      != "" ? data['a_alamat_status'].toString() : "1";
+    invC.statusLuasTanah        = data['c_luas_tanah_status']                  != "" ? data['c_luas_tanah_status'].toString() : "1";
+    invC.statusKondisi          = data['kondisi_status']                       != "" ? data['kondisi_status'].toString() : "1";
+    invC.statusAsalUsul         = data['asal_usul_status']                     != "" ? data['asal_usul_status'].toString() : "1";
+    invC.statusAtribusi         = data['atribusi_status']                      != "" ? data['atribusi_status'].toString() : "0";
+    invC.statusKeberadaanBarang = data['keberadaan_barang_status']             != "" ? data['keberadaan_barang_status'].toString() : "1";
+    invC.statusStatus           = data['penggunaan_status']                    != "" ? data['penggunaan_status'].toString() : "1";
+    invC.statusAtasNama         = data['pemilik_id']                           != "" ? data['pemilik_id'].toString() : "1";
+    invC.statusNamaPemakai      = data['penggunaan_pemda_nama_pemakai_status'] != "" ? data['penggunaan_pemda_nama_pemakai_status'].toString() : "1";
+    invC.statusBast             = data['penggunaan_pemda_bast_pemakaian']      != "" ? data['penggunaan_pemda_bast_pemakaian'].toString() : "1";
+    invC.statusSIP              = data['penggunaan_pemda_sip']                 != "" ? data['penggunaan_pemda_sip'].toString() : "1";
+    invC.statusIMB              = data['penggunaan_pemda_imb']                 != "" ? data['penggunaan_pemda_imb'].toString() : "1";
+    invC.statusGanda            = data['tercatat_ganda']                       != "" ? data['tercatat_ganda'].toString() : "2";
+    invC.statusPempus           = data['penggunaan_pempus_yt']                 != "" ? data['penggunaan_pempus_yt'].toString() : "3";
+    invC.statusPdl              = data['penggunaan_pdl_yt']                    != "" ? data['penggunaan_pdl_yt'].toString() : "3";
+    invC.statusPl               = data['penggunaan_pl_yt']                     != "" ? data['penggunaan_pl_yt'].toString() : "3";
 
+    invC.chooseAtribusi   = data['atribusi_status'] != "" ? data['atribusi_status'].toString() : "0";
+    invC.choosePemerintah = "1";
 
     String caraPerolehan = (statusInventaris == "0") ? data['cara_perolehan'].toString() : data['cara_perolehan_akhir'].toString();
-    if (caraPerolehan == "Pembelian") {
+    if (caraPerolehan == "Pembelian" || caraPerolehan == "1") {
       invC.selectedPerolehan = "1";
-    } else if (caraPerolehan == "Hibah") {
+    } else if (caraPerolehan == "Hibah" || caraPerolehan == "2") {
       invC.selectedPerolehan = "2";
-    } else if (caraPerolehan == "Barang & Jasa") {
+    } else if (caraPerolehan == "Barang & Jasa" || caraPerolehan == "3") {
       invC.selectedPerolehan = "3";
-    } else if (caraPerolehan == "Hasil Inventarisasi") {
+    } else if (caraPerolehan == "Hasil Inventarisasi" || caraPerolehan == "4") {
       invC.selectedPerolehan = "4";
     } else {
       invC.selectedPerolehan = "";
-    }    
+    }
+
+    String bertingkatTidak = (statusInventaris == "0") ? data['c_bertingkat_tidak'].toString() : data['c_bertingkat'].toString();
+    if (bertingkatTidak == "Bertingkat") {
+      invC.statusBertingkat = "1";
+    } else {
+      invC.statusBertingkat = "0";
+    }
+
+    String betonTidak = (statusInventaris == "0") ? data['c_beton_tidak'].toString() : data['c_beton'].toString();
+    if (betonTidak == "Beton") {
+      invC.statusBeton = "1";
+    } else {
+      invC.statusBeton = "0";
+    }
 
     editController.tgl_inventaris.text                    = (statusInventaris == "0") ? DateFormat('dd-MM-yyyy').format(now) : data['tgl_inventaris_formatted'].toString();
     editController.skpd.text                              = data['departemen_kd'].toString();
@@ -82,112 +113,71 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
     editController.tahun_perolehan.text                   = (statusInventaris == "0") ? data['th_beli'].toString() : data['tahun_perolehan'].toString();
     editController.perolehan_awal.text                    = (statusInventaris == "0") ? data['perolehan_formatted'].toString() : data['perolehan_awal_formatted'].toString();
     editController.perolehan_akhir.text                   = (statusInventaris == "0") ? data['perolehan_formatted'].toString() : data['perolehan_akhir_formatted'].toString();
-    editController.atribusi_status.text                   = data['atribusi_status'].toString();
     editController.atribusi_nibar.text                    = data['atribusi_nibar'].toString();
     editController.atribusi_kode_barang.text              = data['atribusi_kode_barang'].toString();
     editController.atribusi_kode_lokasi.text              = data['atribusi_kode_lokasi'].toString();
     editController.atribusi_no_register.text              = data['atribusi_no_register'].toString();
     editController.atribusi_nama_barang.text              = data['atribusi_nama_barang'].toString();
     editController.atribusi_spesifikasi_barang.text       = data['atribusi_spesifikasi_barang'].toString();
-    editController.a_alamat_awal.text                     = (statusInventaris == "0") ? data['a_alamat'].toString() : data['a_alamat_awal'].toString();
+    editController.a_alamat_awal.text                     = (statusInventaris == "0") ? data['c_lokasi'].toString() : data['c_lokasi_awal'].toString();
     editController.alamat_kota.text                       = data['alamat_kota'] != "" ? data['alamat_kota'].toString() : "KOTA BOGOR";
     invC.selectedKecamatan                                = data['alamat_kecamatan'].toString();
-    invC.selectedKelurahan                                = data['alamat_kelurahan'].toString();
-    editController.alamat_jalan.text                      = data['alamat_jalan'].toString();
-    editController.alamat_no.text                         = data['alamat_no'].toString();
-    editController.alamat_rt.text                         = data['alamat_rt'].toString();
-    editController.alamat_rw.text                         = data['alamat_rw'].toString();
-    editController.alamat_kodepos.text                    = data['alamat_kodepos'].toString();
-    // 
-    // 
-    editController.keberadaan_barang_status.text          = data['keberadaan_barang_status'].toString();
-    editController.kondisi_awal.text                      = (statusInventaris == "0") ? data['kondisi'].toString() : data['kondisi_awal'].toString();
-    invC.selectedKondisi                                  = (statusInventaris == "0") ? data['kondisi'].toString() : data['kondisi_akhir'].toString();
-    editController.asal_usul_awal.text                    = (statusInventaris == "0") ? data['asal_usul'].toString() : data['asal_usul_awal'].toString();
-    editController.asal_usul_akhir.text                   = (statusInventaris == "0") ? data['asal_usul'].toString() : data['asal_usul_akhir'].toString();
-    editController.penggunaan_status.text                 = data['penggunaan_status'].toString();
-    editController.penggunaan_awal.text                   = (statusInventaris == "0") ? data['a_penggunaan'].toString() : data['penggunaan_awal'].toString();
-    editController.penggunaan_pemda_status.text           = data['penggunaan_pemda_status'].toString();
-    editController.penggunaan_pemda_akhir.text            = data['penggunaan_pemda_akhir'].toString();
-    editController.penggunaan_pempus_status.text          = data['penggunaan_pempus_status'].toString();
-    editController.penggunaan_pempus_yt.text              = data['penggunaan_pempus_yt'].toString();
-    editController.penggunaan_pempus_y_nm.text            = data['penggunaan_pempus_y_nm'].toString();
-    editController.penggunaan_pempus_y_doc.text           = data['penggunaan_pempus_y_doc'].toString();
-    editController.penggunaan_pempus_t_nm.text            = data['penggunaan_pempus_t_nm'].toString();
-    editController.penggunaan_pdl_status.text             = data['penggunaan_pdl_status'].toString();
-    editController.penggunaan_pdl_yt.text                 = data['penggunaan_pdl_yt'].toString();
-    editController.penggunaan_pdl_y_nm.text               = data['penggunaan_pdl_y_nm'].toString();
-    editController.penggunaan_pdl_y_doc.text              = data['penggunaan_pdl_y_doc'].toString();
-    editController.penggunaan_pdl_t_nm.text               = data['penggunaan_pdl_t_nm'].toString();
-    editController.penggunaan_pl_status.text              = data['penggunaan_pl_status'].toString();
-    editController.penggunaan_pl_yt.text                  = data['penggunaan_pl_yt'].toString();
-    editController.penggunaan_pl_y_nm.text                = data['penggunaan_pl_y_nm'].toString();
-    editController.penggunaan_pl_y_doc.text               = data['penggunaan_pl_y_doc'].toString();
-    editController.penggunaan_pl_t_nm.text                = data['penggunaan_pl_t_nm'].toString();
-    editController.tercatat_ganda.text                    = data['tercatat_ganda'].toString();
-    editController.tercatat_ganda_nibar.text              = data['tercatat_ganda_nibar'].toString();
-    editController.tercatat_ganda_no_register.text        = data['tercatat_ganda_no_register'].toString();
-    editController.tercatat_ganda_kode_barang.text        = data['tercatat_ganda_kode_barang'].toString();
-    editController.tercatat_ganda_nama_barang.text        = data['tercatat_ganda_nama_barang'].toString();
-    editController.tercatat_ganda_spesifikasi_barang.text = data['tercatat_ganda_spesifikasi_barang'].toString();
-    editController.tercatat_ganda_luas.text               = data['tercatat_ganda_luas'].toString();
-    editController.tercatat_ganda_satuan.text             = data['tercatat_ganda_satuan'].toString();
-    editController.tercatat_ganda_perolehan.text          = data['tercatat_ganda_perolehan'].toString();
-    editController.tercatat_ganda_tanggal_perolehan.text  = data['tercatat_ganda_tanggal_perolehan'].toString();
-    editController.tercatat_ganda_kuasa_pengguna.text     = data['tercatat_ganda_kuasa_pengguna'].toString();
-    editController.pemilik_id.text                        = data['pemilik_id'].toString();
-    editController.lat.text                               = (statusInventaris == "0") ? data['lat_penetapan'].toString() : data['lat_inventaris'].toString();
-    editController.long.text                              = (statusInventaris == "0") ? data['long_penetapan'].toString() : data['long_inventaris'].toString();
-    editController.lainnya.text                           = data['lainnya'].toString();
-    editController.keterangan.text                        = (statusInventaris == "0") ? data['keterangan_penetapan'].toString() : data['keterangan_inventaris'].toString();
-    editController.file_nm.text                           = data['file_nm'].toString();
-    editController.petugas.text                           = data['petugas'].toString();
+    if (filteredList.isNotEmpty) {
+      final Map<String, dynamic> selectedKecamatan = filteredList.first;
+      int idKecamatan = selectedKecamatan['id'];
+      invC.selectedKelurahan = (idKecamatan.toString() == "1") ? "000" : data['alamat_kelurahan'].toString();
+    }
+    editController.alamat_jalan.text                        = data['alamat_jalan'].toString();
+    editController.alamat_no.text                           = data['alamat_no'].toString();
+    editController.alamat_rt.text                           = data['alamat_rt'].toString();
+    editController.alamat_rw.text                           = data['alamat_rw'].toString();
+    editController.alamat_kodepos.text                      = data['alamat_kodepos'].toString();
+    editController.c_luas_tanah_awal.text                   = data['c_luas_tanah_awal']  != "" ? data['c_luas_tanah_awal'].toString() : "";
+    editController.c_luas_tanah_akhir.text                  = data['c_luas_tanah_akhir'] != "" ? data['c_luas_tanah_akhir'].toString() : "";
+    invC.statusSatuan                                       = (statusInventaris == "0") ? "M2" : data['c_satuan_tanah'].toString();
+    invC.selectedStatusTanah                                = (statusInventaris == "0") ? "Hak Milik" : data['c_status_tanah_awal'].toString();
+    editController.kondisi_awal.text                        = (statusInventaris == "0") ? data['kondisi'].toString() : data['kondisi_awal'].toString();
+    invC.selectedKondisi                                    = (statusInventaris == "0") ? data['kondisi'].toString() : data['kondisi_akhir'].toString();
+    editController.asal_usul_awal.text                      = (statusInventaris == "0") ? data['asal_usul'].toString() : data['asal_usul_awal'].toString();
+    editController.asal_usul_akhir.text                     = (statusInventaris == "0") ? data['asal_usul'].toString() : data['asal_usul_akhir'].toString();
+    editController.penggunaan_awal.text                     = (statusInventaris == "0") ? data['a_penggunaan'].toString() : data['penggunaan_awal'].toString();
+    editController.penggunaan_pemda_status.text             = data['penggunaan_pemda_status'].toString();
+    editController.penggunaan_pemda_akhir.text              = data['penggunaan_pemda_akhir'].toString();
+    editController.penggunaan_pemda_nama_pemakai.text       = data['penggunaan_pemda_nama_pemakai'].toString();
+    editController.penggunaan_pemda_nama_pemakai_akhir.text = data['penggunaan_pemda_nama_pemakai_akhir'].toString();
+    editController.penggunaan_pemda_status_pemakai.text     = data['penggunaan_pemda_status_pemakai'].toString();
+    editController.penggunaan_pempus_status.text            = data['penggunaan_pempus_status'].toString();
+    editController.penggunaan_pempus_yt.text                = data['penggunaan_pempus_yt'].toString();
+    editController.penggunaan_pempus_y_nm.text              = data['penggunaan_pempus_y_nm'].toString();
+    editController.penggunaan_pempus_y_doc.text             = data['penggunaan_pempus_y_doc'].toString();
+    editController.penggunaan_pempus_t_nm.text              = data['penggunaan_pempus_t_nm'].toString();
+    editController.penggunaan_pdl_status.text               = data['penggunaan_pdl_status'].toString();
+    editController.penggunaan_pdl_yt.text                   = data['penggunaan_pdl_yt'].toString();
+    editController.penggunaan_pdl_y_nm.text                 = data['penggunaan_pdl_y_nm'].toString();
+    editController.penggunaan_pdl_y_doc.text                = data['penggunaan_pdl_y_doc'].toString();
+    editController.penggunaan_pdl_t_nm.text                 = data['penggunaan_pdl_t_nm'].toString();
+    editController.penggunaan_pl_status.text                = data['penggunaan_pl_status'].toString();
+    editController.penggunaan_pl_yt.text                    = data['penggunaan_pl_yt'].toString();
+    editController.penggunaan_pl_y_nm.text                  = data['penggunaan_pl_y_nm'].toString();
+    editController.penggunaan_pl_y_doc.text                 = data['penggunaan_pl_y_doc'].toString();
+    editController.penggunaan_pl_t_nm.text                  = data['penggunaan_pl_t_nm'].toString();
+    editController.tercatat_ganda_nibar.text                = data['tercatat_ganda_nibar'].toString();
+    editController.tercatat_ganda_no_register.text          = data['tercatat_ganda_no_register'].toString();
+    editController.tercatat_ganda_kode_barang.text          = data['tercatat_ganda_kode_barang'].toString();
+    editController.tercatat_ganda_nama_barang.text          = data['tercatat_ganda_nama_barang'].toString();
+    editController.tercatat_ganda_spesifikasi_barang.text   = data['tercatat_ganda_spesifikasi_barang'].toString();
+    editController.tercatat_ganda_luas.text                 = data[ 'tercatat_ganda_luas'].toString();
+    editController.tercatat_ganda_satuan.text               = data['tercatat_ganda_satuan'].toString();
+    editController.tercatat_ganda_perolehan.text            = data['tercatat_ganda_perolehan'].toString();
+    editController.tercatat_ganda_tanggal_perolehan.text    = data['tercatat_ganda_tanggal_perolehan'].toString();
+    editController.tercatat_ganda_kuasa_pengguna.text       = data['tercatat_ganda_kuasa_pengguna'].toString();
+    editController.lat.text                                 = (statusInventaris == "0") ? data['lat_penetapan'].toString() : data['lat_inventaris'].toString();
+    editController.long.text                                = (statusInventaris == "0") ? data['long_penetapan'].toString() : data['long_inventaris'].toString();
+    editController.lainnya.text                             = data['lainnya'].toString();
+    editController.keterangan.text                          = (statusInventaris == "0") ? data['keterangan_penetapan'].toString() : data['keterangan_inventaris'].toString();
+    editController.file_nm.text                             = data['file_nm'].toString();
+    editController.petugas.text                             = data['petugas'].toString();
   }
-
-  Map<String, String> dropdownPerolehan = {
-    "1": "Pembelian",
-    "2": "Hibah",
-    "3": "Barang & Jasa",
-    "4": "Hasil Inventarisasi",
-  };
-
-  List<String> dropdownKondisi = ["B", "RR", "RB"];
-
-  // BAWAH BELUM
-  List<String> keteranganQuestion = ["Ya", "Bukan"];
-  String statusQuestion = "Bukan";
-
-  List<String> keteranganKeberadaanBarang = [
-    "Ada",
-    "Tidak ada/Tidak ditemukan"
-  ];
-  String statusKeberadaanBarang = "Ada";
-
-  List<String> keteranganStatus = ["Sedang digunakan", "Tidak digunakan"];
-  String statusStatus = "Sedang digunakan";
-
-  List<String> keteranganPenggunaanDaerahPusat = ["Ada", "Tidak"];
-  String statusPenggunaanDaerahPusat = "Tidak";
-
-  List<String> keteranganPenggunaanDaerahLain = ["Ada", "Tidak"];
-  String statusPenggunaanDaerahLain = "Tidak";
-
-  List<String> keteranganPenggunaanPihakLain = ["Ada", "Tidak"];
-  String statusPenggunaanPihakLain = "Tidak";
-
-  List<String> keteranganGanda = ["Ya", "Tidak"];
-  String statusGanda = "Tidak";
-
-  List<String> keteranganAtasNama = [
-    "Pemerintah Daerah",
-    "Pemerintah Daerah Lainnya",
-    "Pemerintah Pusat",
-    "Pihak Lain"
-  ];
-  String statusAtasNama = "Pemerintah Daerah";
-
-  String choose = "tidak";
-  String choose_pemerintah = "daerah";
 
   final ImagePicker _picker = ImagePicker();
   File? image;
@@ -971,7 +961,7 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                                 ),
                                 iconEnabledColor: primaryTextColor,
                               ),
-                              value: dropdownPerolehan.keys
+                              value: invC.dropdownPerolehan.keys
                                       .contains(invC.selectedPerolehan)
                                   ? invC.selectedPerolehan
                                   : null,
@@ -980,12 +970,11 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                                   invC.selectedPerolehan =
                                       newValue ?? invC.selectedPerolehan;
                                 });
-                                print(invC.selectedPerolehan);
                               },
-                              items: dropdownPerolehan.keys.map((String item) {
+                              items: invC.dropdownPerolehan.entries.map((entry) {
                                 return DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(dropdownPerolehan[item]!),
+                                  value: entry.key,
+                                  child: Text(entry.value),
                                 );
                               }).toList(),
                             ),
@@ -1177,52 +1166,239 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                           ),
                           iconEnabledColor: primaryTextColor,
                         ),
-                        value: statusQuestion,
+                        value: invC.statusAtribusi,
                         onChanged: (String? newValue) {
                           setState(() {
-                            statusQuestion = newValue ?? "Bukan";
+                            invC.statusAtribusi = newValue ?? invC.statusAtribusi;
                           });
                         },
-                        items: keteranganQuestion.map((String item) {
+                        items: invC.keteranganAtribusi.map((String item) {
                           return DropdownMenuItem<String>(
-                            value: item,
+                            value: invC.keteranganAtribusi.indexOf(item) == 0 ? "1" : "0",
                             child: Text(item),
                           );
                         }).toList(),
                       ),
                     ),
                     SizedBox(height: 10),
-                    statusQuestion == "Ya"
+                    invC.statusAtribusi == "1"
                         ? Column(
                             children: [
                               RadioListTile(
                                 title:
                                     Text("Tidak diketahui data awal/induknya"),
-                                value: "tidak",
-                                groupValue: choose,
+                                value: "0",
+                                groupValue: invC.chooseAtribusi,
                                 onChanged: (value) {
                                   setState(() {
-                                    choose = value.toString();
+                                    invC.chooseAtribusi = value.toString();
                                   });
                                 },
                               ),
                               RadioListTile(
                                 title: Text(
                                     "Ya, Diketahui data awal/Induknya dan sebutkan data barang awal/induknya"),
-                                value: "ya",
-                                groupValue: choose,
+                                value: "1",
+                                groupValue: invC.chooseAtribusi,
                                 onChanged: (value) {
                                   setState(() {
-                                    choose = value.toString();
+                                    invC.chooseAtribusi = value.toString();
                                   });
                                 },
                               ),
                             ],
                           )
                         : SizedBox(),
-                  ],
-                ),
-                SizedBox(height: 15),
+                    SizedBox(height: 10),
+                    invC.chooseAtribusi == "1" 
+                        ? Column(
+                            children: [
+                              // Nibar
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Nibar',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  SizedBox(height: 10),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: Colors.grey.shade400,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: TextFormField(
+                                        controller: editController.atribusi_nibar,
+                                        readOnly: true,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 15),
+                              // Kode Barang
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Kode Barang',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  SizedBox(height: 10),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: Colors.grey.shade400,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: TextFormField(
+                                        controller: editController.atribusi_kode_barang,
+                                        readOnly: true,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 15),
+                              // Kode Lokasi
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Kode Lokasi',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  SizedBox(height: 10),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: Colors.grey.shade400,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: TextFormField(
+                                        controller: editController.atribusi_kode_lokasi,
+                                        readOnly: true,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 15),
+                              // Kode Register
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Kode Register',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  SizedBox(height: 10),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: Colors.grey.shade400,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: TextFormField(
+                                        controller: editController.atribusi_no_register,
+                                        readOnly: true,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 15),
+                              // Nama Barang
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Nama Barang',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  SizedBox(height: 10),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: Colors.grey.shade400,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: TextFormField(
+                                        controller: editController.atribusi_nama_barang,
+                                        readOnly: true,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 15),
+                              // Spesifikasi Barang
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Spesifikasi Barang',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  SizedBox(height: 10),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: Colors.grey.shade400,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: TextFormField(
+                                        controller: editController.atribusi_spesifikasi_barang,
+                                        readOnly: true,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 15),
+                            ],
+                          ) 
+                        : SizedBox(),
+                    ],
+                  ),
+                SizedBox(height: 10),
                 // Alamat
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1551,6 +1727,286 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                   ],
                 ),
                 SizedBox(height: 15),
+                // Bertingkat/Tidak
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Bertingkat/Tidak',
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(height: 10),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        buttonStyleData: ButtonStyleData(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                        isExpanded: true,
+                        iconStyleData: const IconStyleData(
+                          icon: Icon(
+                            Icons.arrow_drop_down_outlined,
+                            color: Colors.grey,
+                            size: 25,
+                          ),
+                          iconEnabledColor: primaryTextColor,
+                        ),
+                        value: invC.statusBertingkat,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            invC.statusBertingkat = newValue ?? invC.statusBertingkat;
+                          });
+                        },
+                        items: invC.keteranganBertingkat.map((String item) {
+                          return DropdownMenuItem<String>(
+                            value: invC.keteranganBertingkat.indexOf(item) == 0 ? "1" : "0",
+                            child: Text(item),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15),
+                // Beton/Tidak
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Beton/Tidak',
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(height: 10),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        buttonStyleData: ButtonStyleData(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                        isExpanded: true,
+                        iconStyleData: const IconStyleData(
+                          icon: Icon(
+                            Icons.arrow_drop_down_outlined,
+                            color: Colors.grey,
+                            size: 25,
+                          ),
+                          iconEnabledColor: primaryTextColor,
+                        ),
+                        value: invC.statusBeton,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            invC.statusBeton = newValue ?? invC.statusBeton;
+                          });
+                        },
+                        items: invC.keteranganBeton.map((String item) {
+                          return DropdownMenuItem<String>(
+                            value: invC.keteranganBeton.indexOf(item) == 0 ? "1" : "0",
+                            child: Text(item),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15),
+                // Luas Tanah
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Luas Tanah',
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.grey.shade400,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 15),
+                              child: TextFormField(
+                                controller: editController.c_luas_tanah_awal,
+                                readOnly: true,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            buttonStyleData: ButtonStyleData(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                            iconStyleData: const IconStyleData(
+                              icon: Icon(
+                                Icons.arrow_drop_down_outlined,
+                                color: Colors.grey,
+                                size: 25,
+                              ),
+                              iconEnabledColor: primaryTextColor,
+                            ),
+                            value: invC.statusLuasTanah,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                invC.statusLuasTanah =
+                                    newValue ?? invC.statusLuasTanah;
+                              });
+                            },
+                            items: invC.keteranganLuasTanah.map((String item) {
+                              return DropdownMenuItem<String>(
+                                value:
+                                    invC.keteranganLuasTanah.indexOf(item) == 0
+                                        ? "1"
+                                        : "2",
+                                child: Text(item),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    invC.statusLuasTanah == "2"
+                        ? Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 15),
+                              child: TextFormField(
+                                controller: editController.c_luas_tanah_akhir,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          )
+                        : SizedBox(),
+                  ],
+                ),
+                SizedBox(height: 15),
+                // Satuan Tanah
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Satuan',
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(height: 10),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        buttonStyleData: ButtonStyleData(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                        isExpanded: true,
+                        iconStyleData: const IconStyleData(
+                          icon: Icon(
+                            Icons.arrow_drop_down_outlined,
+                            color: Colors.grey,
+                            size: 25,
+                          ),
+                          iconEnabledColor: primaryTextColor,
+                        ),
+                        value: invC.statusSatuan,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            invC.statusSatuan = newValue ?? invC.statusSatuan;
+                          });
+                        },
+                        items: invC.keteranganSatuan.map((String item) {
+                          return DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(item),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15),
+                // Status Tanah
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Status Tanah',
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(height: 10),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        buttonStyleData: ButtonStyleData(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                        isExpanded: true,
+                        iconStyleData: const IconStyleData(
+                          icon: Icon(
+                            Icons.arrow_drop_down_outlined,
+                            color: Colors.grey,
+                            size: 25,
+                          ),
+                          iconEnabledColor: primaryTextColor,
+                        ),
+                        value: invC.selectedStatusTanah,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            invC.selectedStatusTanah = newValue ?? invC.selectedStatusTanah;
+                          });
+                        },
+                        items: invC.dropdownStatusTanah.map((String item) {
+                          return DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(item),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15),
                 // Keberadaan Barang
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1581,15 +2037,15 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                           ),
                           iconEnabledColor: primaryTextColor,
                         ),
-                        value: statusKeberadaanBarang,
+                        value: invC.statusKeberadaanBarang,
                         onChanged: (String? newValue) {
                           setState(() {
-                            statusKeberadaanBarang = newValue ?? "Ada";
+                            invC.statusKeberadaanBarang = newValue ?? invC.statusKeberadaanBarang;
                           });
                         },
-                        items: keteranganKeberadaanBarang.map((String item) {
+                        items: invC.keteranganKeberadaanBarang.map((String item) {
                           return DropdownMenuItem<String>(
-                            value: item,
+                            value: invC.keteranganKeberadaanBarang.indexOf(item) == 0 ? "1": "2",
                             child: Text(item),
                           );
                         }).toList(),
@@ -1696,7 +2152,7 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                                   invC.selectedKondisi = newValue ?? invC.selectedKondisi;
                                 });
                               },
-                              items: dropdownKondisi.map((String item) {
+                              items: invC.dropdownKondisi.map((String item) {
                                 return DropdownMenuItem<String>(
                                   value: item,
                                   child: Text(item),
@@ -1830,15 +2286,15 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                           ),
                           iconEnabledColor: primaryTextColor,
                         ),
-                        value: statusStatus,
+                        value: invC.statusStatus,
                         onChanged: (String? newValue) {
                           setState(() {
-                            statusStatus = newValue ?? "Sedang digunakan";
+                            invC.statusStatus = newValue ?? invC.statusStatus;
                           });
                         },
-                        items: keteranganStatus.map((String item) {
+                        items: invC.keteranganStatus.map((String item) {
                           return DropdownMenuItem<String>(
-                            value: item,
+                            value: invC.keteranganStatus.indexOf(item) == 0 ? "1" : "2",
                             child: Text(item),
                           );
                         }).toList(),
@@ -1882,166 +2338,480 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                   children: [
                     RadioListTile(
                       title: Text("Pemerintah Daerah"),
-                      value: "daerah",
-                      groupValue: choose_pemerintah,
+                      value: "1",
+                      groupValue: invC.choosePemerintah,
                       onChanged: (value) {
                         setState(() {
-                          choose_pemerintah = value.toString();
+                          invC.choosePemerintah = value.toString();
                         });
                       },
                     ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Nama Kuasa Pengguna Barang lainnya/Pengguna Barang lainnya',
-                      style: TextStyle(fontSize: 16),
-                      textAlign: TextAlign.left,
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
+                    SizedBox(height: 3),
+                    Column(
+                      children: [
+                        // Nama Kuasa
+                        Column(
+                          children: [
+                            Text(
+                              'Nama Kuasa Pengguna Barang lainnya/Pengguna Barang lainnya',
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 15),
+                                child: TextFormField(
+                                  controller: editController.penggunaan_pemda_akhir,
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ),
+                        SizedBox(height: 15),
+                        // Nama Pemakai
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Nama Pemakai',
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: Colors.grey.shade400,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: TextFormField(
+                                        controller: editController.penggunaan_pemda_nama_pemakai,
+                                        readOnly: true,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                DropdownButtonHideUnderline(
+                                  child: DropdownButton2(
+                                    buttonStyleData: ButtonStyleData(
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                    iconStyleData: const IconStyleData(
+                                      icon: Icon(
+                                        Icons.arrow_drop_down_outlined,
+                                        color: Colors.grey,
+                                        size: 25,
+                                      ),
+                                      iconEnabledColor: primaryTextColor,
+                                    ),
+                                    value: invC.statusNamaPemakai,
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        invC.statusNamaPemakai = newValue ?? invC.statusNamaPemakai;
+                                      });
+                                    },
+                                    items: invC.keteranganNamaPemakai.map((String item) {
+                                      return DropdownMenuItem<String>(
+                                        value: invC.keteranganNamaPemakai.indexOf(item) == 0
+                                            ? "1"
+                                            : "2",
+                                        child: Text(item),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            invC.statusNamaPemakai == "2"
+                                ? Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: TextFormField(
+                                        controller: editController.penggunaan_pemda_nama_pemakai_akhir,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox(),                     
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        // Status Pemakai
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Status Pemakai',
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 15),
+                                child: TextFormField(
+                                  controller: editController.penggunaan_pemda_nama_pemakai_akhir,
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                            ) 
+                          ],
+                        ),
+                        SizedBox(height: 15),
+                        // BAST Pemakaian
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'BAST Pemakaian',
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(height: 10),
+                            DropdownButtonHideUnderline(
+                              child: DropdownButton2(
+                                buttonStyleData: ButtonStyleData(
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                                isExpanded: true,
+                                iconStyleData: const IconStyleData(
+                                  icon: Icon(
+                                    Icons.arrow_drop_down_outlined,
+                                    color: Colors.grey,
+                                    size: 25,
+                                  ),
+                                  iconEnabledColor: primaryTextColor,
+                                ),
+                                value: invC.statusBast,
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    invC.statusBast = newValue ?? invC.statusBast;
+                                  });
+                                },
+                                items: invC.keteranganBast.map((String item) {
+                                  return DropdownMenuItem<String>(
+                                    value: invC.keteranganBast.indexOf(item) == 0 ? "1": "2",
+                                    child: Text(item),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 15),
+                        // SIP
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'SIP',
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(height: 10),
+                            DropdownButtonHideUnderline(
+                              child: DropdownButton2(
+                                buttonStyleData: ButtonStyleData(
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                                isExpanded: true,
+                                iconStyleData: const IconStyleData(
+                                  icon: Icon(
+                                    Icons.arrow_drop_down_outlined,
+                                    color: Colors.grey,
+                                    size: 25,
+                                  ),
+                                  iconEnabledColor: primaryTextColor,
+                                ),
+                                value: invC.statusSIP,
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    invC.statusSIP = newValue ?? invC.statusSIP;
+                                  });
+                                },
+                                items: invC.keteranganSIP.map((String item) {
+                                  return DropdownMenuItem<String>(
+                                    value: invC.keteranganSIP.indexOf(item) == 0 ? "1": "2",
+                                    child: Text(item),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 15),
+                        // IMB
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'IMB',
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(height: 10),
+                            DropdownButtonHideUnderline(
+                              child: DropdownButton2(
+                                buttonStyleData: ButtonStyleData(
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                                isExpanded: true,
+                                iconStyleData: const IconStyleData(
+                                  icon: Icon(
+                                    Icons.arrow_drop_down_outlined,
+                                    color: Colors.grey,
+                                    size: 25,
+                                  ),
+                                  iconEnabledColor: primaryTextColor,
+                                ),
+                                value: invC.statusIMB,
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    invC.statusIMB = newValue ?? invC.statusIMB;
+                                  });
+                                },
+                                items: invC.keteranganIMB.map((String item) {
+                                  return DropdownMenuItem<String>(
+                                    value: invC.keteranganIMB.indexOf(item) == 0 ? "1": "2",
+                                    child: Text(item),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 15),
+                      ],
+                    )
                   ],
                 ),
-                SizedBox(height: 10),
                 // Pemerintah Pusat
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     RadioListTile(
                       title: Text("Pemerintah Pusat"),
-                      value: "pusat",
-                      groupValue: choose_pemerintah,
+                      value: "2",
+                      groupValue: invC.choosePemerintah,
                       onChanged: (value) {
                         setState(() {
-                          choose_pemerintah = value.toString();
+                          invC.choosePemerintah = value.toString();
                         });
                       },
                     ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Dasar Penggunaan',
-                      style: TextStyle(fontSize: 16),
-                      textAlign: TextAlign.left,
-                    ),
-                    SizedBox(height: 10),
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        buttonStyleData: ButtonStyleData(
-                          height: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: Colors.grey,
+                    SizedBox(height: 3),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Dasar Penggunaan',
+                          style: TextStyle(fontSize: 16),
+                          textAlign: TextAlign.left,
+                        ),
+                        SizedBox(height: 10),
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            buttonStyleData: ButtonStyleData(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                              ),
                             ),
+                            isExpanded: true,
+                            iconStyleData: const IconStyleData(
+                              icon: Icon(
+                                Icons.arrow_drop_down_outlined,
+                                color: Colors.grey,
+                                size: 25,
+                              ),
+                              iconEnabledColor: primaryTextColor,
+                            ),
+                            value: invC.statusPempus,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                invC.statusPempus = newValue ?? invC.statusPempus;
+                              });
+                            },
+                            dropdownStyleData: DropdownStyleData(maxHeight: 300),
+                            items: [
+                              DropdownMenuItem<String>(
+                                value: "3",
+                                child: Text("Pilih"),
+                              ),
+                              ...invC.keteranganPempus.map((String item) {
+                                  return DropdownMenuItem<String>(
+                                    value: invC.keteranganPempus.indexOf(item) == 0
+                                        ? "1"
+                                        : "0",
+                                    child: Text(item),
+                                  );
+                                }).toList(),
+                            ],
                           ),
                         ),
-                        isExpanded: true,
-                        iconStyleData: const IconStyleData(
-                          icon: Icon(
-                            Icons.arrow_drop_down_outlined,
-                            color: Colors.grey,
-                            size: 25,
-                          ),
-                          iconEnabledColor: primaryTextColor,
-                        ),
-                        value: statusPenggunaanDaerahPusat,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            statusPenggunaanDaerahPusat = newValue ?? "Tidak";
-                          });
-                        },
-                        items:
-                            keteranganPenggunaanDaerahPusat.map((String item) {
-                          return DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(item),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    statusPenggunaanDaerahPusat == "Ada"
-                        ? Padding(
-                            padding: const EdgeInsets.only(top: 15),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Nama',
-                                      style: TextStyle(fontSize: 16),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    SizedBox(width: 72),
-                                    Expanded(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.grey),
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        child: IntrinsicWidth(
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 15),
-                                            child: TextFormField(
-                                              decoration: const InputDecoration(
-                                                border: InputBorder.none,
-                                              ),
+                        if(invC.statusPempus == "1")
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Nama',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  SizedBox(width: 72),
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: IntrinsicWidth(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: TextFormField(
+                                            controller: editController.penggunaan_pempus_y_nm,
+                                            decoration: const InputDecoration(
+                                              border: InputBorder.none,
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
-                                SizedBox(height: 15),
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Nama Dokumen',
-                                      style: TextStyle(fontSize: 16),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    SizedBox(width: 15),
-                                    Expanded(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.grey),
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        child: IntrinsicWidth(
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 15),
-                                            child: TextFormField(
-                                              decoration: const InputDecoration(
-                                                border: InputBorder.none,
-                                              ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 15),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Nama Dokumen',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  SizedBox(width: 15),
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: IntrinsicWidth(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: TextFormField(
+                                            controller: editController.penggunaan_pempus_y_doc,
+                                            decoration: const InputDecoration(
+                                              border: InputBorder.none,
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                            ],
+                          ),
+                        ),
+                        if(invC.statusPempus == "0")
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15, bottom: 10),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Nama',
+                                style: TextStyle(fontSize: 16),
+                                textAlign: TextAlign.left,
+                              ),
+                              SizedBox(width: 72),
+                              Expanded(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: IntrinsicWidth(
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 15),
+                                      child: TextFormField(
+                                        controller: editController.penggunaan_pempus_t_nm,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ],
-                            ),
-                          )
-                        : SizedBox(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
                   ],
                 ),
                 SizedBox(height: 10),
@@ -2051,128 +2821,173 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                   children: [
                     RadioListTile(
                       title: Text("Pemerintah Daerah Lain"),
-                      value: "daerah_lain",
-                      groupValue: choose_pemerintah,
+                      value: "3",
+                      groupValue: invC.choosePemerintah,
                       onChanged: (value) {
                         setState(() {
-                          choose_pemerintah = value.toString();
+                          invC.choosePemerintah = value.toString();
                         });
                       },
                     ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Dasar Penggunaan',
-                      style: TextStyle(fontSize: 16),
-                      textAlign: TextAlign.left,
-                    ),
-                    SizedBox(height: 10),
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        buttonStyleData: ButtonStyleData(
-                          height: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: Colors.grey,
+                    SizedBox(height: 3),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Dasar Penggunaan',
+                          style: TextStyle(fontSize: 16),
+                          textAlign: TextAlign.left,
+                        ),
+                        SizedBox(height: 10),
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            buttonStyleData: ButtonStyleData(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                              ),
                             ),
+                            isExpanded: true,
+                            iconStyleData: const IconStyleData(
+                              icon: Icon(
+                                Icons.arrow_drop_down_outlined,
+                                color: Colors.grey,
+                                size: 25,
+                              ),
+                              iconEnabledColor: primaryTextColor,
+                            ),
+                            value: invC.statusPdl,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                invC.statusPdl = newValue ?? invC.statusPdl;
+                              });
+                            },
+                            dropdownStyleData: DropdownStyleData(maxHeight: 300),
+                            items: [
+                              DropdownMenuItem<String>(
+                                value: "3",
+                                child: Text("Pilih"),
+                              ),
+                              ...invC.keteranganPdl.map((String item) {
+                                  return DropdownMenuItem<String>(
+                                    value: invC.keteranganPdl.indexOf(item) == 0
+                                        ? "1"
+                                        : "0",
+                                    child: Text(item),
+                                  );
+                                }).toList(),
+                            ],
                           ),
                         ),
-                        isExpanded: true,
-                        iconStyleData: const IconStyleData(
-                          icon: Icon(
-                            Icons.arrow_drop_down_outlined,
-                            color: Colors.grey,
-                            size: 25,
-                          ),
-                          iconEnabledColor: primaryTextColor,
-                        ),
-                        value: statusPenggunaanDaerahLain,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            statusPenggunaanDaerahLain = newValue ?? "Ya";
-                          });
-                        },
-                        items:
-                            keteranganPenggunaanDaerahLain.map((String item) {
-                          return DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(item),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    statusPenggunaanDaerahLain == "Ada"
-                        ? Padding(
-                            padding: const EdgeInsets.only(top: 15),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Nama',
-                                      style: TextStyle(fontSize: 16),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    SizedBox(width: 72),
-                                    Expanded(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.grey),
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        child: IntrinsicWidth(
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 15),
-                                            child: TextFormField(
-                                              decoration: const InputDecoration(
-                                                border: InputBorder.none,
-                                              ),
+                        if(invC.statusPdl == "1")
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Nama',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  SizedBox(width: 72),
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: IntrinsicWidth(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: TextFormField(
+                                            controller: editController.penggunaan_pdl_y_nm,
+                                            decoration: const InputDecoration(
+                                              border: InputBorder.none,
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
-                                SizedBox(height: 15),
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Nama Dokumen',
-                                      style: TextStyle(fontSize: 16),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    SizedBox(width: 15),
-                                    Expanded(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.grey),
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        child: IntrinsicWidth(
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 15),
-                                            child: TextFormField(
-                                              decoration: const InputDecoration(
-                                                border: InputBorder.none,
-                                              ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 15),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Nama Dokumen',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  SizedBox(width: 15),
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: IntrinsicWidth(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: TextFormField(
+                                            controller: editController.penggunaan_pdl_y_doc,
+                                            decoration: const InputDecoration(
+                                              border: InputBorder.none,
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                            ],
+                          ),
+                        ),
+                        if(invC.statusPdl == "0")
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15, bottom: 10),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Nama',
+                                style: TextStyle(fontSize: 16),
+                                textAlign: TextAlign.left,
+                              ),
+                              SizedBox(width: 72),
+                              Expanded(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: IntrinsicWidth(
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 15),
+                                      child: TextFormField(
+                                        controller: editController.penggunaan_pdl_t_nm,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ],
-                            ),
-                          )
-                        : SizedBox(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
                   ],
                 ),
                 SizedBox(height: 10),
@@ -2182,127 +2997,173 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                   children: [
                     RadioListTile(
                       title: Text("Pihak Lain"),
-                      value: "pihak_lain",
-                      groupValue: choose_pemerintah,
+                      value: "4",
+                      groupValue: invC.choosePemerintah,
                       onChanged: (value) {
                         setState(() {
-                          choose_pemerintah = value.toString();
+                          invC.choosePemerintah = value.toString();
                         });
                       },
                     ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Dasar Penggunaan',
-                      style: TextStyle(fontSize: 16),
-                      textAlign: TextAlign.left,
-                    ),
-                    SizedBox(height: 10),
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        buttonStyleData: ButtonStyleData(
-                          height: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: Colors.grey,
+                    SizedBox(height: 3),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Dasar Penggunaan',
+                          style: TextStyle(fontSize: 16),
+                          textAlign: TextAlign.left,
+                        ),
+                        SizedBox(height: 10),
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            buttonStyleData: ButtonStyleData(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                              ),
                             ),
+                            isExpanded: true,
+                            iconStyleData: const IconStyleData(
+                              icon: Icon(
+                                Icons.arrow_drop_down_outlined,
+                                color: Colors.grey,
+                                size: 25,
+                              ),
+                              iconEnabledColor: primaryTextColor,
+                            ),
+                            value: invC.statusPl,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                invC.statusPl = newValue ?? invC.statusPl;
+                              });
+                            },
+                            dropdownStyleData: DropdownStyleData(maxHeight: 300),
+                            items: [
+                              DropdownMenuItem<String>(
+                                value: "3",
+                                child: Text("Pilih"),
+                              ),
+                              ...invC.keteranganPl.map((String item) {
+                                  return DropdownMenuItem<String>(
+                                    value: invC.keteranganPl.indexOf(item) == 0
+                                        ? "1"
+                                        : "0",
+                                    child: Text(item),
+                                  );
+                                }).toList(),
+                            ],
                           ),
                         ),
-                        isExpanded: true,
-                        iconStyleData: const IconStyleData(
-                          icon: Icon(
-                            Icons.arrow_drop_down_outlined,
-                            color: Colors.grey,
-                            size: 25,
-                          ),
-                          iconEnabledColor: primaryTextColor,
-                        ),
-                        value: statusPenggunaanPihakLain,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            statusPenggunaanPihakLain = newValue ?? "Ya";
-                          });
-                        },
-                        items: keteranganPenggunaanPihakLain.map((String item) {
-                          return DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(item),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    statusPenggunaanPihakLain == "Ada"
-                        ? Padding(
-                            padding: const EdgeInsets.only(top: 15),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Nama',
-                                      style: TextStyle(fontSize: 16),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    SizedBox(width: 72),
-                                    Expanded(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.grey),
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        child: IntrinsicWidth(
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 15),
-                                            child: TextFormField(
-                                              decoration: const InputDecoration(
-                                                border: InputBorder.none,
-                                              ),
+                        if(invC.statusPl == "1")
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Nama',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  SizedBox(width: 72),
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: IntrinsicWidth(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: TextFormField(
+                                            controller: editController.penggunaan_pl_y_nm,
+                                            decoration: const InputDecoration(
+                                              border: InputBorder.none,
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
-                                SizedBox(height: 15),
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Nama Dokumen',
-                                      style: TextStyle(fontSize: 16),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    SizedBox(width: 15),
-                                    Expanded(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.grey),
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        child: IntrinsicWidth(
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 15),
-                                            child: TextFormField(
-                                              decoration: const InputDecoration(
-                                                border: InputBorder.none,
-                                              ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 15),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Nama Dokumen',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  SizedBox(width: 15),
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: IntrinsicWidth(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: TextFormField(
+                                            controller: editController.penggunaan_pl_y_doc,
+                                            decoration: const InputDecoration(
+                                              border: InputBorder.none,
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                            ],
+                          ),
+                        ),
+                        if(invC.statusPl == "0")
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15, bottom: 10),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Nama',
+                                style: TextStyle(fontSize: 16),
+                                textAlign: TextAlign.left,
+                              ),
+                              SizedBox(width: 72),
+                              Expanded(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: IntrinsicWidth(
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 15),
+                                      child: TextFormField(
+                                        controller: editController.penggunaan_pl_t_nm,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ],
-                            ),
-                          )
-                        : SizedBox(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
                   ],
                 ),
                 SizedBox(height: 20),
@@ -2336,20 +3197,329 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                           ),
                           iconEnabledColor: primaryTextColor,
                         ),
-                        value: statusGanda,
+                        value: invC.statusGanda,
                         onChanged: (String? newValue) {
                           setState(() {
-                            statusGanda = newValue ?? "Tidak";
+                            invC.statusGanda = newValue ?? invC.statusGanda;
                           });
                         },
-                        items: keteranganGanda.map((String item) {
+                        items: invC.keteranganGanda.map((String item) {
                           return DropdownMenuItem<String>(
-                            value: item,
+                            value: invC.keteranganGanda.indexOf(item) == 0
+                                  ? "1"
+                                  : "2",
                             child: Text(item),
                           );
                         }).toList(),
                       ),
                     ),
+                    invC.statusGanda == "1"
+                      ? Column(
+                          children: [
+                            SizedBox(height: 15),
+                            // Nibar
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Nibar',
+                                  style: TextStyle(fontSize: 16),
+                                  textAlign: TextAlign.left,
+                                ),
+                                SizedBox(height: 10),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.grey.shade400,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 15),
+                                    child: TextFormField(
+                                      controller: editController.tercatat_ganda_nibar,
+                                      readOnly: true,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 15),
+                            // Kode Register
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Kode Register',
+                                  style: TextStyle(fontSize: 16),
+                                  textAlign: TextAlign.left,
+                                ),
+                                SizedBox(height: 10),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.grey.shade400,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 15),
+                                    child: TextFormField(
+                                      controller: editController.tercatat_ganda_no_register,
+                                      readOnly: true,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 15),
+                            // Kode Barang
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Kode Barang',
+                                  style: TextStyle(fontSize: 16),
+                                  textAlign: TextAlign.left,
+                                ),
+                                SizedBox(height: 10),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.grey.shade400,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 15),
+                                    child: TextFormField(
+                                      controller: editController.tercatat_ganda_kode_barang,
+                                      readOnly: true,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 15),
+                            // Nama Barang
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Nama Barang',
+                                  style: TextStyle(fontSize: 16),
+                                  textAlign: TextAlign.left,
+                                ),
+                                SizedBox(height: 10),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.grey.shade400,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 15),
+                                    child: TextFormField(
+                                      controller: editController.tercatat_ganda_nama_barang,
+                                      readOnly: true,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 15),
+                            // Spesifikasi Barang
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Nama Spesifikasi Barang',
+                                  style: TextStyle(fontSize: 16),
+                                  textAlign: TextAlign.left,
+                                ),
+                                SizedBox(height: 10),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.grey.shade400,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 15),
+                                    child: TextFormField(
+                                      controller: editController.tercatat_ganda_spesifikasi_barang,
+                                      readOnly: true,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 15),
+                            // Luas
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Luas',
+                                  style: TextStyle(fontSize: 16),
+                                  textAlign: TextAlign.left,
+                                ),
+                                SizedBox(height: 10),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.grey.shade400,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 15),
+                                    child: TextFormField(
+                                      controller: editController.tercatat_ganda_luas,
+                                      readOnly: true,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 15),
+                            // Satuan
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Satuan',
+                                  style: TextStyle(fontSize: 16),
+                                  textAlign: TextAlign.left,
+                                ),
+                                SizedBox(height: 10),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.grey.shade400,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 15),
+                                    child: TextFormField(
+                                      controller: editController.tercatat_ganda_satuan,
+                                      readOnly: true,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 15),
+                            // Nilai Perolehan Barang
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Nilai Perolehan Barang',
+                                  style: TextStyle(fontSize: 16),
+                                  textAlign: TextAlign.left,
+                                ),
+                                SizedBox(height: 10),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.grey.shade400,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 15),
+                                    child: TextFormField(
+                                      controller: editController.tercatat_ganda_perolehan,
+                                      readOnly: true,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 15),
+                            // Tanggal, Bulan, Tahun Perolehan
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Tanggal, Bulan, Tahun Perolehan',
+                                  style: TextStyle(fontSize: 16),
+                                  textAlign: TextAlign.left,
+                                ),
+                                SizedBox(height: 10),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.grey.shade400,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 15),
+                                    child: TextFormField(
+                                      controller: editController.tercatat_ganda_tanggal_perolehan,
+                                      readOnly: true,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 15),
+                            // Kuasa Pengguna Barang Lainnya, Pengguna Barang lainnya atau Pengelola Barang
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Kuasa Pengguna Barang Lainnya, Pengguna Barang lainnya atau Pengelola Barang',
+                                  style: TextStyle(fontSize: 16),
+                                  textAlign: TextAlign.left,
+                                ),
+                                SizedBox(height: 10),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.grey.shade400,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 15),
+                                    child: TextFormField(
+                                      controller: editController.tercatat_ganda_kuasa_pengguna,
+                                      readOnly: true,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 15),
+                          ],
+                        )
+                      : SizedBox(),
                   ],
                 ),
                 SizedBox(height: 15),
@@ -2383,16 +3553,20 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                           ),
                           iconEnabledColor: primaryTextColor,
                         ),
-                        value: statusAtasNama,
+                        value: invC.dropdownAtasNama.keys
+                                .contains(invC.statusAtasNama)
+                            ? invC.statusAtasNama
+                            : null,
                         onChanged: (String? newValue) {
                           setState(() {
-                            statusAtasNama = newValue ?? "Pemerintah Daerah";
+                            invC.statusAtasNama =
+                                newValue ?? invC.statusAtasNama;
                           });
                         },
-                        items: keteranganAtasNama.map((String item) {
+                        items: invC.dropdownAtasNama.keys.map((String item) {
                           return DropdownMenuItem<String>(
                             value: item,
-                            child: Text(item),
+                            child: Text(invC.dropdownAtasNama[item]!),
                           );
                         }).toList(),
                       ),
@@ -2576,6 +3750,7 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 15),
                         child: TextFormField(
+                          controller: editController.petugas,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                           ),
@@ -2606,32 +3781,33 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                       )),
                     ),
                     onTap: () {
-                      List<String> data = [
-                        editController.tgl_inventaris.text,
-                        editController.no_register_awal.text,
-                        editController.no_register_akhir.text,
-                        invC.statusNoRegister,
-                        editController.kategori_id_awal.text,
-                        invC.selectedKategori,
-                        invC.statusBarang,
-                        editController.nama_spesifikasi_awal.text,
-                        editController.nama_spesifikasi_akhir.text,
-                        invC.statusNamaBarang,
-                        editController.jumlah_awal.text,
-                        invC.selectedSatuan,
-                        editController.cara_perolehan_awal.text,
-                        invC.selectedPerolehan,
-                        invC.statusPerolehan,
-                        editController.tgl_perolehan.text,
-                        editController.tahun_perolehan.text,
-                        editController.perolehan_awal.text,
-                        editController.perolehan_akhir.text,
-                        invC.statusNilaiPerolehan
-                      ];
-                      print(editController.kib_id.text);
-                      print(data);
-                      editController.editInsertInventarisC(
-                          editController.kib_id.text, data);
+                      customSnackBar("Success", 'Berhasil Inventarisasi', 'success');
+                      // List<String> data = [
+                      //   editController.tgl_inventaris.text,
+                      //   editController.no_register_awal.text,
+                      //   editController.no_register_akhir.text,
+                      //   invC.statusNoRegister,
+                      //   editController.kategori_id_awal.text,
+                      //   invC.selectedKategori,
+                      //   invC.statusBarang,
+                      //   editController.nama_spesifikasi_awal.text,
+                      //   editController.nama_spesifikasi_akhir.text,
+                      //   invC.statusNamaBarang,
+                      //   editController.jumlah_awal.text,
+                      //   invC.selectedSatuan,
+                      //   editController.cara_perolehan_awal.text,
+                      //   invC.selectedPerolehan,
+                      //   invC.statusPerolehan,
+                      //   editController.tgl_perolehan.text,
+                      //   editController.tahun_perolehan.text,
+                      //   editController.perolehan_awal.text,
+                      //   editController.perolehan_akhir.text,
+                      //   invC.statusNilaiPerolehan
+                      // ];
+                      // print(editController.kib_id.text);
+                      // print(data);
+                      // editController.editInsertInventarisC(
+                      //     editController.kib_id.text, data);
                     },
                   ),
                 ),
