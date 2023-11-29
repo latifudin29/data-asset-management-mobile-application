@@ -3781,6 +3781,7 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                       )),
                     ),
                     onTap: () {
+                      Get.back();
                       customSnackBar("Success", 'Berhasil Inventarisasi', 'success');
                       // List<String> data = [
                       //   editController.tgl_inventaris.text,

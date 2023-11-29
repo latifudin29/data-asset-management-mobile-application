@@ -4057,6 +4057,7 @@ class _EditInventoryDScreenState extends State<EditInventoryDScreen> {
                     )),
                   ),
                   onTap: () {
+                    Get.back();
                     customSnackBar("Success", 'Berhasil Inventarisasi', 'success');
                   },
                 ),
