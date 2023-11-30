@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dropdown_button2/dropdown_button2.dart';
+// import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -73,7 +74,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
     invA.statusPl     = data['penggunaan_pl_yt'] != "" ? data['penggunaan_pl_yt'].toString() : "3";
 
     String caraPerolehan = (invA.statusInventaris == "0") ? data['cara_perolehan'].toString() : data['cara_perolehan_akhir'].toString();
-    if (caraPerolehan == "Pembelian" || caraPerolehan == "1") {
+    if (caraPerolehan == "Pembelian" || caraPerolehan == "1" || caraPerolehan == "") {
       invA.selectedPerolehan = "1";
     } else if (caraPerolehan == "Hibah" || caraPerolehan == "2") {
       invA.selectedPerolehan = "2";
@@ -81,9 +82,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
       invA.selectedPerolehan = "3";
     } else if (caraPerolehan == "Hasil Inventarisasi" || caraPerolehan == "4") {
       invA.selectedPerolehan = "4";
-    } else {
-      invA.selectedPerolehan = "";
-    }  
+    }
 
     editController.tgl_inventaris.text                    = (invA.statusInventaris == "0") ? DateFormat('dd-MM-yyyy').format(now) : data['tgl_inventaris_formatted'].toString();
     editController.skpd.text                              = data['departemen_kd'].toString();
@@ -164,7 +163,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
     editController.keterangan.text                          = (invA.statusInventaris == "0") ? data['keterangan_penetapan'].toString() : data['keterangan_inventaris'].toString();
     editController.file_nm.text                             = data['file_nm'].toString();
     editController.petugas.text                             = data['petugas'].toString();
-    editController.tahun.text                               = data['tahun'].toString();
+    editController.tahun.text                               = (invA.statusInventaris == "0") ? now.year.toString() : data['tahun'].toString();
   }
 
   final ImagePicker _picker = ImagePicker();
@@ -3611,10 +3610,13 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       )),
                     ),
                     onTap: () {
-                      List<String> data = [
+                      List<String> id = [
                         editController.kib_id.text,
                         editController.penetapan_id.text,
                         editController.departemen_id.text,
+                      ];
+
+                      List<String> data = [
                         editController.tgl_inventaris.text,
                         editController.no_register_awal.text,
                         editController.no_register_akhir.text,
@@ -3668,7 +3670,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                         invA.statusTglSertifikat,
                         invA.statusKeberadaanBarang,
                         editController.kondisi_awal.text,
-                        editController.kondisi_akhir.text,
+                        invA.selectedKondisi,
                         invA.statusKondisi,
                         editController.asal_usul_awal.text,
                         editController.asal_usul_akhir.text,
@@ -3708,12 +3710,14 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                         editController.long.text,
                         editController.lainnya.text,
                         editController.keterangan.text,
-                        editController.file_nm.text,
-                        editController.petugas.text,
                         editController.tahun.text,
                       ];
 
-                      editController.updateInventarisA(editController.kib_id.text, data);
+                      if(invA.statusInventaris == "0"){
+                        editController.insertInventarisA(id, data);
+                      } else {
+                        editController.updateInventarisA(editController.kib_id.text, data);
+                      }
                     },
                   ),
                 ),

@@ -15,4 +15,5 @@ class _AuthEndPoints {
   final String getPenetapan     = 'penetapan/';
   final String getPenetapanById = 'penetapan/inventaris/';
   final String putInventaris    = 'inventaris/';
+  final String postInventaris   = 'inventaris/';
 }

@@ -1,6 +1,5 @@
 class InventoryVariablesA {
-  String statusInventaris       = "";
-  
+  String statusInventaris           = "";
   String statusNoRegister           = "";
   String statusBarang               = "";
   String statusNamaBarang           = "";
@@ -23,6 +22,7 @@ class InventoryVariablesA {
   String statusPdl                  = "";
   String statusPl                   = "";
   String statusGanda                = "";
+  
   String chooseAtribusi             = "";
   String choosePemerintahDaerah     = "";
   String choosePemerintahPusat      = "";
