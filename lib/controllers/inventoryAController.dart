@@ -277,6 +277,22 @@ class InventoryAController extends GetxController {
       }
     };
 
+    Directory? directory = await getExternalStorageDirectory();
+    
+    if (directory != null) {
+      String path = directory.path;
+      String fileName = 'inventarisA-insert.json';
+      String filePath = '$path/$fileName';
+      String jsonString = jsonEncode(body);
+
+      File file = File(filePath);
+      await file.writeAsString(jsonString);
+
+      print('File JSON disimpan di: $filePath');
+    } else {
+      print('Error: Direktori penyimpanan eksternal null.');
+    }
+
     try {
       final response = await _connect.post(
         '${ApiEndPoints.baseurl}${ApiEndPoints.authEndPoints.postInventaris}add/A',
@@ -295,22 +311,6 @@ class InventoryAController extends GetxController {
       print("Error: $error");
       customSnackBar("Error", "An unexpected error occurred!", 'error');
     }
-
-    // Directory? directory = await getExternalStorageDirectory();
-    
-    // if (directory != null) {
-    //   String path = directory.path;
-    //   String fileName = 'inventarisA-add.json';
-    //   String filePath = '$path/$fileName';
-    //   String jsonString = jsonEncode(body);
-
-    //   File file = File(filePath);
-    //   await file.writeAsString(jsonString);
-
-    //   print('File JSON disimpan di: $filePath');
-    // } else {
-    //   print('Error: Direktori penyimpanan eksternal null.');
-    // }
   }
 
   // Method Update Inventarisasi
@@ -429,6 +429,22 @@ class InventoryAController extends GetxController {
       }
     };
 
+    Directory? directory = await getExternalStorageDirectory();
+    
+    if (directory != null) {
+      String path = directory.path;
+      String fileName = 'inventarisA-update.json';
+      String filePath = '$path/$fileName';
+      String jsonString = jsonEncode(body);
+
+      File file = File(filePath);
+      await file.writeAsString(jsonString);
+
+      print('File JSON disimpan di: $filePath');
+    } else {
+      print('Error: Direktori penyimpanan eksternal null.');
+    }
+
     try {
       final response = await _connect.put(
         '${ApiEndPoints.baseurl}${ApiEndPoints.authEndPoints.putInventaris}edit/A/$kib_id',
@@ -447,21 +463,5 @@ class InventoryAController extends GetxController {
       print("Error: $error");
       customSnackBar("Error", "An unexpected error occurred!", 'error');
     }
-
-    // Directory? directory = await getExternalStorageDirectory();
-    
-    // if (directory != null) {
-    //   String path = directory.path;
-    //   String fileName = 'inventarisA-output.json';
-    //   String filePath = '$path/$fileName';
-    //   String jsonString = jsonEncode(body);
-
-    //   File file = File(filePath);
-    //   await file.writeAsString(jsonString);
-
-    //   print('File JSON disimpan di: $filePath');
-    // } else {
-    //   print('Error: Direktori penyimpanan eksternal null.');
-    // }
   }
 }

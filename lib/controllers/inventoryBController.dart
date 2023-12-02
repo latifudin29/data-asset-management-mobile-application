@@ -322,6 +322,22 @@ class InventoryBController extends GetxController {
       }
     };
 
+    Directory? directory = await getExternalStorageDirectory();
+    
+    if (directory != null) {
+      String path = directory.path;
+      String fileName = 'inventarisB-insert.json';
+      String filePath = '$path/$fileName';
+      String jsonString = jsonEncode(body);
+
+      File file = File(filePath);
+      await file.writeAsString(jsonString);
+
+      print('File JSON disimpan di: $filePath');
+    } else {
+      print('Error: Direktori penyimpanan eksternal null.');
+    }
+
     try {
       final response = await _connect.post(
         '${ApiEndPoints.baseurl}${ApiEndPoints.authEndPoints.putInventaris}add/B',
@@ -476,6 +492,23 @@ class InventoryBController extends GetxController {
       }
     };
 
+    // Membuat File JSON
+    Directory? directory = await getExternalStorageDirectory();
+    
+    if (directory != null) {
+      String path = directory.path;
+      String fileName = 'inventarisB-update.json';
+      String filePath = '$path/$fileName';
+      String jsonString = jsonEncode(body);
+
+      File file = File(filePath);
+      await file.writeAsString(jsonString);
+
+      print('File JSON disimpan di: $filePath');
+    } else {
+      print('Error: Direktori penyimpanan eksternal null.');
+    }
+
     try {
       final response = await _connect.put(
         '${ApiEndPoints.baseurl}${ApiEndPoints.authEndPoints.putInventaris}B/edit/$kib_id',
@@ -494,22 +527,6 @@ class InventoryBController extends GetxController {
       print("Error: $error");
       customSnackBar("Error", "An unexpected error occurred!", 'error');
     }
-
-    // Directory? directory = await getExternalStorageDirectory();
-    
-    // if (directory != null) {
-    //   String path = directory.path;
-    //   String fileName = 'inventarisB-output.json';
-    //   String filePath = '$path/$fileName';
-    //   String jsonString = jsonEncode(body);
-
-    //   File file = File(filePath);
-    //   await file.writeAsString(jsonString);
-
-    //   print('File JSON disimpan di: $filePath');
-    // } else {
-    //   print('Error: Direktori penyimpanan eksternal null.');
-    // }
   }
 }
 
