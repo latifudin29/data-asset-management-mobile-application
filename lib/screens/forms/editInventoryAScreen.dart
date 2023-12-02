@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:dropdown_button2/dropdown_button2.dart';
-// import 'package:dropdown_search/dropdown_search.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,6 +10,7 @@ import 'package:kib_application/constans/inventoryVariablesA.dart';
 import 'package:kib_application/controllers/addressController.dart';
 import 'package:kib_application/controllers/appointmentController.dart';
 import 'package:kib_application/controllers/categoryController.dart';
+import 'package:kib_application/controllers/getLocationController.dart';
 import 'package:kib_application/controllers/inventoryAController.dart';
 import 'package:kib_application/controllers/unitController.dart';
 
@@ -26,6 +27,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
   final kategoriController  = Get.put(CategoryController());
   final satuanController    = Get.put(UnitController());
   final addressController   = Get.put(AddressController());
+  final locationController    = Get.put(LocationController());
   final invA                = Get.put(InventoryVariablesA());
 
   DateTime now = DateTime.now();
@@ -78,8 +80,8 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
       invA.selectedPerolehan = "1";
     } else if (caraPerolehan == "Hibah" || caraPerolehan == "2") {
       invA.selectedPerolehan = "2";
-    } else if (caraPerolehan == "Barang & Jasa" || caraPerolehan == "3") {
       invA.selectedPerolehan = "3";
+    } else if (caraPerolehan == "Barang & Jasa" || caraPerolehan == "3") {
     } else if (caraPerolehan == "Hasil Inventarisasi" || caraPerolehan == "4") {
       invA.selectedPerolehan = "4";
     }
@@ -135,15 +137,12 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
     editController.asal_usul_akhir.text                     = (invA.statusInventaris == "0") ? data['asal_usul'].toString() : data['asal_usul_akhir'].toString();
     editController.penggunaan_awal.text                     = (invA.statusInventaris == "0") ? data['a_penggunaan'].toString() : data['penggunaan_awal'].toString();
     editController.penggunaan_pemda_akhir.text              = data['penggunaan_pemda_akhir'].toString();
-    editController.penggunaan_pempus_yt.text                = data['penggunaan_pempus_yt'].toString();
     editController.penggunaan_pempus_y_nm.text              = data['penggunaan_pempus_y_nm'].toString();
     editController.penggunaan_pempus_y_doc.text             = data['penggunaan_pempus_y_doc'].toString();
     editController.penggunaan_pempus_t_nm.text              = data['penggunaan_pempus_t_nm'].toString();
-    editController.penggunaan_pdl_yt.text                   = data['penggunaan_pdl_yt'].toString();
     editController.penggunaan_pdl_y_nm.text                 = data['penggunaan_pdl_y_nm'].toString();
     editController.penggunaan_pdl_y_doc.text                = data['penggunaan_pdl_y_doc'].toString();
     editController.penggunaan_pdl_t_nm.text                 = data['penggunaan_pdl_t_nm'].toString();
-    editController.penggunaan_pl_yt.text                    = data['penggunaan_pl_yt'].toString();
     editController.penggunaan_pl_y_nm.text                  = data['penggunaan_pl_y_nm'].toString();
     editController.penggunaan_pl_y_doc.text                 = data['penggunaan_pl_y_doc'].toString();
     editController.penggunaan_pl_t_nm.text                  = data['penggunaan_pl_t_nm'].toString();
@@ -164,6 +163,14 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
     editController.file_nm.text                             = data['file_nm'].toString();
     editController.petugas.text                             = data['petugas'].toString();
     editController.tahun.text                               = (invA.statusInventaris == "0") ? now.year.toString() : data['tahun'].toString();
+  
+    ever(locationController.latitude, (_) {
+      editController.lat.text = locationController.latitude.value;
+    });
+
+    ever(locationController.longitude, (_) {
+      editController.long.text = locationController.longitude.value;
+    });
   }
 
   final ImagePicker _picker = ImagePicker();
@@ -534,48 +541,55 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                     ),
                     SizedBox(height: 10),
                     invA.statusBarang == "2"
-                        ? DropdownButtonHideUnderline(
-                            child: DropdownButton2(
-                              isExpanded: true,
-                              buttonStyleData: ButtonStyleData(
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                              iconStyleData: const IconStyleData(
-                                icon: Icon(
-                                  Icons.arrow_drop_down_outlined,
-                                  color: Colors.grey,
-                                  size: 25,
-                                ),
-                                iconEnabledColor: primaryTextColor,
-                              ),
-                              value: invA.selectedKategori,
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  invA.selectedKategori =
-                                      newValue ?? invA.selectedKategori;
-                                });
-                              },
-                              dropdownStyleData:
-                                  DropdownStyleData(maxHeight: 300),
-                              items: kategoriController.kategoriList
-                                  .map<DropdownMenuItem<String>>(
-                                (Map<String, dynamic> item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item['id'].toString(),
-                                    child: Text(
-                                      item['kode'] + ' - ' + item['nama'],
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  );
-                                },
-                              ).toList(),
+                        ? DropdownSearch<String>(
+                            popupProps: PopupProps.menu(
+                              showSelectedItems: true,
+                              showSearchBox: true,
                             ),
+                            items: kategoriController.kategoriList
+                              .map<String>((Map<String, dynamic> item) {
+                                return item['kode'] + ' - ' + item['nama'];
+                              })
+                              .toList(),
+                            dropdownDecoratorProps: DropDownDecoratorProps(
+                              dropdownSearchDecoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                            onChanged: (String? newValue) {
+                              if (newValue != null) {
+                                List<String> values = newValue.split(' - ');
+                                String kode = values[0];
+                                String nama = values[1];
+
+                                String id = kategoriController.kategoriList
+                                    .firstWhere((item) => item['kode'] == kode && item['nama'] == nama)['id']
+                                    .toString();
+
+                                setState(() {
+                                  invA.selectedKategori = id;
+                                  print(invA.selectedKategori);
+                                });
+                              }
+                            },
+                            selectedItem: invA.selectedKategori != ""
+                              ? kategoriController.kategoriList
+                                  .where((item) => item['id'].toString() == invA.selectedKategori)
+                                  .map((item) => item['kode'] + ' - ' + item['nama'])
+                                  .first
+                              : kategoriController.kategoriList.isNotEmpty
+                                  ? kategoriController.kategoriList[0]['kode'] +
+                                      ' - ' +
+                                      kategoriController.kategoriList[0]['nama']
+                                  : "Pilih kategori",
+                            dropdownBuilder: (context, selectedItem) {
+                              return Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Text(selectedItem.toString(), style: TextStyle(fontSize: 16)),
+                              );
+                            },
                           )
                         : SizedBox(),
                   ],
@@ -866,52 +880,36 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       textAlign: TextAlign.left,
                     ),
                     SizedBox(height: 10),
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        buttonStyleData: ButtonStyleData(
-                          height: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                        isExpanded: true,
-                        iconStyleData: const IconStyleData(
-                          icon: Icon(
-                            Icons.arrow_drop_down_outlined,
-                            color: Colors.grey,
-                            size: 25,
-                          ),
-                          iconEnabledColor: primaryTextColor,
-                        ),
-                        value: invA.selectedSatuan != ""
-                            ? invA.selectedSatuan
-                            : "",
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            invA.selectedSatuan =
-                                newValue ?? invA.selectedSatuan;
-                          });
-                        },
-                        dropdownStyleData: DropdownStyleData(maxHeight: 300),
-                        items: [
-                          DropdownMenuItem<String>(
-                            value: "",
-                            child: Text("Pilih satuan"),
-                          ),
-                          ...satuanController.satuanList
-                              .map<DropdownMenuItem<String>>(
-                            (Map<String, dynamic> item) {
-                              return DropdownMenuItem<String>(
-                                value: item['satuan_kd'].toString(),
-                                child: Text(item['satuan_nm'].toString()),
-                              );
-                            },
-                          ),
-                        ],
+                    DropdownSearch<String>(
+                      popupProps: PopupProps.menu(
+                        showSelectedItems: true,
+                        showSearchBox: true,
                       ),
+                      items: [
+                        "Pilih satuan",
+                        ...satuanController.satuanList.map<String>((Map<String, dynamic> item) {
+                          return item['satuan_nm'].toString();
+                        }).toList(),
+                      ],
+                      dropdownDecoratorProps: DropDownDecoratorProps(
+                        dropdownSearchDecoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          invA.selectedSatuan = newValue ?? invA.selectedSatuan;
+                        });
+                      },
+                      selectedItem: invA.selectedSatuan != "" ? invA.selectedSatuan : "Pilih satuan",
+                      dropdownBuilder: (context, selectedItem) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 4),
+                          child: Text(selectedItem.toString(), style: TextStyle(fontSize: 16)),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -3445,6 +3443,27 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                             ),
                           ),
                         ),
+                        SizedBox(width: 10),
+                        GestureDetector(
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: buttonColor,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                // Icons.location_on_sharp,
+                                Icons.my_location_rounded,
+                                size: 27,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          onTap: () {
+                            locationController.determinePosition();
+                          },
+                        ),
                       ],
                     ),
                   ],
@@ -3519,7 +3538,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                         SizedBox(width: 10),
                         GestureDetector(
                           child: Container(
-                            padding: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
                               color: buttonColor,
                               borderRadius: BorderRadius.circular(12),
@@ -3527,7 +3546,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                             child: const Center(
                               child: Icon(
                                 Icons.add_photo_alternate_outlined,
-                                size: 20,
+                                size: 27,
                                 color: Colors.white,
                               ),
                             ),

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,7 +12,6 @@ import 'package:kib_application/controllers/appointmentController.dart';
 import 'package:kib_application/controllers/categoryController.dart';
 import 'package:kib_application/controllers/inventoryCController.dart';
 import 'package:kib_application/controllers/unitController.dart';
-import 'package:kib_application/utils/snackbar.dart';
 
 class EditInventoryCScreen extends StatefulWidget {
   const EditInventoryCScreen({super.key});
@@ -235,7 +235,7 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text('Edit Inventaris - A'),
+        title: Text('Edit Inventaris - C'),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -547,48 +547,55 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                     ),
                     SizedBox(height: 10),
                     invC.statusBarang == "2"
-                        ? DropdownButtonHideUnderline(
-                            child: DropdownButton2(
-                              isExpanded: true,
-                              buttonStyleData: ButtonStyleData(
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                              iconStyleData: const IconStyleData(
-                                icon: Icon(
-                                  Icons.arrow_drop_down_outlined,
-                                  color: Colors.grey,
-                                  size: 25,
-                                ),
-                                iconEnabledColor: primaryTextColor,
-                              ),
-                              value: invC.selectedKategori,
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  invC.selectedKategori =
-                                      newValue ?? invC.selectedKategori;
-                                });
-                              },
-                              dropdownStyleData:
-                                  DropdownStyleData(maxHeight: 300),
-                              items: kategoriController.kategoriList
-                                  .map<DropdownMenuItem<String>>(
-                                (Map<String, dynamic> item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item['id'].toString(),
-                                    child: Text(
-                                      item['kode'] + ' - ' + item['nama'],
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  );
-                                },
-                              ).toList(),
+                        ? DropdownSearch<String>(
+                            popupProps: PopupProps.menu(
+                              showSelectedItems: true,
+                              showSearchBox: true,
                             ),
+                            items: kategoriController.kategoriList
+                              .map<String>((Map<String, dynamic> item) {
+                                return item['kode'] + ' - ' + item['nama'];
+                              })
+                              .toList(),
+                            dropdownDecoratorProps: DropDownDecoratorProps(
+                              dropdownSearchDecoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                            onChanged: (String? newValue) {
+                              if (newValue != null) {
+                                List<String> values = newValue.split(' - ');
+                                String kode = values[0];
+                                String nama = values[1];
+
+                                String id = kategoriController.kategoriList
+                                    .firstWhere((item) => item['kode'] == kode && item['nama'] == nama)['id']
+                                    .toString();
+
+                                setState(() {
+                                  invC.selectedKategori = id;
+                                  print(invC.selectedKategori);
+                                });
+                              }
+                            },
+                            selectedItem: invC.selectedKategori != ""
+                              ? kategoriController.kategoriList
+                                  .where((item) => item['id'].toString() == invC.selectedKategori)
+                                  .map((item) => item['kode'] + ' - ' + item['nama'])
+                                  .first
+                              : kategoriController.kategoriList.isNotEmpty
+                                  ? kategoriController.kategoriList[0]['kode'] +
+                                      ' - ' +
+                                      kategoriController.kategoriList[0]['nama']
+                                  : "Pilih kategori",
+                            dropdownBuilder: (context, selectedItem) {
+                              return Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Text(selectedItem.toString(), style: TextStyle(fontSize: 16)),
+                              );
+                            },
                           )
                         : SizedBox(),
                   ],
@@ -818,52 +825,36 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                       textAlign: TextAlign.left,
                     ),
                     SizedBox(height: 10),
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        buttonStyleData: ButtonStyleData(
-                          height: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                        isExpanded: true,
-                        iconStyleData: const IconStyleData(
-                          icon: Icon(
-                            Icons.arrow_drop_down_outlined,
-                            color: Colors.grey,
-                            size: 25,
-                          ),
-                          iconEnabledColor: primaryTextColor,
-                        ),
-                        value: invC.selectedSatuan != ""
-                            ? invC.selectedSatuan
-                            : "",
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            invC.selectedSatuan =
-                                newValue ?? invC.selectedSatuan;
-                          });
-                        },
-                        dropdownStyleData: DropdownStyleData(maxHeight: 300),
-                        items: [
-                          DropdownMenuItem<String>(
-                            value: "",
-                            child: Text("Pilih satuan"),
-                          ),
-                          ...satuanController.satuanList
-                              .map<DropdownMenuItem<String>>(
-                            (Map<String, dynamic> item) {
-                              return DropdownMenuItem<String>(
-                                value: item['satuan_kd'].toString(),
-                                child: Text(item['satuan_nm'].toString()),
-                              );
-                            },
-                          ),
-                        ],
+                    DropdownSearch<String>(
+                      popupProps: PopupProps.menu(
+                        showSelectedItems: true,
+                        showSearchBox: true,
                       ),
+                      items: [
+                        "Pilih satuan",
+                        ...satuanController.satuanList.map<String>((Map<String, dynamic> item) {
+                          return item['satuan_nm'].toString();
+                        }).toList(),
+                      ],
+                      dropdownDecoratorProps: DropDownDecoratorProps(
+                        dropdownSearchDecoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          invC.selectedSatuan = newValue ?? invC.selectedSatuan;
+                        });
+                      },
+                      selectedItem: invC.selectedSatuan != "" ? invC.selectedSatuan : "Pilih satuan",
+                      dropdownBuilder: (context, selectedItem) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 5),
+                          child: Text(selectedItem.toString(), style: TextStyle(fontSize: 16)),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -3782,33 +3773,6 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                     ),
                     onTap: () {
                       Get.back();
-                      customSnackBar("Success", 'Berhasil Inventarisasi', 'success');
-                      // List<String> data = [
-                      //   editController.tgl_inventaris.text,
-                      //   editController.no_register_awal.text,
-                      //   editController.no_register_akhir.text,
-                      //   invC.statusNoRegister,
-                      //   editController.kategori_id_awal.text,
-                      //   invC.selectedKategori,
-                      //   invC.statusBarang,
-                      //   editController.nama_spesifikasi_awal.text,
-                      //   editController.nama_spesifikasi_akhir.text,
-                      //   invC.statusNamaBarang,
-                      //   editController.jumlah_awal.text,
-                      //   invC.selectedSatuan,
-                      //   editController.cara_perolehan_awal.text,
-                      //   invC.selectedPerolehan,
-                      //   invC.statusPerolehan,
-                      //   editController.tgl_perolehan.text,
-                      //   editController.tahun_perolehan.text,
-                      //   editController.perolehan_awal.text,
-                      //   editController.perolehan_akhir.text,
-                      //   invC.statusNilaiPerolehan
-                      // ];
-                      // print(editController.kib_id.text);
-                      // print(data);
-                      // editController.editInsertInventarisC(
-                      //     editController.kib_id.text, data);
                     },
                   ),
                 ),

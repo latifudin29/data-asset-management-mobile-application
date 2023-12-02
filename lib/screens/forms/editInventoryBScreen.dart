@@ -86,7 +86,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
     invB.statusPl     = data['penggunaan_pl_yt'] != "" ? data['penggunaan_pl_yt'].toString() : "3";
 
     String caraPerolehan = (invB.statusInventaris == "0") ? data['cara_perolehan'].toString() : data['cara_perolehan_akhir'].toString();
-    if (caraPerolehan == "Pembelian" || caraPerolehan == "1") {
+    if (caraPerolehan == "Pembelian" || caraPerolehan == "1" || caraPerolehan == "") {
       invB.selectedPerolehan = "1";
     } else if (caraPerolehan == "Hibah" || caraPerolehan == "2") {
       invB.selectedPerolehan = "2";
@@ -157,9 +157,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
       invB.selectedKartuRuangan = (invB.statusInventaris == "0") ? namaRuang : data['kartu_inv_akhir'].toString();
     }
     invB.statusQRBarang                                     = data['barcode_barang']  != "" ? data['barcode_barang'].toString() : "0";
-    editController.barcode_barang_akhir.text                = data['barcode_barang_akhir'].toString();
     invB.statusQRRuangan                                    = data['barcode_ruangan'] != "" ? data['barcode_ruangan'].toString() : "0";
-    editController.barcode_ruangan_akhir.text               = data['barcode_ruangan_akhir'].toString();
     editController.kondisi_awal.text                        = (invB.statusInventaris == "0") ? data['kondisi'].toString() : data['kondisi_awal'].toString();
     invB.selectedKondisi                                    = (invB.statusInventaris == "0") ? data['kondisi'].toString() : data['kondisi_akhir'].toString();
     editController.asal_usul_awal.text                      = (invB.statusInventaris == "0") ? data['asal_usul'].toString() : data['asal_usul_awal'].toString();
@@ -168,15 +166,13 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
     editController.penggunaan_pemda_akhir.text              = data['penggunaan_pemda_akhir'].toString();
     editController.penggunaan_pemda_nama_pemakai.text       = data['penggunaan_pemda_nama_pemakai'].toString();
     editController.penggunaan_pemda_nama_pemakai_akhir.text = data['penggunaan_pemda_nama_pemakai_akhir'].toString();
-    editController.penggunaan_pempus_yt.text                = data['penggunaan_pempus_yt'].toString();
+    editController.penggunaan_pemda_status_pemakai.text     = data['penggunaan_pemda_status_pemakai'].toString();
     editController.penggunaan_pempus_y_nm.text              = data['penggunaan_pempus_y_nm'].toString();
     editController.penggunaan_pempus_y_doc.text             = data['penggunaan_pempus_y_doc'].toString();
     editController.penggunaan_pempus_t_nm.text              = data['penggunaan_pempus_t_nm'].toString();
-    editController.penggunaan_pdl_yt.text                   = data['penggunaan_pdl_yt'].toString();
     editController.penggunaan_pdl_y_nm.text                 = data['penggunaan_pdl_y_nm'].toString();
     editController.penggunaan_pdl_y_doc.text                = data['penggunaan_pdl_y_doc'].toString();
     editController.penggunaan_pdl_t_nm.text                 = data['penggunaan_pdl_t_nm'].toString();
-    editController.penggunaan_pl_yt.text                    = data['penggunaan_pl_yt'].toString();
     editController.penggunaan_pl_y_nm.text                  = data['penggunaan_pl_y_nm'].toString();
     editController.penggunaan_pl_y_doc.text                 = data['penggunaan_pl_y_doc'].toString();
     editController.penggunaan_pl_t_nm.text                  = data['penggunaan_pl_t_nm'].toString();
@@ -561,47 +557,55 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                   ),
                   SizedBox(height: 10),
                   invB.statusBarang == "2"
-                      ? DropdownButtonHideUnderline(
-                          child: DropdownButton2(
-                            isExpanded: true,
-                            buttonStyleData: ButtonStyleData(
-                              height: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ),
-                            iconStyleData: const IconStyleData(
-                              icon: Icon(
-                                Icons.arrow_drop_down_outlined,
-                                color: Colors.grey,
-                                size: 25,
-                              ),
-                              iconEnabledColor: primaryTextColor,
-                            ),
-                            value: invB.selectedKategori,
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                invB.selectedKategori = newValue ?? invB.selectedKategori;
-                              });
-                            },
-                            dropdownStyleData:
-                                DropdownStyleData(maxHeight: 300),
-                            items: kategoriController.kategoriList
-                                .map<DropdownMenuItem<String>>(
-                              (Map<String, dynamic> item) {
-                                return DropdownMenuItem<String>(
-                                  value: item['id'].toString(),
-                                  child: Text(
-                                    item['kode'] + ' - ' + item['nama'],
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                );
-                              },
-                            ).toList(),
+                      ? DropdownSearch<String>(
+                          popupProps: PopupProps.menu(
+                            showSelectedItems: true,
+                            showSearchBox: true,
                           ),
+                          items: kategoriController.kategoriList
+                            .map<String>((Map<String, dynamic> item) {
+                              return item['kode'] + ' - ' + item['nama'];
+                            })
+                            .toList(),
+                          dropdownDecoratorProps: DropDownDecoratorProps(
+                            dropdownSearchDecoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          ),
+                          onChanged: (String? newValue) {
+                            if (newValue != null) {
+                              List<String> values = newValue.split(' - ');
+                              String kode = values[0];
+                              String nama = values[1];
+
+                              String id = kategoriController.kategoriList
+                                  .firstWhere((item) => item['kode'] == kode && item['nama'] == nama)['id']
+                                  .toString();
+
+                              setState(() {
+                                invB.selectedKategori = id;
+                                print(invB.selectedKategori);
+                              });
+                            }
+                          },
+                          selectedItem: invB.selectedKategori != ""
+                            ? kategoriController.kategoriList
+                                .where((item) => item['id'].toString() == invB.selectedKategori)
+                                .map((item) => item['kode'] + ' - ' + item['nama'])
+                                .first
+                            : kategoriController.kategoriList.isNotEmpty
+                                ? kategoriController.kategoriList[0]['kode'] +
+                                    ' - ' +
+                                    kategoriController.kategoriList[0]['nama']
+                                : "Pilih kategori",
+                          dropdownBuilder: (context, selectedItem) {
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 5),
+                              child: Text(selectedItem.toString(), style: TextStyle(fontSize: 16)),
+                            );
+                          },
                         )
                       : SizedBox(),
                 ],
@@ -737,52 +741,36 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     textAlign: TextAlign.left,
                   ),
                   SizedBox(height: 10),
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      buttonStyleData: ButtonStyleData(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                      isExpanded: true,
-                      iconStyleData: const IconStyleData(
-                        icon: Icon(
-                          Icons.arrow_drop_down_outlined,
-                          color: Colors.grey,
-                          size: 25,
-                        ),
-                        iconEnabledColor: primaryTextColor,
-                      ),
-                      value: invB.selectedSatuan != ""
-                            ? invB.selectedSatuan
-                            : "",
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            invB.selectedSatuan =
-                                newValue ?? invB.selectedSatuan;
-                          });
-                        },
-                        dropdownStyleData: DropdownStyleData(maxHeight: 300),
-                        items: [
-                          DropdownMenuItem<String>(
-                            value: "",
-                            child: Text("Pilih satuan"),
-                          ),
-                          ...satuanController.satuanList
-                              .map<DropdownMenuItem<String>>(
-                            (Map<String, dynamic> item) {
-                              return DropdownMenuItem<String>(
-                                value: item['satuan_kd'],
-                                child: Text(item['satuan_nm']),
-                              );
-                            },
-                          ),
-                        ],
+                  DropdownSearch<String>(
+                    popupProps: PopupProps.menu(
+                      showSelectedItems: true,
+                      showSearchBox: true,
                     ),
+                    items: [
+                      "Pilih satuan",
+                      ...satuanController.satuanList.map<String>((Map<String, dynamic> item) {
+                        return item['satuan_nm'].toString();
+                      }).toList(),
+                    ],
+                    dropdownDecoratorProps: DropDownDecoratorProps(
+                      dropdownSearchDecoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        invB.selectedSatuan = newValue ?? invB.selectedSatuan;
+                      });
+                    },
+                    selectedItem: invB.selectedSatuan != "" ? invB.selectedSatuan : "Pilih satuan",
+                    dropdownBuilder: (context, selectedItem) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 4),
+                        child: Text(selectedItem.toString(), style: TextStyle(fontSize: 16)),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -2432,43 +2420,39 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                   ),
                   SizedBox(height: 10),
                   invB.statusKartuRuangan == "2"
-                      ? DropdownButtonHideUnderline(
-                          child: DropdownButton2(
-                            isExpanded: true,
-                            buttonStyleData: ButtonStyleData(
-                              height: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ),
-                            iconStyleData: const IconStyleData(
-                              icon: Icon(
-                                Icons.arrow_drop_down_outlined,
-                                color: Colors.grey,
-                                size: 25,
-                              ),
-                              iconEnabledColor: primaryTextColor,
-                            ),
-                            value: invB.selectedKartuRuangan,
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                invB.selectedKartuRuangan = newValue ?? invB.selectedKartuRuangan;
-                              });
-                            },
-                            dropdownStyleData: DropdownStyleData(maxHeight: 300),
-                            items: ruangController.ruangList
-                                .map<DropdownMenuItem<String>>(
-                              (Map<String, dynamic> item) {
-                                return DropdownMenuItem<String>(
-                                  value: item['ruang_nm'],
-                                  child: Text(item['ruang_nm']),
-                                );
-                              },
-                            ).toList(),
+                      ? DropdownSearch<String>(
+                          popupProps: PopupProps.menu(
+                            showSelectedItems: true,
+                            showSearchBox: true,
                           ),
+                          items: ruangController.ruangList
+                              .map<String>((Map<String, dynamic> item) {
+                                return item['ruang_nm'];
+                              })
+                              .toList(),
+                          dropdownDecoratorProps: DropDownDecoratorProps(
+                            dropdownSearchDecoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          ),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              invB.selectedKartuRuangan = newValue ?? invB.selectedKartuRuangan;
+                            });
+                          },
+                          selectedItem: invB.selectedKartuRuangan != ""
+                              ? invB.selectedKartuRuangan
+                              : ruangController.ruangList.isNotEmpty
+                                  ? ruangController.ruangList[0]['ruang_nm']
+                                  : "Pilih ruangan",
+                          dropdownBuilder: (context, selectedItem) {
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 5),
+                              child: Text(selectedItem.toString(), style: TextStyle(fontSize: 16)),
+                            );
+                          },
                         )
                       : SizedBox(),
                 ],
@@ -3048,7 +3032,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                             child: Padding(
                               padding: const EdgeInsets.only(left: 15),
                               child: TextFormField(
-                                controller: editController.penggunaan_pemda_nama_pemakai_akhir,
+                                controller: editController.penggunaan_pemda_status_pemakai,
                                 decoration: const InputDecoration(
                                   border: InputBorder.none,
                                 ),
@@ -4214,99 +4198,133 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     )),
                   ),
                   onTap: () {
-                      List<String> data = [
-                        editController.kib_id.text,
-                        editController.penetapan_id.text,
-                        editController.departemen_id.text,
-                        editController.tgl_inventaris.text,
-                        editController.no_register_awal.text,
-                        editController.no_register_akhir.text,
-                        invB.statusNoRegister,
-                        editController.kategori_id_awal.text,
-                        invB.selectedKategori,
-                        invB.statusBarang,
-                        editController.nama_spesifikasi_awal.text,
-                        editController.nama_spesifikasi_akhir.text,
-                        invB.statusNamaBarang,
-                        editController.jumlah_awal.text,
-                        invB.selectedSatuan,
-                        editController.cara_perolehan_awal.text,
-                        invB.selectedPerolehan,
-                        invB.statusPerolehan,
-                        editController.tgl_perolehan.text,
-                        editController.tahun_perolehan.text,
-                        editController.perolehan_awal.text,
-                        editController.perolehan_akhir.text,
-                        invB.statusNilaiPerolehan,
-                        invB.statusAtribusi,
-                        editController.atribusi_nibar.text,
-                        editController.atribusi_kode_barang.text,
-                        editController.atribusi_kode_lokasi.text,
-                        editController.atribusi_no_register.text,
-                        editController.atribusi_nama_barang.text,
-                        editController.atribusi_spesifikasi_barang.text,
-                        editController.a_alamat_awal.text,
-                        invB.statusAlamat,
-                        editController.alamat_kota.text,
-                        invB.selectedKecamatan,
-                        invB.selectedKelurahan,
-                        editController.alamat_jalan.text,
-                        editController.alamat_no.text,
-                        editController.alamat_rt.text,
-                        editController.alamat_rw.text,
-                        editController.alamat_kodepos.text,
+                    List<String> id = [
+                      editController.kib_id.text,
+                      editController.penetapan_id.text,
+                      editController.departemen_id.text,
+                    ];
 
-                        invB.statusKeberadaanBarang,
-                        editController.kondisi_awal.text,
-                        editController.kondisi_akhir.text,
-                        invB.statusKondisi,
-                        editController.asal_usul_awal.text,
-                        editController.asal_usul_akhir.text,
-                        invB.statusAsalUsul,
-                        invB.statusStatus,
-                        editController.penggunaan_awal.text,
-                        invB.choosePemerintahDaerah,
-                        editController.penggunaan_pemda_akhir.text,
-                        invB.choosePemerintahPusat,
-                        invB.statusPempus,
-                        editController.penggunaan_pempus_y_nm.text,
-                        editController.penggunaan_pempus_y_doc.text,
-                        editController.penggunaan_pempus_t_nm.text,
-                        invB.choosePemerintahDaerahLain,
-                        invB.statusPdl,
-                        editController.penggunaan_pdl_y_nm.text,
-                        editController.penggunaan_pdl_y_doc.text,
-                        editController.penggunaan_pdl_t_nm.text,
-                        invB.choosePihakLain,
-                        invB.statusPl,
-                        editController.penggunaan_pl_y_nm.text,
-                        editController.penggunaan_pl_y_doc.text,
-                        editController.penggunaan_pl_t_nm.text,
-                        invB.statusGanda,
-                        editController.tercatat_ganda_nibar.text,          
-                        editController.tercatat_ganda_no_register.text,       
-                        editController.tercatat_ganda_kode_barang.text,       
-                        editController.tercatat_ganda_nama_barang.text,       
-                        editController.tercatat_ganda_spesifikasi_barang.text,
-                        editController.tercatat_ganda_luas.text,              
-                        editController.tercatat_ganda_satuan.text,            
-                        editController.tercatat_ganda_perolehan.text,         
-                        editController.tercatat_ganda_tanggal_perolehan.text,                        
-                        editController.tercatat_ganda_kuasa_pengguna.text,
-                        invB.statusAtasNama,
-                        editController.lainnya.text,
-                        editController.keterangan.text,
-                        editController.file_nm.text,
-                        editController.petugas.text,
-                        editController.tahun.text,
-                      ];
-                      
-                      if(invB.statusInventaris == "0"){
-                        editController.insertInventarisB(data);
-                      } else {
-                        editController.updateInventarisB(editController.kib_id.text, data);
-                      }
-                    },
+                    List<String> data = [
+                      editController.tgl_inventaris.text,
+                      editController.no_register_awal.text,
+                      editController.no_register_akhir.text,
+                      invB.statusNoRegister,
+                      editController.kategori_id_awal.text,
+                      invB.selectedKategori,
+                      invB.statusBarang,
+                      editController.nama_spesifikasi_awal.text,
+                      editController.nama_spesifikasi_akhir.text,
+                      invB.statusNamaBarang,
+                      editController.jumlah_awal.text,
+                      invB.selectedSatuan,
+                      editController.cara_perolehan_awal.text,
+                      invB.selectedPerolehan,
+                      invB.statusPerolehan,
+                      editController.tgl_perolehan.text,
+                      editController.tahun_perolehan.text,
+                      editController.perolehan_awal.text,
+                      editController.perolehan_akhir.text,
+                      invB.statusNilaiPerolehan,
+                      invB.statusAtribusi,
+                      editController.atribusi_nibar.text,
+                      editController.atribusi_kode_barang.text,
+                      editController.atribusi_kode_lokasi.text,
+                      editController.atribusi_no_register.text,
+                      editController.atribusi_nama_barang.text,
+                      editController.atribusi_spesifikasi_barang.text,
+                      editController.a_alamat_awal.text,
+                      invB.statusAlamat,
+                      editController.alamat_kota.text,
+                      invB.selectedKecamatan,
+                      invB.selectedKelurahan,
+                      editController.alamat_jalan.text,
+                      editController.alamat_no.text,
+                      editController.alamat_rt.text,
+                      editController.alamat_rw.text,
+                      editController.alamat_kodepos.text,
+                      editController.b_merk_awal.text,
+                      editController.b_merk_akhir.text,
+                      invB.statusMerk,
+                      editController.b_cc_awal.text,
+                      editController.b_cc_akhir.text,
+                      invB.statusCC,
+                      editController.b_nomor_polisi_awal.text,
+                      editController.b_nomor_polisi_akhir.text,
+                      invB.statusNoPolisi,
+                      editController.b_nomor_rangka_awal.text,
+                      editController.b_nomor_rangka_akhir.text,
+                      invB.statusNoRangka,
+                      editController.b_nomor_mesin_awal.text,
+                      editController.b_nomor_mesin_akhir.text,
+                      invB.statusNoMesin,
+                      editController.b_nomor_bpkb_awal.text,
+                      editController.b_nomor_bpkb_akhir.text,
+                      invB.statusNoBPKB,
+                      editController.b_bahan_awal.text,
+                      editController.b_bahan_akhir.text,
+                      invB.statusBahan,
+                      editController.b_nomor_pabrik_awal.text,
+                      editController.b_nomor_pabrik_akhir.text,
+                      invB.statusNoPabrik,
+                      editController.kartu_inv_awal.text,
+                      invB.selectedKartuRuangan,
+                      invB.statusKartuRuangan,
+                      invB.statusQRBarang,
+                      invB.statusQRRuangan,
+                      invB.statusKeberadaanBarang,
+                      editController.kondisi_awal.text,
+                      invB.selectedKondisi,
+                      invB.statusKondisi,
+                      editController.asal_usul_awal.text,
+                      editController.asal_usul_akhir.text,
+                      invB.statusAsalUsul,
+                      invB.statusStatus,
+                      editController.penggunaan_awal.text,
+                      invB.choosePemerintahDaerah,
+                      editController.penggunaan_pemda_akhir.text,
+                      editController.penggunaan_pemda_nama_pemakai.text,
+                      editController.penggunaan_pemda_nama_pemakai_akhir.text,
+                      invB.statusNamaPemakai,
+                      editController.penggunaan_pemda_status_pemakai.text,
+                      invB.statusBast,
+                      invB.choosePemerintahPusat,
+                      invB.statusPempus,
+                      editController.penggunaan_pempus_y_nm.text,
+                      editController.penggunaan_pempus_y_doc.text,
+                      editController.penggunaan_pempus_t_nm.text,
+                      invB.choosePemerintahDaerahLain,
+                      invB.statusPdl,
+                      editController.penggunaan_pdl_y_nm.text,
+                      editController.penggunaan_pdl_y_doc.text,
+                      editController.penggunaan_pdl_t_nm.text,
+                      invB.choosePihakLain,
+                      invB.statusPl,
+                      editController.penggunaan_pl_y_nm.text,
+                      editController.penggunaan_pl_y_doc.text,
+                      editController.penggunaan_pl_t_nm.text,
+                      invB.statusGanda,
+                      editController.tercatat_ganda_nibar.text,          
+                      editController.tercatat_ganda_no_register.text,       
+                      editController.tercatat_ganda_kode_barang.text,       
+                      editController.tercatat_ganda_nama_barang.text,       
+                      editController.tercatat_ganda_spesifikasi_barang.text,
+                      editController.tercatat_ganda_luas.text,              
+                      editController.tercatat_ganda_satuan.text,            
+                      editController.tercatat_ganda_perolehan.text,         
+                      editController.tercatat_ganda_tanggal_perolehan.text,                        
+                      editController.tercatat_ganda_kuasa_pengguna.text,
+                      invB.statusAtasNama,
+                      editController.lainnya.text,
+                      editController.keterangan.text,
+                      editController.tahun.text
+                    ];
+                    
+                    if(invB.statusInventaris == "0"){
+                      editController.insertInventarisB(id, data);
+                    } else {
+                      editController.updateInventarisB(editController.kib_id.text, data);
+                    }
+                  },
                 ),
               ),
             ],

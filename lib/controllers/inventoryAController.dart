@@ -54,15 +54,12 @@ class InventoryAController extends GetxController {
       asal_usul_akhir,
       penggunaan_awal,
       penggunaan_pemda_akhir,
-      penggunaan_pempus_yt,
       penggunaan_pempus_y_nm,
       penggunaan_pempus_y_doc,
       penggunaan_pempus_t_nm,
-      penggunaan_pdl_yt,
       penggunaan_pdl_y_nm,
       penggunaan_pdl_y_doc,
       penggunaan_pdl_t_nm,
-      penggunaan_pl_yt,
       penggunaan_pl_y_nm,
       penggunaan_pl_y_doc,
       penggunaan_pl_t_nm,
@@ -132,15 +129,12 @@ class InventoryAController extends GetxController {
     asal_usul_akhir                   = TextEditingController();
     penggunaan_awal                   = TextEditingController();
     penggunaan_pemda_akhir            = TextEditingController();
-    penggunaan_pempus_yt              = TextEditingController();
     penggunaan_pempus_y_nm            = TextEditingController();
     penggunaan_pempus_y_doc           = TextEditingController();
     penggunaan_pempus_t_nm            = TextEditingController();
-    penggunaan_pdl_yt                 = TextEditingController();
     penggunaan_pdl_y_nm               = TextEditingController();
     penggunaan_pdl_y_doc              = TextEditingController();
     penggunaan_pdl_t_nm               = TextEditingController();
-    penggunaan_pl_yt                  = TextEditingController();
     penggunaan_pl_y_nm                = TextEditingController();
     penggunaan_pl_y_doc               = TextEditingController();
     penggunaan_pl_t_nm                = TextEditingController();
@@ -264,7 +258,7 @@ class InventoryAController extends GetxController {
         "penggunaan_pl_t_nm"               : _getValue(data[76]),                            // String
         "tercatat_ganda"                   : _tryParseInt(_getValue(data[77])),              // int
         "tercatat_ganda_nibar"             : _getValue(data[78]),                            // String
-        "tercatat_ganda_no_register"       : _getValue(data[89]),                            // String
+        "tercatat_ganda_no_register"       : _getValue(data[79]),                            // String
         "tercatat_ganda_kode_barang"       : _getValue(data[80]),                            // String
         "tercatat_ganda_nama_barang"       : _getValue(data[81]),                            // String
         "tercatat_ganda_spesifikasi_barang": _getValue(data[82]),                            // String
@@ -279,6 +273,7 @@ class InventoryAController extends GetxController {
         "lainnya"                          : _getValue(data[91]),                            // String
         "keterangan"                       : _getValue(data[92]),                            // String
         "tahun"                            : _tryParseInt(_getValue(data[93])),              // int
+        "status"                           : 0
       }
     };
 
@@ -288,17 +283,34 @@ class InventoryAController extends GetxController {
         body,
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         Get.back();
         customSnackBar("Success", response.body['message'], 'success');
       } else {
         print("Error: ${response.statusCode}");
+        print("Response Body: ${response.body}");
         customSnackBar("Error", "Failed to inventarisasi data!", 'error');
       }
     } catch (error) {
       print("Error: $error");
       customSnackBar("Error", "An unexpected error occurred!", 'error');
     }
+
+    // Directory? directory = await getExternalStorageDirectory();
+    
+    // if (directory != null) {
+    //   String path = directory.path;
+    //   String fileName = 'inventarisA-add.json';
+    //   String filePath = '$path/$fileName';
+    //   String jsonString = jsonEncode(body);
+
+    //   File file = File(filePath);
+    //   await file.writeAsString(jsonString);
+
+    //   print('File JSON disimpan di: $filePath');
+    // } else {
+    //   print('Error: Direktori penyimpanan eksternal null.');
+    // }
   }
 
   // Method Update Inventarisasi
@@ -399,7 +411,7 @@ class InventoryAController extends GetxController {
         "penggunaan_pl_t_nm"               : _getValue(data[76]),                            // String
         "tercatat_ganda"                   : _tryParseInt(_getValue(data[77])),              // int
         "tercatat_ganda_nibar"             : _getValue(data[78]),                            // String
-        "tercatat_ganda_no_register"       : _getValue(data[89]),                            // String
+        "tercatat_ganda_no_register"       : _getValue(data[79]),                            // String
         "tercatat_ganda_kode_barang"       : _getValue(data[80]),                            // String
         "tercatat_ganda_nama_barang"       : _getValue(data[81]),                            // String
         "tercatat_ganda_spesifikasi_barang": _getValue(data[82]),                            // String
