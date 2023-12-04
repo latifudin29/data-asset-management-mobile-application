@@ -64,8 +64,8 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
     invA.statusAtribusi         = data['atribusi_status']          != "" ? data['atribusi_status'].toString() : "0";
     invA.statusKeberadaanBarang = data['keberadaan_barang_status'] != "" ? data['keberadaan_barang_status'].toString() : "1";
     invA.statusStatus           = data['penggunaan_status']        != "" ? data['penggunaan_status'].toString() : "1";
-    invA.statusAtasNama         = data['pemilik_id']               != "" ? data['pemilik_id'].toString() : "1";
     invA.statusGanda            = data['tercatat_ganda']           != "" ? data['tercatat_ganda'].toString() : "2";
+    invA.statusAtasNama         = data['pemilik_id']               != "" ? data['pemilik_id'].toString() : "1";
 
     invA.chooseAtribusi   = data['atribusi_status'] != "" ? data['atribusi_status'].toString() : "0";
     

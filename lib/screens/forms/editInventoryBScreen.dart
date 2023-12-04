@@ -4231,7 +4231,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
               ),
               // Button Simpan
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 35),
+                padding: const EdgeInsets.only(bottom: 35, top: 20),
                 child: GestureDetector(
                   child: Container(
                     padding: const EdgeInsets.all(20),

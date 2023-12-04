@@ -1,4 +1,6 @@
 class InventoryVariablesC {
+  String statusInventaris     = "";
+
   String statusNoRegister     = "";
   String statusBarang         = "";
   String statusNamaBarang     = "";
@@ -6,6 +8,7 @@ class InventoryVariablesC {
   String statusPerolehan      = "";
   String statusNilaiPerolehan = "";
   String statusAlamat         = "";
+  String statusLuasBangunan   = "";
   String statusLuasTanah      = "";
   String statusKondisi        = "";
   String statusAsalUsul       = "";
@@ -24,10 +27,14 @@ class InventoryVariablesC {
   String statusGanda            = "";
   String statusBertingkat       = "";
   String statusBeton            = "";
-  String statusSatuan           = "";
+  String statusSatuanBangunan   = "";
+  String statusSatuanTanah      = "";
 
-  String chooseAtribusi         = "";
-  String choosePemerintah       = "";
+  String chooseAtribusi             = "";
+  String choosePemerintahDaerah     = "";
+  String choosePemerintahPusat      = "";
+  String choosePemerintahDaerahLain = "";
+  String choosePihakLain            = "";
 
   String selectedKategori    = "";
   String selectedSatuan      = "";
@@ -44,6 +51,7 @@ class InventoryVariablesC {
   List<String> keteranganPerolehan      = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganNilaiPerolehan = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganAlamat         = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganLuasBangunan   = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganLuasTanah      = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganKondisi        = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganAsalUsul       = ["Sesuai", "Tidak Sesuai"];
@@ -62,7 +70,7 @@ class InventoryVariablesC {
   List<String> keteranganPl               = ["Ada", "Tidak"];
   List<String> keteranganBertingkat       = ["Bertingkat", "Tidak Bertingkat"];
   List<String> keteranganBeton            = ["Beton", "Tidak Beton"];
-  List<String> keteranganSatuan           = ["KM", "M", "M2"];
+  List<String> keteranganSatuanTanah      = ["KM", "M", "M2"];
 
   List<String> dropdownStatusTanah = [
     "Hak Milik",

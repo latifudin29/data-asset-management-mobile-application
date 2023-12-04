@@ -10,8 +10,10 @@ import 'package:kib_application/constans/inventoryVariablesC.dart';
 import 'package:kib_application/controllers/addressController.dart';
 import 'package:kib_application/controllers/appointmentController.dart';
 import 'package:kib_application/controllers/categoryController.dart';
+import 'package:kib_application/controllers/getLocationController.dart';
 import 'package:kib_application/controllers/inventoryCController.dart';
 import 'package:kib_application/controllers/unitController.dart';
+import 'package:kib_application/widgets/formPetugas.dart';
 
 class EditInventoryCScreen extends StatefulWidget {
   const EditInventoryCScreen({super.key});
@@ -26,8 +28,11 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
   final kategoriController  = Get.put(CategoryController());
   final satuanController    = Get.put(UnitController());
   final addressController   = Get.put(AddressController());
+  final locationController  = Get.put(LocationController());
   final invC                = Get.put(InventoryVariablesC());
 
+  List<dynamic> _petugasList = [''];
+  
   DateTime now = DateTime.now();
 
   @override
@@ -37,37 +42,45 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
     final filteredList = addressController.kecamatanList
       .where((kecamatan) => kecamatan['kecamatan_kd'].toString() == data['alamat_kecamatan'].toString());
 
-    String statusInventaris = data['status_inventaris'].toString();
-    editController.kib_id.text = data['kib_id'].toString();
+    invC.statusInventaris = data['status_inventaris'].toString();
+    editController.kib_id.text        = data['kib_id'].toString();
+    editController.penetapan_id.text  = data['penetapan_id'].toString();
+    editController.departemen_id.text = data['departemen_id'].toString();
 
     invC.statusNoRegister       = data['no_register_status']                   != "" ? data['no_register_status'].toString() : "1";
     invC.statusBarang           = data['kategori_id_status']                   != "" ? data['kategori_id_status'].toString() : "1";
     invC.statusNamaBarang       = data['nama_spesifikasi_status']              != "" ? data['nama_spesifikasi_status'].toString() : "1";
-    invC.statusLuasLantai       = "1";
     invC.statusPerolehan        = data['cara_perolehan_status']                != "" ? data['cara_perolehan_status'].toString() : "1";
     invC.statusNilaiPerolehan   = data['perolehan_status']                     != "" ? data['perolehan_status'].toString() : "1";
     invC.statusAlamat           = data['a_alamat_status']                      != "" ? data['a_alamat_status'].toString() : "1";
+    invC.statusLuasBangunan     = data['c_luas_bangunan_status']               != "" ? data['c_luas_tanah_status'].toString() : "1";
     invC.statusLuasTanah        = data['c_luas_tanah_status']                  != "" ? data['c_luas_tanah_status'].toString() : "1";
     invC.statusKondisi          = data['kondisi_status']                       != "" ? data['kondisi_status'].toString() : "1";
     invC.statusAsalUsul         = data['asal_usul_status']                     != "" ? data['asal_usul_status'].toString() : "1";
+    
     invC.statusAtribusi         = data['atribusi_status']                      != "" ? data['atribusi_status'].toString() : "0";
     invC.statusKeberadaanBarang = data['keberadaan_barang_status']             != "" ? data['keberadaan_barang_status'].toString() : "1";
     invC.statusStatus           = data['penggunaan_status']                    != "" ? data['penggunaan_status'].toString() : "1";
-    invC.statusAtasNama         = data['pemilik_id']                           != "" ? data['pemilik_id'].toString() : "1";
     invC.statusNamaPemakai      = data['penggunaan_pemda_nama_pemakai_status'] != "" ? data['penggunaan_pemda_nama_pemakai_status'].toString() : "1";
     invC.statusBast             = data['penggunaan_pemda_bast_pemakaian']      != "" ? data['penggunaan_pemda_bast_pemakaian'].toString() : "1";
     invC.statusSIP              = data['penggunaan_pemda_sip']                 != "" ? data['penggunaan_pemda_sip'].toString() : "1";
     invC.statusIMB              = data['penggunaan_pemda_imb']                 != "" ? data['penggunaan_pemda_imb'].toString() : "1";
     invC.statusGanda            = data['tercatat_ganda']                       != "" ? data['tercatat_ganda'].toString() : "2";
+    invC.statusAtasNama         = data['pemilik_id']                           != "" ? data['pemilik_id'].toString() : "1";
+    
     invC.statusPempus           = data['penggunaan_pempus_yt']                 != "" ? data['penggunaan_pempus_yt'].toString() : "3";
     invC.statusPdl              = data['penggunaan_pdl_yt']                    != "" ? data['penggunaan_pdl_yt'].toString() : "3";
     invC.statusPl               = data['penggunaan_pl_yt']                     != "" ? data['penggunaan_pl_yt'].toString() : "3";
 
     invC.chooseAtribusi   = data['atribusi_status'] != "" ? data['atribusi_status'].toString() : "0";
-    invC.choosePemerintah = "1";
 
-    String caraPerolehan = (statusInventaris == "0") ? data['cara_perolehan'].toString() : data['cara_perolehan_akhir'].toString();
-    if (caraPerolehan == "Pembelian" || caraPerolehan == "1") {
+    invC.choosePemerintahDaerah     = (invC.statusInventaris == "0") ? "1" : data['penggunaan_pemda_status'].toString();
+    invC.choosePemerintahPusat      = data['penggunaan_pempus_status'].toString();
+    invC.choosePemerintahDaerahLain = data['penggunaan_pdl_status'].toString();
+    invC.choosePihakLain            = data['penggunaan_pl_status'].toString();
+
+    String caraPerolehan = (invC.statusInventaris == "0") ? data['cara_perolehan'].toString() : data['cara_perolehan_akhir'].toString();
+    if (caraPerolehan == "Pembelian" || caraPerolehan == "1" || caraPerolehan == "") {
       invC.selectedPerolehan = "1";
     } else if (caraPerolehan == "Hibah" || caraPerolehan == "2") {
       invC.selectedPerolehan = "2";
@@ -75,51 +88,46 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
       invC.selectedPerolehan = "3";
     } else if (caraPerolehan == "Hasil Inventarisasi" || caraPerolehan == "4") {
       invC.selectedPerolehan = "4";
-    } else {
-      invC.selectedPerolehan = "";
     }
 
-    String bertingkatTidak = (statusInventaris == "0") ? data['c_bertingkat_tidak'].toString() : data['c_bertingkat'].toString();
-    if (bertingkatTidak == "Bertingkat") {
+    String bertingkatTidak = (invC.statusInventaris == "0") ? data['c_bertingkat_tidak'].toString() : data['c_bertingkat'].toString();
+    if (bertingkatTidak == "Bertingkat" || bertingkatTidak == "1") {
       invC.statusBertingkat = "1";
     } else {
       invC.statusBertingkat = "0";
     }
 
-    String betonTidak = (statusInventaris == "0") ? data['c_beton_tidak'].toString() : data['c_beton'].toString();
-    if (betonTidak == "Beton") {
+    String betonTidak = (invC.statusInventaris == "0") ? data['c_beton_tidak'].toString() : data['c_beton'].toString();
+    if (betonTidak == "Beton" || betonTidak == "1") {
       invC.statusBeton = "1";
     } else {
       invC.statusBeton = "0";
     }
 
-    editController.tgl_inventaris.text                    = (statusInventaris == "0") ? DateFormat('dd-MM-yyyy').format(now) : data['tgl_inventaris_formatted'].toString();
+    editController.tgl_inventaris.text                    = (invC.statusInventaris == "0") ? DateFormat('dd-MM-yyyy').format(now) : data['tgl_inventaris_formatted'].toString();
     editController.skpd.text                              = data['departemen_kd'].toString();
     editController.skpd_uraian.text                       = data['departemen_nm'].toString();
     editController.barang.text                            = data['kategori_kd'].toString() + ' - ' + data['kategori_nm'].toString();
-    editController.no_register_awal.text                  = (statusInventaris == "0") ? data['no_register'].toString() : data['no_register_awal'].toString();
-    editController.no_register_akhir.text                 = (statusInventaris == "0") ? data['no_register'].toString() : data['no_register_akhir'].toString();
-    editController.kategori_id_awal.text                  = (statusInventaris == "0") ? data['kategori_id'].toString() : data['kategori_id_awal'].toString();
-    invC.selectedKategori                                 = (statusInventaris == "0") ? data['kategori_id'].toString() : data['kategori_id_akhir'].toString();
+    editController.no_register_awal.text                  = (invC.statusInventaris == "0") ? data['no_register'].toString() : data['no_register_awal'].toString();
+    editController.no_register_akhir.text                 = (invC.statusInventaris == "0") ? data['no_register'].toString() : data['no_register_akhir'].toString();
+    editController.kategori_id_awal.text                  = (invC.statusInventaris == "0") ? data['kategori_id'].toString() : data['kategori_id_awal'].toString();
+    invC.selectedKategori                                 = (invC.statusInventaris == "0") ? data['kategori_id'].toString() : data['kategori_id_akhir'].toString();
     editController.nama_spesifikasi_awal.text             = data['nama_spesifikasi_awal'].toString();
     editController.nama_spesifikasi_akhir.text            = data['nama_spesifikasi_akhir'].toString();
-    editController.jumlah_awal.text                       = (statusInventaris == "0") ? data['jumlah_awal'].toString() : data['jumlah_akhir'].toString();
-    // 
-    editController.c_luas_lantai.text                     = (statusInventaris == "0") ? data['c_luas_lantai'].toString() : data['c_luas_lantai'].toString();
-    // 
-    invC.selectedSatuan                                   = (statusInventaris == "0") ? (data['satuan_awal'] != "") ? data['satuan_awal'].toString() : "" : (data['satuan_akhir'] != "") ? data['satuan_akhir'].toString() : "";
-    editController.cara_perolehan_awal.text               = (statusInventaris == "0") ? data['cara_perolehan'].toString() : data['cara_perolehan_awal'].toString();
-    editController.tgl_perolehan.text                     = (statusInventaris == "0") ? data['tgl_perolehan_penetapan'].toString() : data['tgl_perolehan_inventaris'].toString();
-    editController.tahun_perolehan.text                   = (statusInventaris == "0") ? data['th_beli'].toString() : data['tahun_perolehan'].toString();
-    editController.perolehan_awal.text                    = (statusInventaris == "0") ? data['perolehan_formatted'].toString() : data['perolehan_awal_formatted'].toString();
-    editController.perolehan_akhir.text                   = (statusInventaris == "0") ? data['perolehan_formatted'].toString() : data['perolehan_akhir_formatted'].toString();
+    editController.jumlah_awal.text                       = (invC.statusInventaris == "0") ? data['jumlah_awal'].toString() : data['jumlah_akhir'].toString();
+    invC.selectedSatuan                                   = (invC.statusInventaris == "0") ? (data['satuan_awal'] != "") ? data['satuan_awal'].toString() : "" : (data['satuan_akhir'] != "") ? data['satuan_akhir'].toString() : "";
+    editController.cara_perolehan_awal.text               = (invC.statusInventaris == "0") ? data['cara_perolehan'].toString() : data['cara_perolehan_awal'].toString();
+    editController.tgl_perolehan.text                     = (invC.statusInventaris == "0") ? data['tgl_perolehan_penetapan'].toString() : data['tgl_perolehan_inventaris'].toString();
+    editController.tahun_perolehan.text                   = (invC.statusInventaris == "0") ? data['th_beli'].toString() : data['tahun_perolehan'].toString();
+    editController.perolehan_awal.text                    = (invC.statusInventaris == "0") ? data['perolehan_formatted'].toString() : data['perolehan_awal_formatted'].toString();
+    editController.perolehan_akhir.text                   = (invC.statusInventaris == "0") ? data['perolehan_formatted'].toString() : data['perolehan_akhir_formatted'].toString();
     editController.atribusi_nibar.text                    = data['atribusi_nibar'].toString();
     editController.atribusi_kode_barang.text              = data['atribusi_kode_barang'].toString();
     editController.atribusi_kode_lokasi.text              = data['atribusi_kode_lokasi'].toString();
     editController.atribusi_no_register.text              = data['atribusi_no_register'].toString();
     editController.atribusi_nama_barang.text              = data['atribusi_nama_barang'].toString();
     editController.atribusi_spesifikasi_barang.text       = data['atribusi_spesifikasi_barang'].toString();
-    editController.a_alamat_awal.text                     = (statusInventaris == "0") ? data['c_lokasi'].toString() : data['c_lokasi_awal'].toString();
+    editController.a_alamat_awal.text                     = (invC.statusInventaris == "0") ? data['a_alamat_awal'].toString() : data['a_alamat_awal'].toString();
     editController.alamat_kota.text                       = data['alamat_kota'] != "" ? data['alamat_kota'].toString() : "KOTA BOGOR";
     invC.selectedKecamatan                                = data['alamat_kecamatan'].toString();
     if (filteredList.isNotEmpty) {
@@ -132,15 +140,14 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
     editController.alamat_rt.text                           = data['alamat_rt'].toString();
     editController.alamat_rw.text                           = data['alamat_rw'].toString();
     editController.alamat_kodepos.text                      = data['alamat_kodepos'].toString();
-    editController.c_luas_tanah_awal.text                   = data['c_luas_tanah_awal']  != "" ? data['c_luas_tanah_awal'].toString() : "";
-    editController.c_luas_tanah_akhir.text                  = data['c_luas_tanah_akhir'] != "" ? data['c_luas_tanah_akhir'].toString() : "";
-    invC.statusSatuan                                       = (statusInventaris == "0") ? "M2" : data['c_satuan_tanah'].toString();
-    invC.selectedStatusTanah                                = (statusInventaris == "0") ? "Hak Milik" : data['c_status_tanah_awal'].toString();
-    editController.kondisi_awal.text                        = (statusInventaris == "0") ? data['kondisi'].toString() : data['kondisi_awal'].toString();
-    invC.selectedKondisi                                    = (statusInventaris == "0") ? data['kondisi'].toString() : data['kondisi_akhir'].toString();
-    editController.asal_usul_awal.text                      = (statusInventaris == "0") ? data['asal_usul'].toString() : data['asal_usul_awal'].toString();
-    editController.asal_usul_akhir.text                     = (statusInventaris == "0") ? data['asal_usul'].toString() : data['asal_usul_akhir'].toString();
-    editController.penggunaan_awal.text                     = (statusInventaris == "0") ? data['a_penggunaan'].toString() : data['penggunaan_awal'].toString();
+    invC.statusSatuanBangunan                               = (invC.statusInventaris == "0") ? "M2" : data['c_satuan_bangunan'].toString();
+    invC.statusSatuanTanah                                  = (invC.statusInventaris == "0") ? "M2" : data['c_satuan_tanah'].toString();
+    invC.selectedStatusTanah                                = (invC.statusInventaris == "0") ? "Hak Milik" : data['c_status_tanah_awal'].toString();
+    editController.kondisi_awal.text                        = (invC.statusInventaris == "0") ? data['kondisi'].toString() : data['kondisi_awal'].toString();
+    invC.selectedKondisi                                    = (invC.statusInventaris == "0") ? data['kondisi'].toString() : data['kondisi_akhir'].toString();
+    editController.asal_usul_awal.text                      = (invC.statusInventaris == "0") ? data['asal_usul'].toString() : data['asal_usul_awal'].toString();
+    editController.asal_usul_akhir.text                     = (invC.statusInventaris == "0") ? data['asal_usul'].toString() : data['asal_usul_akhir'].toString();
+    editController.penggunaan_awal.text                     = (invC.statusInventaris == "0") ? data['a_penggunaan'].toString() : data['penggunaan_awal'].toString();
     editController.penggunaan_pemda_status.text             = data['penggunaan_pemda_status'].toString();
     editController.penggunaan_pemda_akhir.text              = data['penggunaan_pemda_akhir'].toString();
     editController.penggunaan_pemda_nama_pemakai.text       = data['penggunaan_pemda_nama_pemakai'].toString();
@@ -171,12 +178,21 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
     editController.tercatat_ganda_perolehan.text            = data['tercatat_ganda_perolehan'].toString();
     editController.tercatat_ganda_tanggal_perolehan.text    = data['tercatat_ganda_tanggal_perolehan'].toString();
     editController.tercatat_ganda_kuasa_pengguna.text       = data['tercatat_ganda_kuasa_pengguna'].toString();
-    editController.lat.text                                 = (statusInventaris == "0") ? data['lat_penetapan'].toString() : data['lat_inventaris'].toString();
-    editController.long.text                                = (statusInventaris == "0") ? data['long_penetapan'].toString() : data['long_inventaris'].toString();
+    editController.lat.text                                 = (invC.statusInventaris == "0") ? data['lat_penetapan'].toString() : data['lat_inventaris'].toString();
+    editController.long.text                                = (invC.statusInventaris == "0") ? data['long_penetapan'].toString() : data['long_inventaris'].toString();
     editController.lainnya.text                             = data['lainnya'].toString();
-    editController.keterangan.text                          = (statusInventaris == "0") ? data['keterangan_penetapan'].toString() : data['keterangan_inventaris'].toString();
+    editController.keterangan.text                          = (invC.statusInventaris == "0") ? data['keterangan_penetapan'].toString() : data['keterangan_inventaris'].toString();
     editController.file_nm.text                             = data['file_nm'].toString();
-    editController.petugas.text                             = data['petugas'].toString();
+    _petugasList                                            = data['petugas'] != null && data['petugas'].isNotEmpty ? List<String>.from(data['petugas']) : [""];
+    editController.tahun.text                               = (invC.statusInventaris == "0") ? now.year.toString() : data['tahun'].toString();
+  
+    ever(locationController.latitude, (_) {
+      editController.lat.text = locationController.latitude.value;
+    });
+
+    ever(locationController.longitude, (_) {
+      editController.long.text = locationController.longitude.value;
+    });
   }
 
   final ImagePicker _picker = ImagePicker();
@@ -722,96 +738,6 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                         ),
                       ),
                     ),
-                  ],
-                ),
-                SizedBox(height: 15),
-                // Luas Lantai
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Luas Lantai',
-                      style: TextStyle(fontSize: 16),
-                      textAlign: TextAlign.left,
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(12),
-                              color: Colors.grey.shade400,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 15),
-                              child: TextFormField(
-                                controller: editController.c_luas_lantai,
-                                readOnly: true,
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton2(
-                            buttonStyleData: ButtonStyleData(
-                              height: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ),
-                            iconStyleData: const IconStyleData(
-                              icon: Icon(
-                                Icons.arrow_drop_down_outlined,
-                                color: Colors.grey,
-                                size: 25,
-                              ),
-                              iconEnabledColor: primaryTextColor,
-                            ),
-                            value: invC.statusLuasLantai,
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                invC.statusLuasLantai = newValue ?? invC.statusLuasLantai;
-                              });
-                            },
-                            items: invC.keteranganLuasLantai.map((String item) {
-                              return DropdownMenuItem<String>(
-                                value: invC.keteranganLuasLantai.indexOf(item) == 0
-                                    ? "1"
-                                    : "2",
-                                child: Text(item),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    invC.statusLuasLantai == "2"
-                        ? Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 15),
-                              child: TextFormField(
-                                controller: editController.c_luas_lantai,
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                ),
-                              ),
-                            ),
-                          )
-                        : SizedBox(),
                   ],
                 ),
                 SizedBox(height: 15),
@@ -1718,6 +1644,142 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                   ],
                 ),
                 SizedBox(height: 15),
+                // Luas Bangunan
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Luas Bangunan',
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.grey.shade400,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 15),
+                              child: TextFormField(
+                                controller: editController.c_luas_bangunan_awal,
+                                readOnly: true,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            buttonStyleData: ButtonStyleData(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                            iconStyleData: const IconStyleData(
+                              icon: Icon(
+                                Icons.arrow_drop_down_outlined,
+                                color: Colors.grey,
+                                size: 25,
+                              ),
+                              iconEnabledColor: primaryTextColor,
+                            ),
+                            value: invC.statusLuasBangunan,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                invC.statusLuasBangunan =
+                                    newValue ?? invC.statusLuasBangunan;
+                              });
+                            },
+                            items: invC.keteranganLuasBangunan.map((String item) {
+                              return DropdownMenuItem<String>(
+                                value:
+                                    invC.keteranganLuasBangunan.indexOf(item) == 0
+                                        ? "1"
+                                        : "2",
+                                child: Text(item),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    invC.statusLuasBangunan == "2"
+                        ? Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 15),
+                              child: TextFormField(
+                                controller: editController.c_luas_bangunan_akhir,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          )
+                        : SizedBox(),
+                  ],
+                ),
+                SizedBox(height: 10),
+                // Satuan Bangunan
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Satuan Bangunan',
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(height: 10),
+                    DropdownSearch<String>(
+                      popupProps: PopupProps.menu(
+                        showSelectedItems: true,
+                        showSearchBox: true,
+                      ),
+                      items: [
+                        "Pilih satuan",
+                        ...satuanController.satuanList.map<String>((Map<String, dynamic> item) {
+                          return item['satuan_nm'].toString();
+                        }).toList(),
+                      ],
+                      dropdownDecoratorProps: DropDownDecoratorProps(
+                        dropdownSearchDecoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          invC.statusSatuanBangunan = newValue ?? invC.statusSatuanBangunan;
+                        });
+                      },
+                      selectedItem: invC.statusSatuanBangunan != "" ? invC.statusSatuanBangunan : "Pilih satuan",
+                      dropdownBuilder: (context, selectedItem) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 5),
+                          child: Text(selectedItem.toString(), style: TextStyle(fontSize: 16)),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15),
                 // Bertingkat/Tidak
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1903,13 +1965,13 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                         : SizedBox(),
                   ],
                 ),
-                SizedBox(height: 15),
+                SizedBox(height: 10),
                 // Satuan Tanah
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Satuan',
+                      'Satuan Tanah',
                       style: TextStyle(fontSize: 16),
                       textAlign: TextAlign.left,
                     ),
@@ -1934,13 +1996,13 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                           ),
                           iconEnabledColor: primaryTextColor,
                         ),
-                        value: invC.statusSatuan,
+                        value: invC.statusSatuanTanah,
                         onChanged: (String? newValue) {
                           setState(() {
-                            invC.statusSatuan = newValue ?? invC.statusSatuan;
+                            invC.statusSatuanTanah = newValue ?? invC.statusSatuanTanah;
                           });
                         },
-                        items: invC.keteranganSatuan.map((String item) {
+                        items: invC.keteranganSatuanTanah.map((String item) {
                           return DropdownMenuItem<String>(
                             value: item,
                             child: Text(item),
@@ -2330,10 +2392,13 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                     RadioListTile(
                       title: Text("Pemerintah Daerah"),
                       value: "1",
-                      groupValue: invC.choosePemerintah,
+                      groupValue: invC.choosePemerintahDaerah,
                       onChanged: (value) {
                         setState(() {
-                          invC.choosePemerintah = value.toString();
+                          invC.choosePemerintahDaerah = (value == "1") ? "1" : "";
+                          invC.choosePemerintahPusat = "";
+                          invC.choosePemerintahDaerahLain = "";
+                          invC.choosePihakLain = "";
                         });
                       },
                     ),
@@ -2475,7 +2540,7 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 15),
                                 child: TextFormField(
-                                  controller: editController.penggunaan_pemda_nama_pemakai_akhir,
+                                  controller: editController.penggunaan_pemda_status_pemakai,
                                   decoration: const InputDecoration(
                                     border: InputBorder.none,
                                   ),
@@ -2636,11 +2701,14 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                   children: [
                     RadioListTile(
                       title: Text("Pemerintah Pusat"),
-                      value: "2",
-                      groupValue: invC.choosePemerintah,
+                      value: "1",
+                      groupValue: invC.choosePemerintahPusat,
                       onChanged: (value) {
                         setState(() {
-                          invC.choosePemerintah = value.toString();
+                          invC.choosePemerintahPusat = (value == "1") ? "1" : "";
+                          invC.choosePemerintahDaerah= "";
+                          invC.choosePemerintahDaerahLain = "";
+                          invC.choosePihakLain = "";
                         });
                       },
                     ),
@@ -2812,11 +2880,14 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                   children: [
                     RadioListTile(
                       title: Text("Pemerintah Daerah Lain"),
-                      value: "3",
-                      groupValue: invC.choosePemerintah,
+                      value: "1",
+                      groupValue: invC.choosePemerintahDaerahLain,
                       onChanged: (value) {
                         setState(() {
-                          invC.choosePemerintah = value.toString();
+                          invC.choosePemerintahDaerahLain = (value == "1") ? "1" : "";
+                          invC.choosePemerintahDaerah = "";
+                          invC.choosePemerintahPusat = "";
+                          invC.choosePihakLain = "";
                         });
                       },
                     ),
@@ -2987,14 +3058,17 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     RadioListTile(
-                      title: Text("Pihak Lain"),
-                      value: "4",
-                      groupValue: invC.choosePemerintah,
-                      onChanged: (value) {
-                        setState(() {
-                          invC.choosePemerintah = value.toString();
-                        });
-                      },
+                        title: Text("Pihak Lain"),
+                        value: "1",
+                        groupValue: invC.choosePihakLain,
+                        onChanged: (value) {
+                          setState(() {
+                            invC.choosePihakLain = (value == "1") ? "1" : "";
+                            invC.choosePemerintahDaerah = "";
+                            invC.choosePemerintahPusat = "";
+                            invC.choosePemerintahDaerahLain = "";
+                          });
+                        },
                     ),
                     SizedBox(height: 3),
                     Column(
@@ -3606,6 +3680,27 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                             ),
                           ),
                         ),
+                        SizedBox(width: 10),
+                        GestureDetector(
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: buttonColor,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                // Icons.location_on_sharp,
+                                Icons.my_location_rounded,
+                                size: 27,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          onTap: () {
+                            locationController.determinePosition();
+                          },
+                        ),
                       ],
                     ),
                   ],
@@ -3732,27 +3827,33 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                       style: TextStyle(fontSize: 16),
                       textAlign: TextAlign.left,
                     ),
-                    SizedBox(height: 10),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          controller: editController.petugas,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
+                  ],
+                ),
+                SizedBox(height: 10),
+                Column(
+                  children: List.generate(
+                    _petugasList.length,
+                    (index) => Padding(
+                      padding: const EdgeInsets.only(bottom: 15.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: FormDynamicPetugas(
+                              key: UniqueKey(),
+                              initialValue: _petugasList[index],
+                              onChanged: (v) => _petugasList[index] = v,
+                            ),
                           ),
-                        ),
+                          const SizedBox(width: 10),
+                          _textfieldBtn(index),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
                 // Button Simpan
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 35),
+                  padding: const EdgeInsets.only(bottom: 35, top: 20),
                   child: GestureDetector(
                     child: Container(
                       padding: const EdgeInsets.all(20),
@@ -3772,13 +3873,148 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                       )),
                     ),
                     onTap: () {
-                      Get.back();
+                      List<String> id = [
+                      editController.kib_id.text,
+                      editController.penetapan_id.text,
+                      editController.departemen_id.text,
+                    ];
+
+                    List<dynamic> data = [
+                      editController.tgl_inventaris.text,
+                      editController.no_register_awal.text,
+                      editController.no_register_akhir.text,
+                      invC.statusNoRegister,
+                      editController.kategori_id_awal.text,
+                      invC.selectedKategori,
+                      invC.statusBarang,
+                      editController.nama_spesifikasi_awal.text,
+                      editController.nama_spesifikasi_akhir.text,
+                      invC.statusNamaBarang,
+                      editController.jumlah_awal.text,
+                      invC.selectedSatuan,
+                      editController.cara_perolehan_awal.text,
+                      invC.selectedPerolehan,
+                      invC.statusPerolehan,
+                      editController.tgl_perolehan.text,
+                      editController.tahun_perolehan.text,
+                      editController.perolehan_awal.text,
+                      editController.perolehan_akhir.text,
+                      invC.statusNilaiPerolehan,
+                      invC.statusAtribusi,
+                      editController.atribusi_nibar.text,
+                      editController.atribusi_kode_barang.text,
+                      editController.atribusi_kode_lokasi.text,
+                      editController.atribusi_no_register.text,
+                      editController.atribusi_nama_barang.text,
+                      editController.atribusi_spesifikasi_barang.text,
+                      editController.a_alamat_awal.text,
+                      invC.statusAlamat,
+                      editController.alamat_kota.text,
+                      invC.selectedKecamatan,
+                      invC.selectedKelurahan,
+                      editController.alamat_jalan.text,
+                      editController.alamat_no.text,
+                      editController.alamat_rt.text,
+                      editController.alamat_rw.text,
+                      editController.alamat_kodepos.text,
+                      editController.c_luas_bangunan_awal.text,
+                      editController.c_luas_bangunan_akhir.text,
+                      invC.statusLuasBangunan,
+                      invC.statusSatuanBangunan,
+                      invC.statusBertingkat,
+                      invC.statusBeton,
+                      editController.c_luas_tanah_awal.text,
+                      editController.c_luas_tanah_akhir.text,
+                      invC.statusLuasTanah,
+                      invC.statusSatuanTanah,
+                      invC.selectedStatusTanah,
+                      invC.statusKeberadaanBarang,
+                      editController.kondisi_awal.text,
+                      invC.selectedKondisi,
+                      invC.statusKondisi,
+                      editController.asal_usul_awal.text,
+                      editController.asal_usul_akhir.text,
+                      invC.statusAsalUsul,
+                      invC.statusStatus,
+                      editController.penggunaan_awal.text,
+                      invC.choosePemerintahDaerah,
+                      editController.penggunaan_pemda_akhir.text,
+                      editController.penggunaan_pemda_nama_pemakai.text,
+                      editController.penggunaan_pemda_nama_pemakai_akhir.text,
+                      invC.statusNamaPemakai,
+                      editController.penggunaan_pemda_status_pemakai.text,
+                      invC.statusBast,
+                      invC.statusSIP,
+                      invC.statusIMB,
+                      invC.choosePemerintahPusat,
+                      invC.statusPempus,
+                      editController.penggunaan_pempus_y_nm.text,
+                      editController.penggunaan_pempus_y_doc.text,
+                      editController.penggunaan_pempus_t_nm.text,
+                      invC.choosePemerintahDaerahLain,
+                      invC.statusPdl,
+                      editController.penggunaan_pdl_y_nm.text,
+                      editController.penggunaan_pdl_y_doc.text,
+                      editController.penggunaan_pdl_t_nm.text,
+                      invC.choosePihakLain,
+                      invC.statusPl,
+                      editController.penggunaan_pl_y_nm.text,
+                      editController.penggunaan_pl_y_doc.text,
+                      editController.penggunaan_pl_t_nm.text,
+                      invC.statusGanda,
+                      editController.tercatat_ganda_nibar.text,          
+                      editController.tercatat_ganda_no_register.text,       
+                      editController.tercatat_ganda_kode_barang.text,       
+                      editController.tercatat_ganda_nama_barang.text,       
+                      editController.tercatat_ganda_spesifikasi_barang.text,
+                      editController.tercatat_ganda_luas.text,              
+                      editController.tercatat_ganda_satuan.text,            
+                      editController.tercatat_ganda_perolehan.text,         
+                      editController.tercatat_ganda_tanggal_perolehan.text,                        
+                      editController.tercatat_ganda_kuasa_pengguna.text,
+                      invC.statusAtasNama,
+                      editController.lat.text,
+                      editController.long.text,
+                      editController.lainnya.text,
+                      editController.keterangan.text,
+                      _petugasList,
+                      editController.tahun.text
+                    ];
+                    
+                    if(invC.statusInventaris == "0"){
+                      editController.insertInventarisC(id, data);
+                    } else {
+                      editController.updateInventarisC(editController.kib_id.text, data);
+                    }
                     },
                   ),
                 ),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _textfieldBtn(int index) {
+    bool isLast = index == _petugasList.length - 1;
+
+    return InkWell(
+      onTap: () => setState(
+        () => isLast ? _petugasList.add('') : _petugasList.removeAt(index),
+      ),
+      borderRadius: BorderRadius.circular(15),
+      child: Container(
+        width: 30,
+        height: 30,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: isLast ? Colors.green : Colors.red,
+        ),
+        child: Icon(
+          isLast ? Icons.add : Icons.remove,
+          color: Colors.white,
         ),
       ),
     );
