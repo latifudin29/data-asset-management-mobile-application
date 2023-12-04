@@ -3490,6 +3490,7 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 15),
                         child: TextFormField(
+                          controller: editController.lainnya,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                           ),

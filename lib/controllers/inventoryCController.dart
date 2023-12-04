@@ -214,9 +214,9 @@ class InventoryCController extends GetxController {
 
     Map<String, dynamic> body = {
       "data": {
-        "kib_id"                              : _tryParseInt(_getValue(id[0])),                                                      // int
-        "penetapan_id"                        : _tryParseInt(_getValue(id[1])),                                                      // int
-        "departemen_id"                       : _tryParseInt(_getValue(id[2])),                                                      // int
+        "kib_id"                              : _tryParseInt(_getValue(id[0])),                                                        // int
+        "penetapan_id"                        : _tryParseInt(_getValue(id[1])),                                                        // int
+        "departemen_id"                       : _tryParseInt(_getValue(id[2])),
         "tgl_inventaris"                      : _getValue(data[0]),                                                                  // date
         "no_register_awal"                    : _tryParseInt(_getValue(data[1])),                                                    // int
         "no_register_akhir"                   : _tryParseInt(_getValue(data[2])),                                                    // int
@@ -264,7 +264,7 @@ class InventoryCController extends GetxController {
         "c_luas_tanah_akhir"                  : _tryParseInt(_getValue(data[44])),                                                   // int
         "c_luas_tanah_status"                 : _tryParseInt(_getValue(data[45])),                                                   // int
         "c_satuan_tanah"                      : _getValue(data[46]),                                                                 // String
-        "status_tanah_awal"                   : _getValue(data[47]),                                                                 // String
+        "c_status_tanah_awal"                 : _getValue(data[47]),                                                                 // String
         "keberadaan_barang_status"            : _tryParseInt(_getValue(data[48])),                                                   // int
         "kondisi_awal"                        : _getValue(data[49]),                                                                 // String
         "kondisi_akhir"                       : _getValue(data[50]),                                                                 // String
@@ -316,6 +316,7 @@ class InventoryCController extends GetxController {
         "keterangan"                          : _getValue(data[96]),                                                                 // String
         "petugas"                             : _getValue(jsonEncode(data[97])) == '[""]' ? '[]': _getValue(jsonEncode(data[97])),   // JSON
         "tahun"                               : _tryParseInt(_getValue(data[98])),                                                   // int
+        "status"                              : 0
       }
     };
 
@@ -421,7 +422,7 @@ class InventoryCController extends GetxController {
         "c_luas_tanah_akhir"                  : _tryParseInt(_getValue(data[44])),                                                   // int
         "c_luas_tanah_status"                 : _tryParseInt(_getValue(data[45])),                                                   // int
         "c_satuan_tanah"                      : _getValue(data[46]),                                                                 // String
-        "status_tanah_awal"                   : _getValue(data[47]),                                                                 // String
+        "c_status_tanah_awal"                 : _getValue(data[47]),                                                                 // String
         "keberadaan_barang_status"            : _tryParseInt(_getValue(data[48])),                                                   // int
         "kondisi_awal"                        : _getValue(data[49]),                                                                 // String
         "kondisi_akhir"                       : _getValue(data[50]),                                                                 // String
@@ -433,13 +434,13 @@ class InventoryCController extends GetxController {
         "penggunaan_awal"                     : _getValue(data[56]),                                                                 // String
         "penggunaan_pemda_status"             : _tryParseInt(_getValue(data[57])),                                                   // int
         "penggunaan_pemda_akhir"              : _getValue(data[58]),                                                                 // String
-        "penggunaan_pemda_nama_pemakai"       : _getValue(data[59]),                                                                  // String
-        "penggunaan_pemda_nama_pemakai_akhir" : _getValue(data[60]),                                                                  // String
-        "penggunaan_pemda_nama_pemakai_status": _tryParseInt(_getValue(data[61])),                                                    // int
-        "penggunaan_pemda_status_pemakai"     : _getValue(data[62]),                                                                  // String
-        "penggunaan_pemda_bast_pemakaian"     : _tryParseInt(_getValue(data[63])),                                                    // int
-        "penggunaan_pemda_sip"                : _tryParseInt(_getValue(data[64])),                                                    // int
-        "penggunaan_pemda_imb"                : _getValue(data[65]),                                                                  // String
+        "penggunaan_pemda_nama_pemakai"       : _getValue(data[59]),                                                                 // String
+        "penggunaan_pemda_nama_pemakai_akhir" : _getValue(data[60]),                                                                 // String
+        "penggunaan_pemda_nama_pemakai_status": _tryParseInt(_getValue(data[61])),                                                   // int
+        "penggunaan_pemda_status_pemakai"     : _getValue(data[62]),                                                                 // String
+        "penggunaan_pemda_bast_pemakaian"     : _tryParseInt(_getValue(data[63])),                                                   // int
+        "penggunaan_pemda_sip"                : _tryParseInt(_getValue(data[64])),                                                   // int
+        "penggunaan_pemda_imb"                : _getValue(data[65]),                                                                 // String
         "penggunaan_pempus_status"            : _tryParseInt(_getValue(data[66])),                                                   // int
         "penggunaan_pempus_yt"                : _tryParseInt(_getValue(data[67])),                                                   // int
         "penggunaan_pempus_y_nm"              : _getValue(data[68]),                                                                 // String

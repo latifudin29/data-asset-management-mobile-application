@@ -79,6 +79,8 @@ class AppointmentController extends GetxController {
         await kategoriController.getKategori("C");
       } else if (kategori == "D"){
         await kategoriController.getKategori("D");
+      }  else if (kategori == "E"){
+        await kategoriController.getKategori("E");
       }
 
       final response = await _connect.get(ApiEndPoints.baseurl +
