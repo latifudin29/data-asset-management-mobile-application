@@ -36,13 +36,14 @@ class InventoryVariablesB {
   String choosePemerintahDaerahLain = "";
   String choosePihakLain            = "";
 
-  String selectedKategori     = "";
-  String selectedSatuan       = "";
-  String selectedPerolehan    = "";
-  String selectedKecamatan    = "";
-  String selectedKelurahan    = "";
-  String selectedKondisi      = "";
-  String selectedKartuRuangan = "";
+  String selectedKategori         = "";
+  String selectedSatuan           = "";
+  String selectedPerolehan        = "";
+  String selectedKecamatan        = "";
+  String selectedKelurahan        = "";
+  String selectedKondisi          = "";
+  String selectedKeberadaanBarang = "";
+  String selectedKartuRuangan     = "";
 
   List<String> keteranganNoRegister       = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganBarang           = ["Sesuai", "Tidak Sesuai"];
@@ -80,6 +81,16 @@ class InventoryVariablesB {
     "2": "Hibah",
     "3": "Barang & Jasa",
     "4": "Hasil Inventarisasi",
+  };
+
+  Map<String, String> dropdownKeberadaanBarang   = {
+    "1": "Pilih",
+    "2": "Hilang",
+    "3": "Tidak Ditemukan",
+    "4": "Mutasi",
+    "5": "Hibah",
+    "6": "Penjualan",
+    "7": "Penghapusan"
   };
 
   Map<String, String> dropdownAtasNama = {

@@ -66,7 +66,7 @@ class LoginController extends GetxController {
     if (response.statusCode == 200) {
       if (response.body.containsKey('result')) {
         user.setUsername(response.body['result']['data'][0]['user_name']);
-        user.setToken(response.body['result']['data'][0]['token']);
+        user.setToken(response.body['result']['data'][0]['token'] ?? "");
         user.setNIK(response.body['result']['data'][0]['nik']);
         user.setNama(response.body['result']['data'][0]['nama']);
         user.setIsPegawai(response.body['result']['data'][0]['is_pegawai']);

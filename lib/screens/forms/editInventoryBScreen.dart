@@ -13,6 +13,7 @@ import 'package:kib_application/controllers/categoryController.dart';
 import 'package:kib_application/controllers/inventoryBController.dart';
 import 'package:kib_application/controllers/unitController.dart';
 import 'package:kib_application/controllers/roomController.dart';
+import 'package:kib_application/widgets/formPetugas.dart';
 
 class EditInventoryBScreen extends StatefulWidget {
   const EditInventoryBScreen({super.key});
@@ -29,6 +30,8 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
   final ruangController     = Get.put(RoomController());
   final addressController   = Get.put(AddressController());
   final invB                = Get.put(InventoryVariablesB());
+
+  List<dynamic> _petugasList = [''];
 
   DateTime now = DateTime.now();
 
@@ -97,6 +100,8 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
     } else {
       invB.selectedPerolehan = "";
     }  
+
+    invB.selectedKeberadaanBarang = data['keberadaan_barang_akhir'] != "" ? data['keberadaan_barang_akhir'].toString() : "1";
 
     editController.tgl_inventaris.text                      = (invB.statusInventaris == "0") ? DateFormat('dd-MM-yyyy').format(now) : data['tgl_inventaris_formatted'].toString();
     editController.skpd.text                                = data['departemen_kd'].toString();
@@ -189,7 +194,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
     editController.lainnya.text                             = data['lainnya'].toString();
     editController.keterangan.text                          = (invB.statusInventaris == "0") ? data['keterangan_penetapan'].toString() : data['keterangan_inventaris'].toString();
     editController.file_nm.text                             = data['file_nm'].toString();
-    editController.petugas.text                             = data['petugas'].toString();
+    _petugasList                                            = data['petugas']         != null && data['petugas'].isNotEmpty ? List<String>.from(data['petugas']) : [""];
     editController.tahun.text                               = (invB.statusInventaris == "0") ? now.year.toString() : data['tahun'].toString();
   }
 
@@ -2592,12 +2597,53 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                         },
                         items: invB.keteranganKeberadaanBarang.map((String item) {
                           return DropdownMenuItem<String>(
-                            value: invB.keteranganKeberadaanBarang.indexOf(item) == 0 ? "1": "2",
+                            value: invB.keteranganKeberadaanBarang.indexOf(item) == 0 ? "1": "0",
                             child: Text(item),
                           );
                         }).toList(),
                       ),
                     ),
+                    SizedBox(height: 10),
+                    invB.statusKeberadaanBarang == "0"
+                      ? DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            buttonStyleData: ButtonStyleData(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                            isExpanded: true,
+                            iconStyleData: const IconStyleData(
+                              icon: Icon(
+                                Icons.arrow_drop_down_outlined,
+                                color: Colors.grey,
+                                size: 25,
+                              ),
+                              iconEnabledColor: primaryTextColor,
+                            ),
+                            value: invB.dropdownKeberadaanBarang.keys
+                                .contains(invB.selectedKeberadaanBarang)
+                            ? invB.selectedKeberadaanBarang
+                            : null,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                invB.selectedKeberadaanBarang =
+                                    newValue ?? invB.selectedKeberadaanBarang;
+                              });
+                            },
+                            items: invB.dropdownKeberadaanBarang.keys.map((String item) {
+                              return DropdownMenuItem<String>(
+                                value: item,
+                                child: Text(invB.dropdownKeberadaanBarang[item]!),
+                              );
+                            }).toList(),
+                          ),
+                        )
+                      : SizedBox(),
                   ],
                 ),
               SizedBox(height: 15),
@@ -4159,22 +4205,29 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     style: TextStyle(fontSize: 16),
                     textAlign: TextAlign.left,
                   ),
-                  SizedBox(height: 10),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 15),
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
+                ],
+              ),
+              SizedBox(height: 10),
+              Column(
+                children: List.generate(
+                  _petugasList.length,
+                  (index) => Padding(
+                    padding: const EdgeInsets.only(bottom: 15.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: FormDynamicPetugas(
+                            key: UniqueKey(),
+                            initialValue: _petugasList[index],
+                            onChanged: (v) => _petugasList[index] = v,
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 10),
+                        _textfieldBtn(index),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
               // Button Simpan
               Padding(
@@ -4204,7 +4257,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                       editController.departemen_id.text,
                     ];
 
-                    List<String> data = [
+                    List<dynamic> data = [
                       editController.tgl_inventaris.text,
                       editController.no_register_awal.text,
                       editController.no_register_akhir.text,
@@ -4271,6 +4324,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                       invB.statusKartuRuangan,
                       invB.statusQRBarang,
                       invB.statusQRRuangan,
+                      invB.selectedKeberadaanBarang,
                       invB.statusKeberadaanBarang,
                       editController.kondisi_awal.text,
                       invB.selectedKondisi,
@@ -4316,6 +4370,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                       invB.statusAtasNama,
                       editController.lainnya.text,
                       editController.keterangan.text,
+                      _petugasList,
                       editController.tahun.text
                     ];
                     
@@ -4329,6 +4384,29 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _textfieldBtn(int index) {
+    bool isLast = index == _petugasList.length - 1;
+
+    return InkWell(
+      onTap: () => setState(
+        () => isLast ? _petugasList.add('') : _petugasList.removeAt(index),
+      ),
+      borderRadius: BorderRadius.circular(15),
+      child: Container(
+        width: 30,
+        height: 30,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: isLast ? Colors.green : Colors.red,
+        ),
+        child: Icon(
+          isLast ? Icons.add : Icons.remove,
+          color: Colors.white,
         ),
       ),
     );

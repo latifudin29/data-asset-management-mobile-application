@@ -71,13 +71,21 @@ class AppointmentController extends GetxController {
       Get.dialog(Center(child: CircularProgressIndicator()),
           barrierDismissible: false);
 
+      if (kategori == "A") {
+        await kategoriController.getKategori("A");
+      } else if (kategori == "B"){
+        await kategoriController.getKategori("B");
+      } else if (kategori == "C"){
+        await kategoriController.getKategori("C");
+      } else if (kategori == "D"){
+        await kategoriController.getKategori("D");
+      }
+
       final response = await _connect.get(ApiEndPoints.baseurl +
           ApiEndPoints.authEndPoints.getPenetapanById +
           kategori +
           '/' +
           id);
-
-      print('INI ID PENETAPAN: ${id}');
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = response.body;
@@ -104,16 +112,7 @@ class AppointmentController extends GetxController {
           await addressController.getKelurahan(idKecamatan.toString());
         }
       }
-
-      if (kategori == "A") {
-        await kategoriController.getKategori("A");
-      } else if (kategori == "B"){
-        await kategoriController.getKategori("B");
-      } else if (kategori == "C"){
-        await kategoriController.getKategori("C");
-      } else if (kategori == "D"){
-        await kategoriController.getKategori("D");
-      }
+      
     } finally {
       Get.back();
 
