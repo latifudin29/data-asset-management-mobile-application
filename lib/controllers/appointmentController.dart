@@ -88,6 +88,8 @@ class AppointmentController extends GetxController {
           kategori +
           '/' +
           id);
+      
+      print('INI ID: $id');
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = response.body;

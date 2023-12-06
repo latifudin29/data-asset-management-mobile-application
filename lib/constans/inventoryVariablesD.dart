@@ -1,4 +1,6 @@
 class InventoryVariablesD {
+  String statusInventaris     = "";
+
   String statusNoRegister     = "";
   String statusBarang         = "";
   String statusNamaBarang     = "";
@@ -26,8 +28,11 @@ class InventoryVariablesD {
   String statusLebar             = "";
   String statusLuas              = "";
 
-  String chooseAtribusi         = "";
-  String choosePemerintah       = "";
+  String chooseAtribusi             = "";
+  String choosePemerintahDaerah     = "";
+  String choosePemerintahPusat      = "";
+  String choosePemerintahDaerahLain = "";
+  String choosePihakLain            = "";
 
   String selectedKategori    = "";
   String selectedSatuan      = "";
@@ -50,7 +55,7 @@ class InventoryVariablesD {
   List<String> keteranganKondisi        = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganAsalUsul       = ["Sesuai", "Tidak Sesuai"];
 
-  List<String> keteranganPengkerasanJalan    = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganPengkerasanJalan  = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganBahanJembatan     = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganNoRuasJalan       = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganNoJaringanIrigasi = ["Sesuai", "Tidak Sesuai"];
@@ -67,9 +72,9 @@ class InventoryVariablesD {
   List<String> keteranganPempus           = ["Ada", "Tidak"];
   List<String> keteranganPdl              = ["Ada", "Tidak"];
   List<String> keteranganPl               = ["Ada", "Tidak"];
-  List<String> keteranganSatuanPanjang    = ["KM", "M", "M2"];
-  List<String> keteranganSatuanLebar      = ["KM", "M", "M2"];
-  List<String> keteranganSatuanLuas       = ["KM", "M", "M2"];
+  List<String> keteranganSatuanPanjang    = ["Km", "M", "M2"];
+  List<String> keteranganSatuanLebar      = ["Km", "M", "M2"];
+  List<String> keteranganSatuanLuas       = ["Km", "M", "M2"];
 
   List<String> dropdownStatusTanah = [
     "Hak Milik",

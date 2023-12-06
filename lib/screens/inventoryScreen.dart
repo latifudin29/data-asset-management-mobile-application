@@ -102,12 +102,21 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
   Future<void> loadPenetapanData() async {
     page = page;
+
+    user.setDepartemenID(selectedId);
+    user.setKategori(modifiedTitle);
+    user.setPage(page.toString());
+
     await penetapanController.getPenetapan(selectedId, modifiedTitle, page);
   }
 
   // Future<void> loadPenetapanData() async {
   //   page = page;
+
   //   String departemenID = user.departemen_id.value;
+  //   user.setKategori(modifiedTitle);
+  //   user.setPage(page);
+
   //   await penetapanController.getPenetapan(departemenID, modifiedTitle, page);
   // }
 
@@ -1591,7 +1600,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   //       decoration: const InputDecoration(
                   //         border: InputBorder.none,
                   //       ),
-                  //       style: TextStyle(fontWeight: FontWeight.bold),
                   //     ),
                   //   ),
                   // ),
@@ -1670,19 +1678,26 @@ class _InventoryScreenState extends State<InventoryScreen> {
             ),
             Container(
               decoration: BoxDecoration(color: Colors.white),
-              child: NumberPaginator(
-                numberPages: totalPage,
-                onPageChange: (int index) {
-                  setState(() {
-                    page = index + 1;
-                  });
-                  loadPenetapanData();
-                },
-                config: NumberPaginatorUIConfig(
-                  buttonUnselectedForegroundColor:Color.fromARGB(255, 18, 58, 146),
-                  buttonSelectedBackgroundColor:Color.fromARGB(255, 18, 58, 146),
-                ),
-              ),
+              child: totalPage > 0
+                  ? NumberPaginator(
+                      numberPages: totalPage,
+                      onPageChange: (int index) {
+                        setState(() {
+                          page = index + 1;
+                        });
+                        loadPenetapanData();
+                      },
+                      config: NumberPaginatorUIConfig(
+                        buttonUnselectedForegroundColor: Color.fromARGB(255, 18, 58, 146),
+                        buttonSelectedBackgroundColor: Color.fromARGB(255, 18, 58, 146),
+                      ),
+                    )
+                  : Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text("Tidak ada data yang tersedia!", style: TextStyle(color: Colors.red),),
+                      ),
+                    ),
             ),
           ],
         ),

@@ -1,14 +1,17 @@
 import 'package:get/get.dart';
 
 class SharedPrefs extends GetxController {
-  var username = ''.obs;
-  var token = ''.obs;
-  var nik = ''.obs;
-  var nama = ''.obs;
-  var is_pegawai = ''.obs;
+  var username      = ''.obs;
+  var token         = ''.obs;
+  var nik           = ''.obs;
+  var nama          = ''.obs;
+  var is_pegawai    = ''.obs;
   var departemen_id = ''.obs;
   var departemen_kd = ''.obs;
   var departemen_nm = ''.obs;
+
+  var kategori      = ''.obs;
+  var page          = ''.obs;
 
   setUsername(args) {
     return username.value = args;
@@ -40,5 +43,13 @@ class SharedPrefs extends GetxController {
 
   setDepartemenNama(args) {
     return departemen_nm.value = args;
+  }
+
+  setKategori(args) {
+    return kategori.value = args;
+  }
+
+  setPage(args) {
+    return page.value = args;
   }
 }

@@ -1,5 +1,5 @@
 class ApiEndPoints {
-  // static final String baseurl         = 'http://172.20.10.6:5000/';
+  // static final String baseurl         = 'http://192.168.88.24:5000/';
   static final String baseurl         = 'https://simasda.server-uing.my.id/';
   static _AuthEndPoints authEndPoints = _AuthEndPoints();
 }

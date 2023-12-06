@@ -1,27 +1,27 @@
 class InventoryVariablesA {
-  String statusInventaris           = "";
-  String statusNoRegister           = "";
-  String statusBarang               = "";
-  String statusNamaBarang           = "";
-  String statusJumlah               = "";
-  String statusLuas                 = "";
-  String statusPerolehan            = "";
-  String statusNilaiPerolehan       = "";
-  String statusAlamat               = "";
-  String statusHakTanah             = "";
-  String statusNoSertifikat         = "";
-  String statusTglSertifikat        = "";
-  String statusKondisi              = "";
-  String statusAsalUsul             = "";
-  String statusAtribusi             = "";
-  String statusKeberadaanBarang     = "";
-  String statusStatus               = "";
-  String statusAtasNama             = "";
-  String statusNamaPemakai          = "";
-  String statusPempus               = "";
-  String statusPdl                  = "";
-  String statusPl                   = "";
-  String statusGanda                = "";
+  String statusInventaris       = "";
+  String statusNoRegister       = "";
+  String statusBarang           = "";
+  String statusNamaBarang       = "";
+  String statusJumlah           = "";
+  String statusLuas             = "";
+  String statusPerolehan        = "";
+  String statusNilaiPerolehan   = "";
+  String statusAlamat           = "";
+  String statusHakTanah         = "";
+  String statusNoSertifikat     = "";
+  String statusTglSertifikat    = "";
+  String statusKondisi          = "";
+  String statusAsalUsul         = "";
+  String statusAtribusi         = "";
+  String statusKeberadaanBarang = "";
+  String statusPenggunaanStatus = "";
+  String statusAtasNama         = "";
+  String statusNamaPemakai      = "";
+  String statusPempus           = "";
+  String statusPdl              = "";
+  String statusPl               = "";
+  String statusGanda            = "";
   
   String chooseAtribusi             = "";
   String choosePemerintahDaerah     = "";
@@ -50,7 +50,6 @@ class InventoryVariablesA {
   List<String> keteranganKondisi        = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganAsalUsul       = ["Sesuai", "Tidak Sesuai"];
 
-  List<String> dropdownKondisi            = ["B", "RR", "RB", "TGR", "AK", "KB"];
   List<String> keteranganAtribusi         = ["Ya", "Bukan"];
   List<String> keteranganKeberadaanBarang = ["Ada", "Tidak ada/Tidak ditemukan"];
   List<String> keteranganStatus           = ["Sedang digunakan", "Tidak digunakan"];
@@ -58,6 +57,8 @@ class InventoryVariablesA {
   List<String> keteranganPempus           = ["Ada", "Tidak"];
   List<String> keteranganPdl              = ["Ada", "Tidak"];
   List<String> keteranganPl               = ["Ada", "Tidak"];
+
+  List<String> dropdownKondisi            = ["B", "RR", "RB", "TGR", "AK", "KB"];
 
   Map<String, String> dropdownPerolehan = {
     "1": "Pembelian",
@@ -72,5 +73,4 @@ class InventoryVariablesA {
     "3": "Pemerintah Pusat",
     "4": "Pihak Lain"
   };
-
 }

@@ -66,9 +66,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
     invB.statusBahan          = data['b_bahan_status']          != "" ? data['b_bahan_status'].toString() : "1";
     invB.statusNoPabrik       = data['b_nomor_pabrik_status']   != "" ? data['b_nomor_pabrik_status'].toString() : "1";
     invB.statusKartuRuangan   = data['kartu_inv_status']        != "" ? data['kartu_inv_status'].toString() : "1";
-    invB.statusKondisi        = data['kondisi_status']          != "" ? data['kondisi_status'].toString() : "1";
-    invB.statusAsalUsul       = data['asal_usul_status']        != "" ? data['asal_usul_status'].toString() : "1";
-
+    
     invB.statusAtribusi         = data['atribusi_status']                      != "" ? data['atribusi_status'].toString() : "0";
     invB.statusKeberadaanBarang = data['keberadaan_barang_status']             != "" ? data['keberadaan_barang_status'].toString() : "1";
     invB.statusStatus           = data['penggunaan_status']                    != "" ? data['penggunaan_status'].toString() : "1";
@@ -97,9 +95,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
       invB.selectedPerolehan = "3";
     } else if (caraPerolehan == "Hasil Inventarisasi" || caraPerolehan == "4") {
       invB.selectedPerolehan = "4";
-    } else {
-      invB.selectedPerolehan = "";
-    }  
+    }
 
     invB.selectedKeberadaanBarang = data['keberadaan_barang_akhir'] != "" ? data['keberadaan_barang_akhir'].toString() : "1";
 
