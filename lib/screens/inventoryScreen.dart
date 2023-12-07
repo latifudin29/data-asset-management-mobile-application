@@ -74,6 +74,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
     selectedSKPD            = user.departemen_kd.value;
 
     modifyTitle(widget.title);
+    user.setKategori(modifiedTitle);
     
     String yearNow = DateFormat.y().format(now);
     penetapanController.tahun.text = yearNow;
@@ -103,21 +104,18 @@ class _InventoryScreenState extends State<InventoryScreen> {
   Future<void> loadPenetapanData() async {
     page = page;
 
-    user.setDepartemenID(selectedId);
+    await penetapanController.getPenetapan(selectedId, modifiedTitle, page);
+
     user.setKategori(modifiedTitle);
     user.setPage(page.toString());
-
-    await penetapanController.getPenetapan(selectedId, modifiedTitle, page);
   }
 
   // Future<void> loadPenetapanData() async {
   //   page = page;
-
   //   String departemenID = user.departemen_id.value;
-  //   user.setKategori(modifiedTitle);
-  //   user.setPage(page);
 
   //   await penetapanController.getPenetapan(departemenID, modifiedTitle, page);
+  //   user.setPage(page.toString());
   // }
 
   void selectDepartemen(String selectedItem) {
@@ -130,6 +128,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
       departemenSelected.text = department['nama'].toString();
       selectedSKPD = department['kode'].toString();
       selectedId = department['id'].toString();
+
+      user.setDepartemenID(selectedId);
     });
   }
 
@@ -1549,157 +1549,166 @@ class _InventoryScreenState extends State<InventoryScreen> {
       return [];
     }
 
-    return Scaffold(
-      backgroundColor: primaryBackgroundColor,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: Colors.white,
+    return WillPopScope(
+      onWillPop: () async {
+        user.setPage('1');
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: primaryBackgroundColor,
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+              user.setPage('1');
+            },
           ),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(widget.title),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            color: appbarColor,
+          title: Text(widget.title),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              color: appbarColor,
+            ),
           ),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 28),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomDropdown.searchRequest(
-                    controller: searchDepartement,
-                    futureRequest: getDepartementData,
-                    futureRequestDelay: const Duration(seconds: 3),
-                    hintText: 'Pilih Departemen',
-                    onChanged: selectDepartemen,
-                  ),
-                  // Container(
-                  //   decoration: BoxDecoration(
-                  //     border: Border.all(color: Colors.grey),
-                  //     borderRadius: BorderRadius.circular(12),
-                  //     color: Colors.grey.shade400,
-                  //   ),
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.only(left: 15),
-                  //     child: TextFormField(
-                  //       controller: departemenSelected,
-                  //       readOnly: true,
-                  //       decoration: const InputDecoration(
-                  //         border: InputBorder.none,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  SizedBox(height: 10),
-                  RichText(
-                    text: TextSpan(
-                      text: 'SKPD: ',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                      ),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: selectedSKPD,
-                          style: TextStyle(
-                            color: Colors.black,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 30),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 28),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomDropdown.searchRequest(
+                      controller: searchDepartement,
+                      futureRequest: getDepartementData,
+                      futureRequestDelay: const Duration(seconds: 3),
+                      hintText: 'Pilih Departemen',
+                      onChanged: selectDepartemen,
+                    ),
+                    // Container(
+                    //   decoration: BoxDecoration(
+                    //     border: Border.all(color: Colors.grey),
+                    //     borderRadius: BorderRadius.circular(12),
+                    //     color: Colors.grey.shade400,
+                    //   ),
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.only(left: 15),
+                    //     child: TextFormField(
+                    //       controller: departemenSelected,
+                    //       readOnly: true,
+                    //       decoration: const InputDecoration(
+                    //         border: InputBorder.none,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    SizedBox(height: 10),
+                    RichText(
+                      text: TextSpan(
+                        text: 'SKPD: ',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: selectedSKPD,
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
                           ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: penetapanController.tahun,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12)),
+                              ),
+                              labelText: 'Tahun',
+                              labelStyle: TextStyle(color: secondaryTextColor),
+                              contentPadding: EdgeInsets.all(14),
+                              filled: true,
+                              fillColor: Colors.white,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: buttonColor,
+                            padding: EdgeInsets.all(16),
+                          ),
+                          onPressed: loadPenetapanData,
+                          child: Text('Generate'),
                         ),
                       ],
                     ),
-                  ),
-                  SizedBox(height: 15),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: penetapanController.tahun,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(12)),
-                            ),
-                            labelText: 'Tahun',
-                            labelStyle: TextStyle(color: secondaryTextColor),
-                            contentPadding: EdgeInsets.all(14),
-                            filled: true,
-                            fillColor: Colors.white,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: buttonColor,
-                          padding: EdgeInsets.all(16),
-                        ),
-                        onPressed: loadPenetapanData,
-                        child: Text('Generate'),
-                      ),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 30),
-            Container(
-              height: 395,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey.shade200),
-                color: Colors.white,
-              ),
-              child: Obx(
-                () => SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: DataTable(
-                      headingRowColor: MaterialStateProperty.all(Colors.white),
-                      columnSpacing: 30,
-                      columns: columns,
-                      rows: generateDataRows(),
+              SizedBox(height: 30),
+              Container(
+                height: 395,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey.shade200),
+                  color: Colors.white,
+                ),
+                child: Obx(
+                  () => SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: DataTable(
+                        headingRowColor: MaterialStateProperty.all(Colors.white),
+                        columnSpacing: 30,
+                        columns: columns,
+                        rows: generateDataRows(),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Container(
-              decoration: BoxDecoration(color: Colors.white),
-              child: totalPage > 0
-                  ? NumberPaginator(
-                      numberPages: totalPage,
-                      onPageChange: (int index) {
-                        setState(() {
-                          page = index + 1;
-                        });
-                        loadPenetapanData();
-                      },
-                      config: NumberPaginatorUIConfig(
-                        buttonUnselectedForegroundColor: Color.fromARGB(255, 18, 58, 146),
-                        buttonSelectedBackgroundColor: Color.fromARGB(255, 18, 58, 146),
+              Container(
+                decoration: BoxDecoration(color: Colors.white),
+                child: totalPage > 0
+                    ? NumberPaginator(
+                        numberPages: totalPage,
+                        onPageChange: (int index) {
+                          setState(() {
+                            page = index + 1;
+                          });
+                          loadPenetapanData();
+                        },
+                        config: NumberPaginatorUIConfig(
+                          buttonUnselectedForegroundColor: Color.fromARGB(255, 18, 58, 146),
+                          buttonSelectedBackgroundColor: Color.fromARGB(255, 18, 58, 146),
+                        ),
+                      )
+                    : Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text("Tidak ada data yang tersedia!", style: TextStyle(color: Colors.red),),
+                        ),
                       ),
-                    )
-                  : Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text("Tidak ada data yang tersedia!", style: TextStyle(color: Colors.red),),
-                      ),
-                    ),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -44,47 +44,28 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
     final dataRuang = ruangController.ruangList
       .where((ruang) => ruang['ruang_id'].toString() == data['b_kd_ruang'].toString());     
     
-    invB.statusInventaris             = data['status_inventaris'].toString();
-    editController.kib_id.text        = data['kib_id'].toString();
-    editController.penetapan_id.text  = data['penetapan_id'].toString();
-    editController.departemen_id.text = data['departemen_id'].toString();
-
-    invB.statusNoRegister     = data['no_register_status']      != "" ? data['no_register_status'].toString() : "1";
-    invB.statusBarang         = data['kategori_id_status']      != "" ? data['kategori_id_status'].toString() : "1";
-    invB.statusNamaBarang     = data['nama_spesifikasi_status'] != "" ? data['nama_spesifikasi_status'].toString() : "1";
-    invB.statusPerolehan      = data['cara_perolehan_status']   != "" ? data['cara_perolehan_status'].toString() : "1";
-    invB.statusNilaiPerolehan = data['perolehan_status']        != "" ? data['perolehan_status'].toString() : "1";
-    invB.statusAlamat         = data['a_alamat_status']         != "" ? data['a_alamat_status'].toString() : "1";
-    invB.statusKondisi        = data['kondisi_status']          != "" ? data['kondisi_status'].toString() : "1";
-    invB.statusAsalUsul       = data['asal_usul_status']        != "" ? data['asal_usul_status'].toString() : "1";
-    invB.statusMerk           = data['b_merk_status']           != "" ? data['b_merk_status'].toString() : "1";
-    invB.statusCC             = data['b_cc_status']             != "" ? data['b_cc_status'].toString() : "1";
-    invB.statusNoPolisi       = data['b_nomor_polisi_status']   != "" ? data['b_nomor_polisi_status'].toString() : "1";
-    invB.statusNoRangka       = data['b_nomor_rangka_status']   != "" ? data['b_nomor_rangka_status'].toString() : "1";
-    invB.statusNoMesin        = data['b_nomor_mesin_status']    != "" ? data['b_nomor_mesin_status'].toString() : "1";
-    invB.statusNoBPKB         = data['b_nomor_bpkb_status']     != "" ? data['b_nomor_bpkb_status'].toString() : "1";
-    invB.statusBahan          = data['b_bahan_status']          != "" ? data['b_bahan_status'].toString() : "1";
-    invB.statusNoPabrik       = data['b_nomor_pabrik_status']   != "" ? data['b_nomor_pabrik_status'].toString() : "1";
-    invB.statusKartuRuangan   = data['kartu_inv_status']        != "" ? data['kartu_inv_status'].toString() : "1";
+    invB.statusInventaris                                   = data['status_inventaris'].toString();
+    editController.kib_id.text                              = data['kib_id'].toString();
+    editController.penetapan_id.text                        = data['penetapan_id'].toString();
+    editController.departemen_id.text                       = data['departemen_id'].toString();
     
-    invB.statusAtribusi         = data['atribusi_status']                      != "" ? data['atribusi_status'].toString() : "0";
-    invB.statusKeberadaanBarang = data['keberadaan_barang_status']             != "" ? data['keberadaan_barang_status'].toString() : "1";
-    invB.statusStatus           = data['penggunaan_status']                    != "" ? data['penggunaan_status'].toString() : "1";
-    invB.statusAtasNama         = data['pemilik_id']                           != "" ? data['pemilik_id'].toString() : "1";
-    invB.statusNamaPemakai      = data['penggunaan_pemda_nama_pemakai_status'] != "" ? data['penggunaan_pemda_nama_pemakai_status'].toString() : "1";
-    invB.statusBast             = data['penggunaan_pemda_bast_pemakaian']      != "" ? data['penggunaan_pemda_bast_pemakaian'].toString() : "1";
-    invB.statusGanda            = data['tercatat_ganda']                       != "" ? data['tercatat_ganda'].toString() : "2";
-
-    invB.chooseAtribusi   = data['atribusi_status'] != "" ? data['atribusi_status'].toString() : "0";
-    
-    invB.choosePemerintahDaerah     = (invB.statusInventaris == "0") ? "1" : data['penggunaan_pemda_status'].toString();
-    invB.choosePemerintahPusat      = data['penggunaan_pempus_status'].toString();
-    invB.choosePemerintahDaerahLain = data['penggunaan_pdl_status'].toString();
-    invB.choosePihakLain            = data['penggunaan_pl_status'].toString();
-
-    invB.statusPempus = data['penggunaan_pempus_yt'] != "" ? data['penggunaan_pempus_yt'].toString() : "3";
-    invB.statusPdl    = data['penggunaan_pdl_yt'] != "" ? data['penggunaan_pdl_yt'].toString() : "3";
-    invB.statusPl     = data['penggunaan_pl_yt'] != "" ? data['penggunaan_pl_yt'].toString() : "3";
+    editController.tgl_inventaris.text                      = (invB.statusInventaris == "0") ? DateFormat('dd-MM-yyyy').format(now) : data['tgl_inventaris_formatted'].toString();
+    editController.skpd.text                                = data['departemen_kd'].toString();
+    editController.skpd_uraian.text                         = data['departemen_nm'].toString();
+    editController.no_register_awal.text                    = (invB.statusInventaris == "0") ? data['no_register'].toString() : data['no_register_awal'].toString();
+    editController.no_register_akhir.text                   = (invB.statusInventaris == "0") ? data['no_register'].toString() : data['no_register_akhir'].toString();
+    invB.statusNoRegister                                   = data['no_register_status']      != "" ? data['no_register_status'].toString() : "1";
+    editController.barang.text                              = data['kategori_kd'].toString() + ' - ' + data['kategori_nm'].toString();
+    editController.kategori_id_awal.text                    = (invB.statusInventaris == "0") ? data['kategori_id'].toString() : data['kategori_id_awal'].toString();
+    invB.selectedKategori                                   = (invB.statusInventaris == "0") ? data['kategori_id'].toString() : data['kategori_id_akhir'].toString();
+    invB.statusBarang                                       = data['kategori_id_status']      != "" ? data['kategori_id_status'].toString() : "1";
+    editController.nama_spesifikasi_awal.text               = (invB.statusInventaris == "0") ? "" : data['nama_spesifikasi_awal'].toString();
+    editController.nama_spesifikasi_akhir.text              = (invB.statusInventaris == "0") ? "" : data['nama_spesifikasi_akhir'].toString();
+    invB.statusNamaBarang                                   = data['nama_spesifikasi_status'] != "" ? data['nama_spesifikasi_status'].toString() : "1";
+    editController.jumlah_awal.text                         = (invB.statusInventaris == "0") ? data['jumlah'].toString() : data['jumlah_awal'].toString();
+    invB.selectedSatuan                                     = (invB.statusInventaris == "0") ? (data['satuan_awal'] != "") ? data['satuan_awal'].toString() : "" : (data['satuan_akhir'] != "") ? data['satuan_akhir'].toString() : "";
+    editController.cara_perolehan_awal.text                 = (invB.statusInventaris == "0") ? data['cara_perolehan'].toString() : data['cara_perolehan_awal'].toString();
+    invB.statusPerolehan                                    = data['cara_perolehan_status']   != "" ? data['cara_perolehan_status'].toString() : "1";
 
     String caraPerolehan = (invB.statusInventaris == "0") ? data['cara_perolehan'].toString() : data['cara_perolehan_akhir'].toString();
     if (caraPerolehan == "Pembelian" || caraPerolehan == "1" || caraPerolehan == "") {
@@ -96,40 +77,31 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
     } else if (caraPerolehan == "Hasil Inventarisasi" || caraPerolehan == "4") {
       invB.selectedPerolehan = "4";
     }
-
-    invB.selectedKeberadaanBarang = data['keberadaan_barang_akhir'] != "" ? data['keberadaan_barang_akhir'].toString() : "1";
-
-    editController.tgl_inventaris.text                      = (invB.statusInventaris == "0") ? DateFormat('dd-MM-yyyy').format(now) : data['tgl_inventaris_formatted'].toString();
-    editController.skpd.text                                = data['departemen_kd'].toString();
-    editController.skpd_uraian.text                         = data['departemen_nm'].toString();
-    editController.barang.text                              = data['kategori_kd'].toString() + ' - ' + data['kategori_nm'].toString();
-    editController.no_register_awal.text                    = (invB.statusInventaris == "0") ? data['no_register'].toString() : data['no_register_awal'].toString();
-    editController.no_register_akhir.text                   = (invB.statusInventaris == "0") ? data['no_register'].toString() : data['no_register_akhir'].toString();
-    editController.kategori_id_awal.text                    = (invB.statusInventaris == "0") ? data['kategori_id'].toString() : data['kategori_id_awal'].toString();
-    invB.selectedKategori                                   = (invB.statusInventaris == "0") ? data['kategori_id'].toString() : data['kategori_id_akhir'].toString();
-    editController.nama_spesifikasi_awal.text               = data['nama_spesifikasi_awal'].toString();
-    editController.nama_spesifikasi_akhir.text              = data['nama_spesifikasi_akhir'].toString();
-    editController.jumlah_awal.text                         = (invB.statusInventaris == "0") ? data['jumlah'].toString() : data['jumlah_awal'].toString();
-    invB.selectedSatuan                                     = (invB.statusInventaris == "0") ? (data['satuan_awal'] != "") ? data['satuan_awal'].toString() : "" : (data['satuan_akhir'] != "") ? data['satuan_akhir'].toString() : "";
-    editController.cara_perolehan_awal.text                 = (invB.statusInventaris == "0") ? data['cara_perolehan'].toString() : data['cara_perolehan_awal'].toString();
+    
     editController.tgl_perolehan.text                       = (invB.statusInventaris == "0") ? data['tgl_perolehan_penetapan'].toString() : data['tgl_perolehan_inventaris'].toString();
     editController.tahun_perolehan.text                     = (invB.statusInventaris == "0") ? data['th_beli'].toString() : data['tahun_perolehan'].toString();
     editController.perolehan_awal.text                      = (invB.statusInventaris == "0") ? data['perolehan_formatted'].toString() : data['perolehan_awal_formatted'].toString();
     editController.perolehan_akhir.text                     = (invB.statusInventaris == "0") ? data['perolehan_formatted'].toString() : data['perolehan_akhir_formatted'].toString();
-    editController.atribusi_nibar.text                      = data['atribusi_nibar'].toString();
-    editController.atribusi_kode_barang.text                = data['atribusi_kode_barang'].toString();
-    editController.atribusi_kode_lokasi.text                = data['atribusi_kode_lokasi'].toString();
-    editController.atribusi_no_register.text                = data['atribusi_no_register'].toString();
-    editController.atribusi_nama_barang.text                = data['atribusi_nama_barang'].toString();
-    editController.atribusi_spesifikasi_barang.text         = data['atribusi_spesifikasi_barang'].toString();
+    invB.statusNilaiPerolehan                               = data['perolehan_status'] != "" ? data['perolehan_status'].toString() : "1";
+    invB.statusAtribusi                                     = data['atribusi_biaya']   != "" ? data['atribusi_biaya'].toString() : "0";
+    invB.chooseAtribusi                                     = data['atribusi_status']  != "" ? data['atribusi_status'].toString() : "0";
+    editController.atribusi_nibar.text                      = (invB.statusInventaris == "0") ? "" : data['atribusi_nibar'].toString();
+    editController.atribusi_kode_barang.text                = (invB.statusInventaris == "0") ? "" : data['atribusi_kode_barang'].toString();
+    editController.atribusi_kode_lokasi.text                = (invB.statusInventaris == "0") ? "" : data['atribusi_kode_lokasi'].toString();
+    editController.atribusi_no_register.text                = (invB.statusInventaris == "0") ? "" : data['atribusi_no_register'].toString();
+    editController.atribusi_nama_barang.text                = (invB.statusInventaris == "0") ? "" : data['atribusi_nama_barang'].toString();
+    editController.atribusi_spesifikasi_barang.text         = (invB.statusInventaris == "0") ? "" : data['atribusi_spesifikasi_barang'].toString();
     editController.a_alamat_awal.text                       = (invB.statusInventaris == "0") ? data['a_alamat'].toString() : data['a_alamat_awal'].toString();
-    editController.alamat_kota.text                         = data['alamat_kota'] != "" ? data['alamat_kota'].toString() : "KOTA BOGOR";
+    invB.statusAlamat                                       = data['a_alamat_status']  != "" ? data['a_alamat_status'].toString() : "1";
+    editController.alamat_kota.text                         = data['alamat_kota']      != "" ? data['alamat_kota'].toString() : "KOTA BOGOR";
     invB.selectedKecamatan                                  = data['alamat_kecamatan'].toString();
+    
     if (filteredList.isNotEmpty) {
       final Map<String, dynamic> selectedKecamatan = filteredList.first;
       int idKecamatan = selectedKecamatan['id'];
       invB.selectedKelurahan = (idKecamatan.toString() == "1") ? "000" : data['alamat_kelurahan'].toString();
     }
+
     editController.alamat_jalan.text                        = data['alamat_jalan'].toString();
     editController.alamat_no.text                           = data['alamat_no'].toString();
     editController.alamat_rt.text                           = data['alamat_rt'].toString();
@@ -137,46 +109,72 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
     editController.alamat_kodepos.text                      = data['alamat_kodepos'].toString();
     editController.b_merk_awal.text                         = (invB.statusInventaris == "0") ? data['b_merk'].toString() : data['b_merk_awal'].toString();
     editController.b_merk_akhir.text                        = (invB.statusInventaris == "0") ? data['b_merk'] : data['b_merk_akhir'].toString();
+    invB.statusMerk                                         = data['b_merk_status']         != "" ? data['b_merk_status'].toString() : "1";
     editController.b_cc_awal.text                           = (invB.statusInventaris == "0") ? data['b_cc'].toString() : data['b_cc_awal'].toString();
     editController.b_cc_akhir.text                          = (invB.statusInventaris == "0") ? data['b_cc'].toString() : data['b_cc_akhir'].toString();
+    invB.statusCC                                           = data['b_cc_status']           != "" ? data['b_cc_status'].toString() : "1";
     editController.b_nomor_polisi_awal.text                 = (invB.statusInventaris == "0") ? data['b_nomor_polisi'].toString() : data['b_nomor_polisi_awal'].toString();
     editController.b_nomor_polisi_akhir.text                = (invB.statusInventaris == "0") ? data['b_nomor_polisi'].toString() : data['b_nomor_polisi_akhir'].toString();
+    invB.statusNoPolisi                                     = data['b_nomor_polisi_status'] != "" ? data['b_nomor_polisi_status'].toString() : "1";
     editController.b_nomor_rangka_awal.text                 = (invB.statusInventaris == "0") ? data['b_nomor_rangka'].toString() : data['b_nomor_rangka_awal'].toString();
     editController.b_nomor_rangka_akhir.text                = (invB.statusInventaris == "0") ? data['b_nomor_rangka'].toString() : data['b_nomor_rangka_akhir'].toString();
+    invB.statusNoRangka                                     = data['b_nomor_rangka_status'] != "" ? data['b_nomor_rangka_status'].toString() : "1";
     editController.b_nomor_mesin_awal.text                  = (invB.statusInventaris == "0") ? data['b_nomor_mesin'].toString() : data['b_nomor_mesin_awal'].toString();
     editController.b_nomor_mesin_akhir.text                 = (invB.statusInventaris == "0") ? data['b_nomor_mesin'].toString() : data['b_nomor_mesin_akhir'].toString();
+    invB.statusNoMesin                                      = data['b_nomor_mesin_status']  != "" ? data['b_nomor_mesin_status'].toString() : "1";
     editController.b_nomor_bpkb_awal.text                   = (invB.statusInventaris == "0") ? data['b_nomor_bpkb'].toString() : data['b_nomor_bpkb_awal'].toString();
     editController.b_nomor_bpkb_akhir.text                  = (invB.statusInventaris == "0") ? data['b_nomor_bpkb'].toString() : data['b_nomor_bpkb_akhir'].toString();
+    invB.statusNoBPKB                                       = data['b_nomor_bpkb_status']   != "" ? data['b_nomor_bpkb_status'].toString() : "1";
     editController.b_bahan_awal.text                        = (invB.statusInventaris == "0") ? data['b_bahan'].toString() : data['b_bahan_awal'].toString();
     editController.b_bahan_akhir.text                       = (invB.statusInventaris == "0") ? data['b_bahan'].toString() : data['b_bahan_akhir'].toString();
+    invB.statusBahan                                        = data['b_bahan_status']        != "" ? data['b_bahan_status'].toString() : "1";
     editController.b_nomor_pabrik_awal.text                 = (invB.statusInventaris == "0") ? data['b_nomor_pabrik'].toString() : data['b_nomor_pabrik_awal'].toString();
     editController.b_nomor_pabrik_akhir.text                = (invB.statusInventaris == "0") ? data['b_nomor_pabrik'].toString() : data['b_nomor_pabrik_akhir'].toString();
+    invB.statusNoPabrik                                     = data['b_nomor_pabrik_status'] != "" ? data['b_nomor_pabrik_status'].toString() : "1";
+    
     if (dataRuang.isNotEmpty) {
       final Map<String, dynamic> selectedRuang = dataRuang.first;
       String namaRuang = selectedRuang['ruang_nm'];
       editController.kartu_inv_awal.text = (invB.statusInventaris == "0") ? namaRuang : data['kartu_inv_awal'].toString();
       invB.selectedKartuRuangan = (invB.statusInventaris == "0") ? namaRuang : data['kartu_inv_akhir'].toString();
     }
-    invB.statusQRBarang                                     = data['barcode_barang']  != "" ? data['barcode_barang'].toString() : "0";
-    invB.statusQRRuangan                                    = data['barcode_ruangan'] != "" ? data['barcode_ruangan'].toString() : "0";
+
+    invB.statusKartuRuangan                                 = data['kartu_inv_status']                     != "" ? data['kartu_inv_status'].toString() : "1";
+    invB.statusQRBarang                                     = (invB.statusInventaris == "0" || data['barcode_barang'] == "") ? "0" : data['barcode_barang'].toString();
+    invB.statusQRRuangan                                    = (invB.statusInventaris == "0" || data['barcode_barang'] == "") ? "0" : data['barcode_ruangan'].toString();
+    invB.selectedKeberadaanBarang                           = data['keberadaan_barang_akhir']              != "" ? data['keberadaan_barang_akhir'].toString() : "1";
+    invB.statusKeberadaanBarang                             = data['keberadaan_barang_status']             != "" ? data['keberadaan_barang_status'].toString() : "1";
     editController.kondisi_awal.text                        = (invB.statusInventaris == "0") ? data['kondisi'].toString() : data['kondisi_awal'].toString();
     invB.selectedKondisi                                    = (invB.statusInventaris == "0") ? data['kondisi'].toString() : data['kondisi_akhir'].toString();
+    invB.statusKondisi                                      = data['kondisi_status']                       != "" ? data['kondisi_status'].toString() : "1";
     editController.asal_usul_awal.text                      = (invB.statusInventaris == "0") ? data['asal_usul'].toString() : data['asal_usul_awal'].toString();
     editController.asal_usul_akhir.text                     = (invB.statusInventaris == "0") ? data['asal_usul'].toString() : data['asal_usul_akhir'].toString();
+    invB.statusAsalUsul                                     = data['asal_usul_status']                     != "" ? data['asal_usul_status'].toString() : "1";
+    invB.statusPenggunaanStatus                             = data['penggunaan_status']                    != "" ? data['penggunaan_status'].toString() : "1";
     editController.penggunaan_awal.text                     = (invB.statusInventaris == "0") ? data['a_penggunaan'].toString() : data['penggunaan_awal'].toString();
+    invB.choosePemerintahDaerah                             = (invB.statusInventaris == "0") ? "1" : data['penggunaan_pemda_status'].toString();
     editController.penggunaan_pemda_akhir.text              = data['penggunaan_pemda_akhir'].toString();
     editController.penggunaan_pemda_nama_pemakai.text       = data['penggunaan_pemda_nama_pemakai'].toString();
     editController.penggunaan_pemda_nama_pemakai_akhir.text = data['penggunaan_pemda_nama_pemakai_akhir'].toString();
+    invB.statusNamaPemakai                                  = data['penggunaan_pemda_nama_pemakai_status'] != "" ? data['penggunaan_pemda_nama_pemakai_status'].toString() : "1";
     editController.penggunaan_pemda_status_pemakai.text     = data['penggunaan_pemda_status_pemakai'].toString();
+    invB.statusBast                                         = data['penggunaan_pemda_bast_pemakaian']      != "" ? data['penggunaan_pemda_bast_pemakaian'].toString() : "1";
+    invB.choosePemerintahPusat                              = data['penggunaan_pempus_status'].toString();
+    invB.statusPempus                                       = data['penggunaan_pempus_yt']                 != "" ? data['penggunaan_pempus_yt'].toString() : "3";
     editController.penggunaan_pempus_y_nm.text              = data['penggunaan_pempus_y_nm'].toString();
     editController.penggunaan_pempus_y_doc.text             = data['penggunaan_pempus_y_doc'].toString();
     editController.penggunaan_pempus_t_nm.text              = data['penggunaan_pempus_t_nm'].toString();
+    invB.choosePemerintahDaerahLain                         = data['penggunaan_pdl_status'].toString();
+    invB.statusPdl                                          = data['penggunaan_pdl_yt']                    != "" ? data['penggunaan_pdl_yt'].toString() : "3";
     editController.penggunaan_pdl_y_nm.text                 = data['penggunaan_pdl_y_nm'].toString();
     editController.penggunaan_pdl_y_doc.text                = data['penggunaan_pdl_y_doc'].toString();
     editController.penggunaan_pdl_t_nm.text                 = data['penggunaan_pdl_t_nm'].toString();
+    invB.choosePihakLain                                    = data['penggunaan_pl_status'].toString();
+    invB.statusPl                                           = data['penggunaan_pl_yt']                     != "" ? data['penggunaan_pl_yt'].toString() : "3";
     editController.penggunaan_pl_y_nm.text                  = data['penggunaan_pl_y_nm'].toString();
     editController.penggunaan_pl_y_doc.text                 = data['penggunaan_pl_y_doc'].toString();
     editController.penggunaan_pl_t_nm.text                  = data['penggunaan_pl_t_nm'].toString();
+    invB.statusGanda                                        = data['tercatat_ganda']                       != "" ? data['tercatat_ganda'].toString() : "2";
     editController.tercatat_ganda_nibar.text                = data['tercatat_ganda_nibar'].toString();
     editController.tercatat_ganda_no_register.text          = data['tercatat_ganda_no_register'].toString();
     editController.tercatat_ganda_kode_barang.text          = data['tercatat_ganda_kode_barang'].toString();
@@ -187,11 +185,11 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
     editController.tercatat_ganda_perolehan.text            = data['tercatat_ganda_perolehan'].toString();
     editController.tercatat_ganda_tanggal_perolehan.text    = data['tercatat_ganda_tanggal_perolehan'].toString();
     editController.tercatat_ganda_kuasa_pengguna.text       = data['tercatat_ganda_kuasa_pengguna'].toString();
+    invB.statusAtasNama                                     = data['pemilik_id']                           != "" ? data['pemilik_id'].toString() : "1";
     editController.lainnya.text                             = data['lainnya'].toString();
     editController.keterangan.text                          = (invB.statusInventaris == "0") ? data['keterangan_penetapan'].toString() : data['keterangan_inventaris'].toString();
-    editController.file_nm.text                             = data['file_nm'].toString();
-    _petugasList                                            = data['petugas']         != null && data['petugas'].isNotEmpty ? List<String>.from(data['petugas']) : [""];
-    editController.tahun.text                               = (invB.statusInventaris == "0") ? now.year.toString() : data['tahun'].toString();
+    editController.file_nm.text                             = (invB.statusInventaris == "0") ? data['file_penetapan'].toString() : data['file_inventaris'].toString();
+    _petugasList                                            = data['petugas']                              != null && data['petugas'].isNotEmpty ? List<String>.from(data['petugas']) : [""];
   }
 
   final ImagePicker _picker = ImagePicker();
@@ -748,7 +746,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                       showSearchBox: true,
                     ),
                     items: [
-                      "Pilih satuan",
+                      "",
                       ...satuanController.satuanList.map<String>((Map<String, dynamic> item) {
                         return item['satuan_nm'].toString();
                       }).toList(),
@@ -1085,34 +1083,32 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  invB.statusAtribusi == "1"
-                      ? Column(
-                          children: [
-                            RadioListTile(
-                              title:
-                                  Text("Tidak diketahui data awal/induknya"),
-                              value: "0",
-                              groupValue: invB.chooseAtribusi,
-                              onChanged: (value) {
-                                setState(() {
-                                  invB.chooseAtribusi = value.toString();
-                                });
-                              },
-                            ),
-                            RadioListTile(
-                              title: Text(
-                                  "Ya, Diketahui data awal/Induknya dan sebutkan data barang awal/induknya"),
-                              value: "1",
-                              groupValue: invB.chooseAtribusi,
-                              onChanged: (value) {
-                                setState(() {
-                                  invB.chooseAtribusi = value.toString();
-                                });
-                              },
-                            ),
-                          ],
-                        )
-                      : SizedBox(),
+                  Column(
+                    children: [
+                      RadioListTile(
+                        title:
+                            Text("Tidak diketahui data awal/induknya"),
+                        value: "0",
+                        groupValue: invB.chooseAtribusi,
+                        onChanged: (value) {
+                          setState(() {
+                            invB.chooseAtribusi = value.toString();
+                          });
+                        },
+                      ),
+                      RadioListTile(
+                        title: Text(
+                            "Ya, Diketahui data awal/Induknya dan sebutkan data barang awal/induknya"),
+                        value: "1",
+                        groupValue: invB.chooseAtribusi,
+                        onChanged: (value) {
+                          setState(() {
+                            invB.chooseAtribusi = value.toString();
+                          });
+                        },
+                      ),
+                    ],
+                  ),
                   SizedBox(height: 10),
                   invB.chooseAtribusi == "1" 
                       ? Column(
@@ -2734,16 +2730,19 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                               ),
                               iconEnabledColor: primaryTextColor,
                             ),
-                            value: invB.selectedKondisi,
+                            value: invB.dropdownKondisi.keys
+                                    .contains(invB.selectedKondisi)
+                                ? invB.selectedKondisi
+                                : null,
                             onChanged: (String? newValue) {
                               setState(() {
                                 invB.selectedKondisi = newValue ?? invB.selectedKondisi;
                               });
                             },
-                            items: invB.dropdownKondisi.map((String item) {
+                            items: invB.dropdownKondisi.entries.map((entry) {
                               return DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(item),
+                                value: entry.key,
+                                child: Text(entry.value),
                               );
                             }).toList(),
                           ),
@@ -2872,10 +2871,10 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                           ),
                           iconEnabledColor: primaryTextColor,
                         ),
-                        value: invB.statusStatus,
+                        value    : invB.statusPenggunaanStatus,
                         onChanged: (String? newValue) {
                           setState(() {
-                            invB.statusStatus = newValue ?? invB.statusStatus;
+                            invB.statusPenggunaanStatus = newValue ?? invB.statusPenggunaanStatus;
                           });
                         },
                         items: invB.keteranganStatus.map((String item) {
@@ -4256,25 +4255,31 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                     List<dynamic> data = [
                       editController.tgl_inventaris.text,
                       editController.no_register_awal.text,
-                      editController.no_register_akhir.text,
+                      (invB.statusNoRegister == "1") ? editController.no_register_awal.text : editController.no_register_akhir.text,
                       invB.statusNoRegister,
                       editController.kategori_id_awal.text,
-                      invB.selectedKategori,
+                      (invB.statusBarang == "1") ? editController.kategori_id_awal.text : invB.selectedKategori,
                       invB.statusBarang,
                       editController.nama_spesifikasi_awal.text,
-                      editController.nama_spesifikasi_akhir.text,
+                      (invB.statusNamaBarang == "1") ? editController.nama_spesifikasi_awal.text : editController.nama_spesifikasi_akhir.text,
                       invB.statusNamaBarang,
                       editController.jumlah_awal.text,
                       invB.selectedSatuan,
                       editController.cara_perolehan_awal.text,
-                      invB.selectedPerolehan,
+                      (invB.statusPerolehan == "1")
+                        ? (editController.cara_perolehan_awal.text == "Pembelian") ? "1" : 
+                          (editController.cara_perolehan_awal.text == "Hibah") ? "2" : 
+                          (editController.cara_perolehan_awal.text == "Barang & Jasa") ? "3" :
+                          (editController.cara_perolehan_awal.text == "Hasil Inventarisasi") ? "4" : ""
+                        : invB.selectedPerolehan,
                       invB.statusPerolehan,
                       editController.tgl_perolehan.text,
                       editController.tahun_perolehan.text,
                       editController.perolehan_awal.text,
-                      editController.perolehan_akhir.text,
+                      (invB.statusNilaiPerolehan == "1") ? editController.perolehan_awal.text : editController.perolehan_akhir.text,
                       invB.statusNilaiPerolehan,
                       invB.statusAtribusi,
+                      invB.chooseAtribusi,
                       editController.atribusi_nibar.text,
                       editController.atribusi_kode_barang.text,
                       editController.atribusi_kode_lokasi.text,
@@ -4292,48 +4297,48 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                       editController.alamat_rw.text,
                       editController.alamat_kodepos.text,
                       editController.b_merk_awal.text,
-                      editController.b_merk_akhir.text,
+                      (invB.statusMerk == "1") ? editController.b_merk_awal.text : editController.b_merk_akhir.text,
                       invB.statusMerk,
                       editController.b_cc_awal.text,
-                      editController.b_cc_akhir.text,
+                      (invB.statusCC == "1") ? editController.b_cc_awal.text : editController.b_cc_akhir.text,
                       invB.statusCC,
                       editController.b_nomor_polisi_awal.text,
-                      editController.b_nomor_polisi_akhir.text,
+                      (invB.statusNoPolisi == "1") ? editController.b_nomor_polisi_awal.text : editController.b_nomor_polisi_akhir.text,
                       invB.statusNoPolisi,
                       editController.b_nomor_rangka_awal.text,
-                      editController.b_nomor_rangka_akhir.text,
+                      (invB.statusNoRangka == "1") ? editController.b_nomor_rangka_awal.text : editController.b_nomor_rangka_akhir.text,
                       invB.statusNoRangka,
                       editController.b_nomor_mesin_awal.text,
-                      editController.b_nomor_mesin_akhir.text,
+                      (invB.statusNoMesin == "1") ? editController.b_nomor_mesin_awal.text : editController.b_nomor_mesin_akhir.text,
                       invB.statusNoMesin,
                       editController.b_nomor_bpkb_awal.text,
-                      editController.b_nomor_bpkb_akhir.text,
+                      (invB.statusNoBPKB == "1") ? editController.b_nomor_bpkb_awal.text : editController.b_nomor_bpkb_akhir.text,
                       invB.statusNoBPKB,
                       editController.b_bahan_awal.text,
-                      editController.b_bahan_akhir.text,
+                      (invB.statusBahan == "1") ? editController.b_bahan_awal.text : editController.b_bahan_akhir.text,
                       invB.statusBahan,
                       editController.b_nomor_pabrik_awal.text,
-                      editController.b_nomor_pabrik_akhir.text,
+                      (invB.statusNoPabrik == "1") ? editController.b_nomor_pabrik_awal.text : editController.b_nomor_pabrik_akhir.text,
                       invB.statusNoPabrik,
                       editController.kartu_inv_awal.text,
-                      invB.selectedKartuRuangan,
+                      (invB.selectedKartuRuangan == "Pilih ruangan") ? "" : invB.selectedKartuRuangan,
                       invB.statusKartuRuangan,
                       invB.statusQRBarang,
                       invB.statusQRRuangan,
-                      invB.selectedKeberadaanBarang,
+                      (invB.statusKeberadaanBarang == "1") ? "1" : invB.selectedKeberadaanBarang,
                       invB.statusKeberadaanBarang,
                       editController.kondisi_awal.text,
-                      invB.selectedKondisi,
+                      (invB.statusKondisi == "1") ? editController.kondisi_awal.text : invB.selectedKondisi,
                       invB.statusKondisi,
                       editController.asal_usul_awal.text,
-                      editController.asal_usul_akhir.text,
+                      (invB.statusAsalUsul == "1") ? editController.asal_usul_awal.text : editController.asal_usul_akhir.text,
                       invB.statusAsalUsul,
-                      invB.statusStatus,
+                      invB.statusPenggunaanStatus,
                       editController.penggunaan_awal.text,
                       invB.choosePemerintahDaerah,
                       editController.penggunaan_pemda_akhir.text,
                       editController.penggunaan_pemda_nama_pemakai.text,
-                      editController.penggunaan_pemda_nama_pemakai_akhir.text,
+                      (invB.statusNamaPemakai == "1") ? editController.penggunaan_pemda_nama_pemakai.text : editController.penggunaan_pemda_nama_pemakai_akhir.text,
                       invB.statusNamaPemakai,
                       editController.penggunaan_pemda_status_pemakai.text,
                       invB.statusBast,
@@ -4367,7 +4372,6 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                       editController.lainnya.text,
                       editController.keterangan.text,
                       _petugasList,
-                      editController.tahun.text
                     ];
                     
                     if(invB.statusInventaris == "0"){

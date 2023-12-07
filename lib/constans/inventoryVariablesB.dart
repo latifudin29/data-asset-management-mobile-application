@@ -19,7 +19,7 @@ class InventoryVariablesB {
   String statusAsalUsul         = "";
   String statusAtribusi         = "";
   String statusKeberadaanBarang = "";
-  String statusStatus           = "";
+  String statusPenggunaanStatus = "";
   String statusGanda            = "";
   String statusAtasNama         = "";
   String statusQRBarang         = "";
@@ -66,8 +66,8 @@ class InventoryVariablesB {
 
   List<String> barcodeBarang              = ["Ada", "Tidak"];
   List<String> barcodeRuang               = ["Ada", "Tidak"];
+
   List<String> keteranganBast             = ["Ada", "Tidak"];
-  List<String> dropdownKondisi            = ["B", "RR", "RB", "TGR", "AK", "KB"];
   List<String> keteranganAtribusi         = ["Ya", "Bukan"];
   List<String> keteranganKeberadaanBarang = ["Ada", "Tidak"];
   List<String> keteranganStatus           = ["Sedang digunakan", "Tidak digunakan"];
@@ -76,6 +76,16 @@ class InventoryVariablesB {
   List<String> keteranganPdl              = ["Ada", "Tidak"];
   List<String> keteranganPl               = ["Ada", "Tidak"];
 
+  Map<String, String> dropdownKondisi = {
+    "B"  : "B",
+    "RR" : "RR",
+    "RB" : "RB",
+    "TGR": "TGR",
+    "AK" : "AK",
+    "KB" : "KB",
+    "BJ" : "Barang dan Jasa"
+  };
+
   Map<String, String> dropdownPerolehan = {
     "1": "Pembelian",
     "2": "Hibah",
@@ -83,7 +93,7 @@ class InventoryVariablesB {
     "4": "Hasil Inventarisasi",
   };
 
-  Map<String, String> dropdownKeberadaanBarang   = {
+  Map<String, String> dropdownKeberadaanBarang = {
     "1": "Pilih",
     "2": "Hilang",
     "3": "Tidak Ditemukan",

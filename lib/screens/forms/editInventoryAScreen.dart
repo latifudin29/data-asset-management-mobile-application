@@ -61,8 +61,8 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
     editController.nama_spesifikasi_akhir.text            = (invA.statusInventaris == "0") ? "" : data['nama_spesifikasi_akhir'].toString();
     invA.statusNamaBarang                                 = data['nama_spesifikasi_status'] != "" ? data['nama_spesifikasi_status'].toString() : "1";
     editController.jumlah_awal.text                       = (invA.statusInventaris == "0") ? data['jumlah'].toString() : data['jumlah_awal'].toString();
-    invA.statusJumlah                                     = data['jumlah_status']           != "" ? data['jumlah_status'].toString() : "1";
     editController.jumlah_akhir.text                      = (invA.statusInventaris == "0") ? data['jumlah'].toString() : data['jumlah_akhir'].toString();
+    invA.statusJumlah                                     = data['jumlah_status']           != "" ? data['jumlah_status'].toString() : "1";
     editController.a_luas_m2_awal.text                    = (invA.statusInventaris == "0") ? data['a_luas_m2'].toString() : data['a_luas_m2_awal'].toString();
     editController.a_luas_m2_akhir.text                   = (invA.statusInventaris == "0") ? data['a_luas_m2'].toString() : data['a_luas_m2_akhir'].toString();
     invA.statusLuas                                       = data['a_luas_m2_status']        != "" ? data['a_luas_m2_status'].toString() : "1";
@@ -880,12 +880,9 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                         showSelectedItems: true,
                         showSearchBox: true,
                       ),
-                      items: [
-                        "Pilih satuan",
-                        ...satuanController.satuanList.map<String>((Map<String, dynamic> item) {
+                      items: satuanController.satuanList.map<String>((Map<String, dynamic> item) {
                           return item['satuan_nm'].toString();
                         }).toList(),
-                      ],
                       dropdownDecoratorProps: DropDownDecoratorProps(
                         dropdownSearchDecoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -3639,28 +3636,33 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                       List<dynamic> data = [
                         editController.tgl_inventaris.text,
                         editController.no_register_awal.text,
-                        editController.no_register_akhir.text,
+                        (invA.statusNoRegister == "1") ? editController.no_register_awal.text : editController.no_register_akhir.text,
                         invA.statusNoRegister,
                         editController.kategori_id_awal.text,
-                        invA.selectedKategori,
+                        (invA.statusBarang == "1") ? editController.kategori_id_awal.text : invA.selectedKategori,
                         invA.statusBarang,
                         editController.nama_spesifikasi_awal.text,
-                        editController.nama_spesifikasi_akhir.text,
+                        (invA.statusNamaBarang == "1") ? editController.nama_spesifikasi_awal.text : editController.nama_spesifikasi_akhir.text,
                         invA.statusNamaBarang,
                         editController.jumlah_awal.text,
-                        editController.jumlah_akhir.text,
+                        (invA.statusJumlah == "1") ? editController.jumlah_awal.text : editController.jumlah_akhir.text,
                         invA.statusJumlah,
                         editController.a_luas_m2_awal.text,
-                        editController.a_luas_m2_akhir.text,
+                        (invA.statusLuas == "1") ? editController.a_luas_m2_awal.text : editController.a_luas_m2_akhir.text,
                         invA.statusLuas,
                         invA.selectedSatuan,
                         editController.cara_perolehan_awal.text,
-                        invA.selectedPerolehan,
+                        (invA.statusPerolehan == "1")
+                          ? (editController.cara_perolehan_awal.text == "Pembelian") ? "1" : 
+                            (editController.cara_perolehan_awal.text == "Hibah") ? "2" : 
+                            (editController.cara_perolehan_awal.text == "Barang & Jasa") ? "3" :
+                            (editController.cara_perolehan_awal.text == "Hasil Inventarisasi") ? "4" : ""
+                          : invA.selectedPerolehan,
                         invA.statusPerolehan,
                         editController.tgl_perolehan.text,
                         editController.tahun_perolehan.text,
                         editController.perolehan_awal.text,
-                        editController.perolehan_akhir.text,
+                        (invA.statusNilaiPerolehan == "1") ? editController.perolehan_awal.text : editController.perolehan_akhir.text,
                         invA.statusNilaiPerolehan,
                         invA.statusAtribusi,
                         invA.chooseAtribusi,
@@ -3681,20 +3683,20 @@ class _EditInventoryAScreenState extends State<EditInventoryAScreen> {
                         editController.alamat_rw.text,
                         editController.alamat_kodepos.text,
                         editController.a_hak_tanah_awal.text,
-                        editController.a_hak_tanah_akhir.text,
+                        (invA.statusHakTanah == "1") ? editController.a_hak_tanah_awal.text : editController.a_hak_tanah_akhir.text,
                         invA.statusHakTanah,
                         editController.a_sertifikat_nomor_awal.text,
-                        editController.a_sertifikat_nomor_akhir.text,
+                        (invA.statusNoSertifikat == "1") ? editController.a_sertifikat_nomor_awal.text : editController.a_sertifikat_nomor_akhir.text,
                         invA.statusNoSertifikat,
                         editController.a_sertifikat_tanggal_awal.text,
-                        editController.a_sertifikat_tanggal_akhir.text,
+                        (invA.statusTglSertifikat == "1") ? editController.a_sertifikat_tanggal_awal.text : editController.a_sertifikat_tanggal_akhir.text,
                         invA.statusTglSertifikat,
                         invA.statusKeberadaanBarang,
                         editController.kondisi_awal.text,
-                        invA.selectedKondisi,
+                        (invA.statusKondisi == "1") ? editController.kondisi_awal.text : invA.selectedKondisi,
                         invA.statusKondisi,
                         editController.asal_usul_awal.text,
-                        editController.asal_usul_akhir.text,
+                        (invA.statusAsalUsul == "1") ? editController.asal_usul_awal.text : editController.asal_usul_akhir.text,
                         invA.statusAsalUsul,
                         invA.statusPenggunaanStatus,
                         editController.penggunaan_awal.text,

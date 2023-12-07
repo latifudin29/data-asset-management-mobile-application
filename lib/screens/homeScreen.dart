@@ -5,6 +5,7 @@ import 'package:kib_application/controllers/logoutController.dart';
 import 'package:kib_application/screens/changePasswordScreen.dart';
 import 'package:kib_application/screens/inventoryScreen.dart';
 import 'package:kib_application/utils/sharedPrefs.dart';
+import 'package:kib_application/utils/snackbar.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key});
@@ -149,11 +150,17 @@ class Menus extends StatelessWidget {
       child: ListView(
         children: List.generate(titleScreen.length, (index) {
           final title = titleScreen[index];
+          bool showCloseIcon = index >= 5 && index <= 7;
+
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 28),
             child: InkWell(
               onTap: () {
-                Get.to(InventoryScreen(title: title));
+                if (showCloseIcon) {
+                  customSnackBar("Error", "Belum bisa diakses!", 'error');
+                } else {
+                  Get.to(InventoryScreen(title: title));
+                }
               },
               borderRadius: BorderRadius.circular(15),
               child: Container(
@@ -178,6 +185,16 @@ class Menus extends StatelessWidget {
                         ),
                       ),
                     ),
+                    Spacer(),
+                    if (showCloseIcon)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Icon(
+                          Icons.close,
+                          color: Colors.red,
+                          size: 30,
+                        ),
+                      ),
                   ],
                 ),
               ),

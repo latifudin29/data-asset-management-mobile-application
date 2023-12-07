@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:kib_application/controllers/appointmentController.dart';
+import 'package:kib_application/utils/sharedPrefs.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,10 @@ import 'package:kib_application/utils/snackbar.dart';
 
 class InventoryBController extends GetxController {
   final _connect = GetConnect();
+  final SharedPrefs user     = Get.put(SharedPrefs());
+  final penetapanController  = Get.put(AppointmentController());
+
+  DateTime now = DateTime.now();
 
   late TextEditingController kib_id,
       penetapan_id,
@@ -226,100 +232,101 @@ class InventoryBController extends GetxController {
         "perolehan_awal"                      : _tryParseInt(removeDot(_getValue(data[17]))),                                          // int
         "perolehan_akhir"                     : _tryParseInt(removeDot(_getValue(data[18]))),                                          // int
         "perolehan_status"                    : _tryParseInt(_getValue(data[19])),                                                     // int
-        "atribusi_status"                     : _tryParseInt(_getValue(data[20])),                                                     // int
-        "atribusi_nibar"                      : _getValue(data[21]),                                                                   // String
-        "atribusi_kode_barang"                : _getValue(data[22]),                                                                   // String
-        "atribusi_kode_lokasi"                : _getValue(data[23]),                                                                   // String
-        "atribusi_no_register"                : _getValue(data[24]),                                                                   // String
-        "atribusi_nama_barang"                : _getValue(data[25]),                                                                   // String
-        "atribusi_spesifikasi_barang"         : _getValue(data[26]),                                                                   // String
-        "a_alamat_awal"                       : _getValue(data[27]),                                                                   // String
-        "a_alamat_status"                     : _tryParseInt(_getValue(data[28])),                                                     // int
-        "alamat_kota"                         : _getValue(data[29]),                                                                   // String
-        "alamat_kecamatan"                    : _getValue(data[30]),                                                                   // String
-        "alamat_kelurahan"                    : _getValue(data[31]),                                                                   // String
-        "alamat_jalan"                        : _getValue(data[32]),                                                                   // String
-        "alamat_no"                           : _getValue(data[33]),                                                                   // String
-        "alamat_rt"                           : _getValue(data[34]),                                                                   // String
-        "alamat_rw"                           : _getValue(data[35]),                                                                   // String
-        "alamat_kodepos"                      : _getValue(data[36]),                                                                   // String
-        "b_merk_awal"                         : _getValue(data[37]),                                                                   // String
-        "b_merk_akhir"                        : _getValue(data[38]),                                                                   // String
-        "b_merk_status"                       : _tryParseInt(_getValue(data[39])),                                                     // int
-        "b_cc_awal"                           : _getValue(data[40]),                                                                   // String
-        "b_cc_akhir"                          : _getValue(data[41]),                                                                   // String
-        "b_cc_status"                         : _tryParseInt(_getValue(data[42])),                                                     // int
-        "b_nomor_polisi_awal"                 : _getValue(data[43]),                                                                   // String
-        "b_nomor_polisi_akhir"                : _getValue(data[44]),                                                                   // String
-        "b_nomor_polisi_status"               : _tryParseInt(_getValue(data[45])),                                                     // int
-        "b_nomor_rangka_awal"                 : _getValue(data[46]),                                                                   // String
-        "b_nomor_rangka_akhir"                : _getValue(data[47]),                                                                   // String
-        "b_nomor_rangka_status"               : _tryParseInt(_getValue(data[48])),                                                     // int
-        "b_nomor_mesin_awal"                  : _getValue(data[49]),                                                                   // String
-        "b_nomor_mesin_akhir"                 : _getValue(data[50]),                                                                   // String
-        "b_nomor_mesin_status"                : _tryParseInt(_getValue(data[51])),                                                     // int
-        "b_nomor_bpkb_awal"                   : _getValue(data[52]),                                                                   // String
-        "b_nomor_bpkb_akhir"                  : _getValue(data[53]),                                                                   // String
-        "b_nomor_bpkb_status"                 : _tryParseInt(_getValue(data[54])),                                                     // int
-        "b_bahan_awal"                        : _getValue(data[55]),                                                                   // String
-        "b_bahan_akhir"                       : _getValue(data[56]),                                                                   // String
-        "b_bahan_status"                      : _tryParseInt(_getValue(data[57])),                                                     // int
-        "b_nomor_pabrik_awal"                 : _getValue(data[58]),                                                                   // String
-        "b_nomor_pabrik_akhir"                : _getValue(data[59]),                                                                   // String
-        "b_nomor_pabrik_status"               : _tryParseInt(_getValue(data[60])),                                                     // int
-        "kartu_inv_awal"                      : _getValue(data[61]),                                                                   // String
-        "kartu_inv_akhir"                     : _getValue(data[62]),                                                                   // String
-        "kartu_inv_status"                    : _tryParseInt(_getValue(data[63])),                                                     // int
-        "barcode_barang"                      : _tryParseInt(_getValue(data[64])),                                                     // int
-        "barcode_ruangan"                     : _tryParseInt(_getValue(data[65])),                                                     // int
-        "keberadaan_barang_akhir"             : _tryParseInt(_getValue(data[66])),                                                     // int
-        "keberadaan_barang_status"            : _tryParseInt(_getValue(data[67])),                                                     // int
-        "kondisi_awal"                        : _getValue(data[68]),                                                                   // String
-        "kondisi_akhir"                       : _getValue(data[69]),                                                                   // String
-        "kondisi_status"                      : _tryParseInt(_getValue(data[70])),                                                     // int
-        "asal_usul_awal"                      : _getValue(data[71]),                                                                   // String
-        "asal_usul_akhir"                     : _getValue(data[72]),                                                                   // String
-        "asal_usul_status"                    : _tryParseInt(_getValue(data[73])),                                                     // int
-        "penggunaan_status"                   : _tryParseInt(_getValue(data[74])),                                                     // int
-        "penggunaan_awal"                     : _getValue(data[75]),                                                                   // String
-        "penggunaan_pemda_status"             : _tryParseInt(_getValue(data[76])),                                                     // int
-        "penggunaan_pemda_akhir"              : _getValue(data[77]),                                                                   // String
-        "penggunaan_pemda_nama_pemakai"       : _getValue(data[78]),                                                                   // String
-        "penggunaan_pemda_nama_pemakai_akhir" : _getValue(data[79]),                                                                   // String
-        "penggunaan_pemda_nama_pemakai_status": _tryParseInt(_getValue(data[80])),                                                     // int
-        "penggunaan_pemda_status_pemakai"     : _getValue(data[81]),                                                                   // String
-        "penggunaan_pemda_bast_pemakaian"     : _tryParseInt(_getValue(data[82])),                                                     // int
-        "penggunaan_pempus_status"            : _tryParseInt(_getValue(data[83])),                                                     // int
-        "penggunaan_pempus_yt"                : _tryParseInt(_getValue(data[84])),                                                     // int
-        "penggunaan_pempus_y_nm"              : _getValue(data[85]),                                                                   // String
-        "penggunaan_pempus_y_doc"             : _getValue(data[86]),                                                                   // String
-        "penggunaan_pempus_t_nm"              : _getValue(data[87]),                                                                   // String
-        "penggunaan_pdl_status"               : _tryParseInt(_getValue(data[88])),                                                     // int
-        "penggunaan_pdl_yt"                   : _tryParseInt(_getValue(data[89])),                                                     // int
-        "penggunaan_pdl_y_nm"                 : _getValue(data[90]),                                                                   // String
-        "penggunaan_pdl_y_doc"                : _getValue(data[91]),                                                                   // String
-        "penggunaan_pdl_t_nm"                 : _getValue(data[92]),                                                                   // String
-        "penggunaan_pl_status"                : _tryParseInt(_getValue(data[93])),                                                     // int
-        "penggunaan_pl_yt"                    : _tryParseInt(_getValue(data[94])),                                                     // int
-        "penggunaan_pl_y_nm"                  : _getValue(data[95]),                                                                   // String
-        "penggunaan_pl_y_doc"                 : _getValue(data[96]),                                                                   // String
-        "penggunaan_pl_t_nm"                  : _getValue(data[97]),                                                                   // String
-        "tercatat_ganda"                      : _tryParseInt(_getValue(data[98])),                                                     // int
-        "tercatat_ganda_nibar"                : _getValue(data[99]),                                                                   // String
-        "tercatat_ganda_no_register"          : _getValue(data[100]),                                                                  // String
-        "tercatat_ganda_kode_barang"          : _getValue(data[101]),                                                                  // String
-        "tercatat_ganda_nama_barang"          : _getValue(data[102]),                                                                  // String
-        "tercatat_ganda_spesifikasi_barang"   : _getValue(data[103]),                                                                  // String
-        "tercatat_ganda_luas"                 : _getValue(data[104]),                                                                  // String
-        "tercatat_ganda_satuan"               : _getValue(data[105]),                                                                  // String
-        "tercatat_ganda_perolehan"            : _getValue(data[106]),                                                                  // String
-        "tercatat_ganda_tanggal_perolehan"    : _getValue(data[107]),                                                                  // date
-        "tercatat_ganda_kuasa_pengguna"       : _getValue(data[108]),                                                                  // String
-        "pemilik_id"                          : _tryParseInt(_getValue(data[109])),                                                    // int
-        "lainnya"                             : _getValue(data[110]),                                                                  // String
-        "keterangan"                          : _getValue(data[111]),                                                                  // String
-        "petugas"                             : _getValue(jsonEncode(data[111])) == '[""]' ? '[]': _getValue(jsonEncode(data[112])),   // JSON
-        "tahun"                               : _tryParseInt(_getValue(data[113])),                                                    // int
+        "atribusi_biaya"                      : _tryParseInt(_getValue(data[20])),                                                     // int
+        "atribusi_status"                     : _tryParseInt(_getValue(data[21])),                                                     // int
+        "atribusi_nibar"                      : _getValue(data[22]),                                                                   // String
+        "atribusi_kode_barang"                : _getValue(data[23]),                                                                   // String
+        "atribusi_kode_lokasi"                : _getValue(data[24]),                                                                   // String
+        "atribusi_no_register"                : _getValue(data[25]),                                                                   // String
+        "atribusi_nama_barang"                : _getValue(data[26]),                                                                   // String
+        "atribusi_spesifikasi_barang"         : _getValue(data[27]),                                                                   // String
+        "a_alamat_awal"                       : _getValue(data[28]),                                                                   // String
+        "a_alamat_status"                     : _tryParseInt(_getValue(data[29])),                                                     // int
+        "alamat_kota"                         : _getValue(data[30]),                                                                   // String
+        "alamat_kecamatan"                    : _getValue(data[31]),                                                                   // String
+        "alamat_kelurahan"                    : _getValue(data[32]),                                                                   // String
+        "alamat_jalan"                        : _getValue(data[33]),                                                                   // String
+        "alamat_no"                           : _getValue(data[34]),                                                                   // String
+        "alamat_rt"                           : _getValue(data[35]),                                                                   // String
+        "alamat_rw"                           : _getValue(data[36]),                                                                   // String
+        "alamat_kodepos"                      : _getValue(data[37]),                                                                   // String
+        "b_merk_awal"                         : _getValue(data[38]),                                                                   // String
+        "b_merk_akhir"                        : _getValue(data[39]),                                                                   // String
+        "b_merk_status"                       : _tryParseInt(_getValue(data[40])),                                                     // int
+        "b_cc_awal"                           : _getValue(data[41]),                                                                   // String
+        "b_cc_akhir"                          : _getValue(data[42]),                                                                   // String
+        "b_cc_status"                         : _tryParseInt(_getValue(data[43])),                                                     // int
+        "b_nomor_polisi_awal"                 : _getValue(data[44]),                                                                   // String
+        "b_nomor_polisi_akhir"                : _getValue(data[45]),                                                                   // String
+        "b_nomor_polisi_status"               : _tryParseInt(_getValue(data[46])),                                                     // int
+        "b_nomor_rangka_awal"                 : _getValue(data[47]),                                                                   // String
+        "b_nomor_rangka_akhir"                : _getValue(data[48]),                                                                   // String
+        "b_nomor_rangka_status"               : _tryParseInt(_getValue(data[49])),                                                     // int
+        "b_nomor_mesin_awal"                  : _getValue(data[50]),                                                                   // String
+        "b_nomor_mesin_akhir"                 : _getValue(data[51]),                                                                   // String
+        "b_nomor_mesin_status"                : _tryParseInt(_getValue(data[52])),                                                     // int
+        "b_nomor_bpkb_awal"                   : _getValue(data[53]),                                                                   // String
+        "b_nomor_bpkb_akhir"                  : _getValue(data[54]),                                                                   // String
+        "b_nomor_bpkb_status"                 : _tryParseInt(_getValue(data[55])),                                                     // int
+        "b_bahan_awal"                        : _getValue(data[56]),                                                                   // String
+        "b_bahan_akhir"                       : _getValue(data[57]),                                                                   // String
+        "b_bahan_status"                      : _tryParseInt(_getValue(data[58])),                                                     // int
+        "b_nomor_pabrik_awal"                 : _getValue(data[59]),                                                                   // String
+        "b_nomor_pabrik_akhir"                : _getValue(data[60]),                                                                   // String
+        "b_nomor_pabrik_status"               : _tryParseInt(_getValue(data[61])),                                                     // int
+        "kartu_inv_awal"                      : _getValue(data[62]),                                                                   // String
+        "kartu_inv_akhir"                     : _getValue(data[63]),                                                                   // String
+        "kartu_inv_status"                    : _tryParseInt(_getValue(data[64])),                                                     // int
+        "barcode_barang"                      : _tryParseInt(_getValue(data[65])),                                                     // int
+        "barcode_ruangan"                     : _tryParseInt(_getValue(data[66])),                                                     // int
+        "keberadaan_barang_akhir"             : _tryParseInt(_getValue(data[67])),                                                     // int
+        "keberadaan_barang_status"            : _tryParseInt(_getValue(data[68])),                                                     // int
+        "kondisi_awal"                        : _getValue(data[69]),                                                                   // String
+        "kondisi_akhir"                       : _getValue(data[70]),                                                                   // String
+        "kondisi_status"                      : _tryParseInt(_getValue(data[71])),                                                     // int
+        "asal_usul_awal"                      : _getValue(data[72]),                                                                   // String
+        "asal_usul_akhir"                     : _getValue(data[73]),                                                                   // String
+        "asal_usul_status"                    : _tryParseInt(_getValue(data[74])),                                                     // int
+        "penggunaan_status"                   : _tryParseInt(_getValue(data[75])),                                                     // int
+        "penggunaan_awal"                     : _getValue(data[76]),                                                                   // String
+        "penggunaan_pemda_status"             : _tryParseInt(_getValue(data[77])),                                                     // int
+        "penggunaan_pemda_akhir"              : _getValue(data[78]),                                                                   // String
+        "penggunaan_pemda_nama_pemakai"       : _getValue(data[79]),                                                                   // String
+        "penggunaan_pemda_nama_pemakai_akhir" : _getValue(data[80]),                                                                   // String
+        "penggunaan_pemda_nama_pemakai_status": _tryParseInt(_getValue(data[81])),                                                     // int
+        "penggunaan_pemda_status_pemakai"     : _getValue(data[82]),                                                                   // String
+        "penggunaan_pemda_bast_pemakaian"     : _tryParseInt(_getValue(data[83])),                                                     // int
+        "penggunaan_pempus_status"            : _tryParseInt(_getValue(data[84])),                                                     // int
+        "penggunaan_pempus_yt"                : _tryParseInt(_getValue(data[85])),                                                     // int
+        "penggunaan_pempus_y_nm"              : _getValue(data[86]),                                                                   // String
+        "penggunaan_pempus_y_doc"             : _getValue(data[87]),                                                                   // String
+        "penggunaan_pempus_t_nm"              : _getValue(data[88]),                                                                   // String
+        "penggunaan_pdl_status"               : _tryParseInt(_getValue(data[89])),                                                     // int
+        "penggunaan_pdl_yt"                   : _tryParseInt(_getValue(data[90])),                                                     // int
+        "penggunaan_pdl_y_nm"                 : _getValue(data[91]),                                                                   // String
+        "penggunaan_pdl_y_doc"                : _getValue(data[92]),                                                                   // String
+        "penggunaan_pdl_t_nm"                 : _getValue(data[93]),                                                                   // String
+        "penggunaan_pl_status"                : _tryParseInt(_getValue(data[94])),                                                     // int
+        "penggunaan_pl_yt"                    : _tryParseInt(_getValue(data[95])),                                                     // int
+        "penggunaan_pl_y_nm"                  : _getValue(data[96]),                                                                   // String
+        "penggunaan_pl_y_doc"                 : _getValue(data[97]),                                                                   // String
+        "penggunaan_pl_t_nm"                  : _getValue(data[98]),                                                                   // String
+        "tercatat_ganda"                      : _tryParseInt(_getValue(data[99])),                                                     // int
+        "tercatat_ganda_nibar"                : _getValue(data[100]),                                                                  // String
+        "tercatat_ganda_no_register"          : _getValue(data[101]),                                                                  // String
+        "tercatat_ganda_kode_barang"          : _getValue(data[102]),                                                                  // String
+        "tercatat_ganda_nama_barang"          : _getValue(data[103]),                                                                  // String
+        "tercatat_ganda_spesifikasi_barang"   : _getValue(data[104]),                                                                  // String
+        "tercatat_ganda_luas"                 : _getValue(data[105]),                                                                  // String
+        "tercatat_ganda_satuan"               : _getValue(data[106]),                                                                  // String
+        "tercatat_ganda_perolehan"            : _getValue(data[107]),                                                                  // String
+        "tercatat_ganda_tanggal_perolehan"    : _getValue(data[108]),                                                                  // date
+        "tercatat_ganda_kuasa_pengguna"       : _getValue(data[109]),                                                                  // String
+        "pemilik_id"                          : _tryParseInt(_getValue(data[110])),                                                    // int
+        "lainnya"                             : _getValue(data[111]),                                                                  // String
+        "keterangan"                          : _getValue(data[112]),                                                                  // String
+        "petugas"                             : _getValue(jsonEncode(data[113])) == '[""]' ? '[]': _getValue(jsonEncode(data[113])),   // JSON
+        "tahun"                               : now.year,                                                                              // int
         "status"                              : 0
       }
     };
@@ -348,6 +355,7 @@ class InventoryBController extends GetxController {
 
       if (response.statusCode == 201) {
         Get.back();
+        await penetapanController.getPenetapan(user.departemen_id.value, user.kategori.value, int.parse(user.page.value));
         customSnackBar("Success", response.body['message'], 'success');
       } else {
         print("Error: ${response.statusCode}");
@@ -399,100 +407,100 @@ class InventoryBController extends GetxController {
         "perolehan_awal"                      : _tryParseInt(removeDot(_getValue(data[17]))),                                          // int
         "perolehan_akhir"                     : _tryParseInt(removeDot(_getValue(data[18]))),                                          // int
         "perolehan_status"                    : _tryParseInt(_getValue(data[19])),                                                     // int
-        "atribusi_status"                     : _tryParseInt(_getValue(data[20])),                                                     // int
-        "atribusi_nibar"                      : _getValue(data[21]),                                                                   // String
-        "atribusi_kode_barang"                : _getValue(data[22]),                                                                   // String
-        "atribusi_kode_lokasi"                : _getValue(data[23]),                                                                   // String
-        "atribusi_no_register"                : _getValue(data[24]),                                                                   // String
-        "atribusi_nama_barang"                : _getValue(data[25]),                                                                   // String
-        "atribusi_spesifikasi_barang"         : _getValue(data[26]),                                                                   // String
-        "a_alamat_awal"                       : _getValue(data[27]),                                                                   // String
-        "a_alamat_status"                     : _tryParseInt(_getValue(data[28])),                                                     // int
-        "alamat_kota"                         : _getValue(data[29]),                                                                   // String
-        "alamat_kecamatan"                    : _getValue(data[30]),                                                                   // String
-        "alamat_kelurahan"                    : _getValue(data[31]),                                                                   // String
-        "alamat_jalan"                        : _getValue(data[32]),                                                                   // String
-        "alamat_no"                           : _getValue(data[33]),                                                                   // String
-        "alamat_rt"                           : _getValue(data[34]),                                                                   // String
-        "alamat_rw"                           : _getValue(data[35]),                                                                   // String
-        "alamat_kodepos"                      : _getValue(data[36]),                                                                   // String
-        "b_merk_awal"                         : _getValue(data[37]),                                                                   // String
-        "b_merk_akhir"                        : _getValue(data[38]),                                                                   // String
-        "b_merk_status"                       : _tryParseInt(_getValue(data[39])),                                                     // int
-        "b_cc_awal"                           : _getValue(data[40]),                                                                   // String
-        "b_cc_akhir"                          : _getValue(data[41]),                                                                   // String
-        "b_cc_status"                         : _tryParseInt(_getValue(data[42])),                                                     // int
-        "b_nomor_polisi_awal"                 : _getValue(data[43]),                                                                   // String
-        "b_nomor_polisi_akhir"                : _getValue(data[44]),                                                                   // String
-        "b_nomor_polisi_status"               : _tryParseInt(_getValue(data[45])),                                                     // int
-        "b_nomor_rangka_awal"                 : _getValue(data[46]),                                                                   // String
-        "b_nomor_rangka_akhir"                : _getValue(data[47]),                                                                   // String
-        "b_nomor_rangka_status"               : _tryParseInt(_getValue(data[48])),                                                     // int
-        "b_nomor_mesin_awal"                  : _getValue(data[49]),                                                                   // String
-        "b_nomor_mesin_akhir"                 : _getValue(data[50]),                                                                   // String
-        "b_nomor_mesin_status"                : _tryParseInt(_getValue(data[51])),                                                     // int
-        "b_nomor_bpkb_awal"                   : _getValue(data[52]),                                                                   // String
-        "b_nomor_bpkb_akhir"                  : _getValue(data[53]),                                                                   // String
-        "b_nomor_bpkb_status"                 : _tryParseInt(_getValue(data[54])),                                                     // int
-        "b_bahan_awal"                        : _getValue(data[55]),                                                                   // String
-        "b_bahan_akhir"                       : _getValue(data[56]),                                                                   // String
-        "b_bahan_status"                      : _tryParseInt(_getValue(data[57])),                                                     // int
-        "b_nomor_pabrik_awal"                 : _getValue(data[58]),                                                                   // String
-        "b_nomor_pabrik_akhir"                : _getValue(data[59]),                                                                   // String
-        "b_nomor_pabrik_status"               : _tryParseInt(_getValue(data[60])),                                                     // int
-        "kartu_inv_awal"                      : _getValue(data[61]),                                                                   // String
-        "kartu_inv_akhir"                     : _getValue(data[62]),                                                                   // String
-        "kartu_inv_status"                    : _tryParseInt(_getValue(data[63])),                                                     // int
-        "barcode_barang"                      : _tryParseInt(_getValue(data[64])),                                                     // int
-        "barcode_ruangan"                     : _tryParseInt(_getValue(data[65])),                                                     // int
-        "keberadaan_barang_akhir"             : _tryParseInt(_getValue(data[66])),                                                     // int
-        "keberadaan_barang_status"            : _tryParseInt(_getValue(data[67])),                                                     // int
-        "kondisi_awal"                        : _getValue(data[68]),                                                                   // String
-        "kondisi_akhir"                       : _getValue(data[69]),                                                                   // String
-        "kondisi_status"                      : _tryParseInt(_getValue(data[70])),                                                     // int
-        "asal_usul_awal"                      : _getValue(data[71]),                                                                   // String
-        "asal_usul_akhir"                     : _getValue(data[72]),                                                                   // String
-        "asal_usul_status"                    : _tryParseInt(_getValue(data[73])),                                                     // int
-        "penggunaan_status"                   : _tryParseInt(_getValue(data[74])),                                                     // int
-        "penggunaan_awal"                     : _getValue(data[75]),                                                                   // String
-        "penggunaan_pemda_status"             : _tryParseInt(_getValue(data[76])),                                                     // int
-        "penggunaan_pemda_akhir"              : _getValue(data[77]),                                                                   // String
-        "penggunaan_pemda_nama_pemakai"       : _getValue(data[78]),                                                                   // String
-        "penggunaan_pemda_nama_pemakai_akhir" : _getValue(data[79]),                                                                   // String
-        "penggunaan_pemda_nama_pemakai_status": _tryParseInt(_getValue(data[80])),                                                     // int
-        "penggunaan_pemda_status_pemakai"     : _getValue(data[81]),                                                                   // String
-        "penggunaan_pemda_bast_pemakaian"     : _tryParseInt(_getValue(data[82])),                                                     // int
-        "penggunaan_pempus_status"            : _tryParseInt(_getValue(data[83])),                                                     // int
-        "penggunaan_pempus_yt"                : _tryParseInt(_getValue(data[84])),                                                     // int
-        "penggunaan_pempus_y_nm"              : _getValue(data[85]),                                                                   // String
-        "penggunaan_pempus_y_doc"             : _getValue(data[86]),                                                                   // String
-        "penggunaan_pempus_t_nm"              : _getValue(data[87]),                                                                   // String
-        "penggunaan_pdl_status"               : _tryParseInt(_getValue(data[88])),                                                     // int
-        "penggunaan_pdl_yt"                   : _tryParseInt(_getValue(data[89])),                                                     // int
-        "penggunaan_pdl_y_nm"                 : _getValue(data[90]),                                                                   // String
-        "penggunaan_pdl_y_doc"                : _getValue(data[91]),                                                                   // String
-        "penggunaan_pdl_t_nm"                 : _getValue(data[92]),                                                                   // String
-        "penggunaan_pl_status"                : _tryParseInt(_getValue(data[93])),                                                     // int
-        "penggunaan_pl_yt"                    : _tryParseInt(_getValue(data[94])),                                                     // int
-        "penggunaan_pl_y_nm"                  : _getValue(data[95]),                                                                   // String
-        "penggunaan_pl_y_doc"                 : _getValue(data[96]),                                                                   // String
-        "penggunaan_pl_t_nm"                  : _getValue(data[97]),                                                                   // String
-        "tercatat_ganda"                      : _tryParseInt(_getValue(data[98])),                                                     // int
-        "tercatat_ganda_nibar"                : _getValue(data[99]),                                                                   // String
-        "tercatat_ganda_no_register"          : _getValue(data[100]),                                                                   // String
-        "tercatat_ganda_kode_barang"          : _getValue(data[101]),                                                                  // String
-        "tercatat_ganda_nama_barang"          : _getValue(data[102]),                                                                  // String
-        "tercatat_ganda_spesifikasi_barang"   : _getValue(data[103]),                                                                  // String
-        "tercatat_ganda_luas"                 : _getValue(data[104]),                                                                  // String
-        "tercatat_ganda_satuan"               : _getValue(data[105]),                                                                  // String
-        "tercatat_ganda_perolehan"            : _getValue(data[106]),                                                                  // String
-        "tercatat_ganda_tanggal_perolehan"    : _getValue(data[107]),                                                                  // date
-        "tercatat_ganda_kuasa_pengguna"       : _getValue(data[108]),                                                                  // String
-        "pemilik_id"                          : _tryParseInt(_getValue(data[109])),                                                    // int
-        "lainnya"                             : _getValue(data[110]),                                                                  // String
-        "keterangan"                          : _getValue(data[111]),                                                                  // String
-        "petugas"                             : _getValue(jsonEncode(data[111])) == '[""]' ? '[]': _getValue(jsonEncode(data[112])),   // JSON
-        "tahun"                               : _tryParseInt(_getValue(data[113])),                                                    // int
+        "atribusi_biaya"                      : _tryParseInt(_getValue(data[20])),                                                     // int
+        "atribusi_status"                     : _tryParseInt(_getValue(data[21])),                                                     // int
+        "atribusi_nibar"                      : _getValue(data[22]),                                                                   // String
+        "atribusi_kode_barang"                : _getValue(data[23]),                                                                   // String
+        "atribusi_kode_lokasi"                : _getValue(data[24]),                                                                   // String
+        "atribusi_no_register"                : _getValue(data[25]),                                                                   // String
+        "atribusi_nama_barang"                : _getValue(data[26]),                                                                   // String
+        "atribusi_spesifikasi_barang"         : _getValue(data[27]),                                                                   // String
+        "a_alamat_awal"                       : _getValue(data[28]),                                                                   // String
+        "a_alamat_status"                     : _tryParseInt(_getValue(data[29])),                                                     // int
+        "alamat_kota"                         : _getValue(data[30]),                                                                   // String
+        "alamat_kecamatan"                    : _getValue(data[31]),                                                                   // String
+        "alamat_kelurahan"                    : _getValue(data[32]),                                                                   // String
+        "alamat_jalan"                        : _getValue(data[33]),                                                                   // String
+        "alamat_no"                           : _getValue(data[34]),                                                                   // String
+        "alamat_rt"                           : _getValue(data[35]),                                                                   // String
+        "alamat_rw"                           : _getValue(data[36]),                                                                   // String
+        "alamat_kodepos"                      : _getValue(data[37]),                                                                   // String
+        "b_merk_awal"                         : _getValue(data[38]),                                                                   // String
+        "b_merk_akhir"                        : _getValue(data[39]),                                                                   // String
+        "b_merk_status"                       : _tryParseInt(_getValue(data[40])),                                                     // int
+        "b_cc_awal"                           : _getValue(data[41]),                                                                   // String
+        "b_cc_akhir"                          : _getValue(data[42]),                                                                   // String
+        "b_cc_status"                         : _tryParseInt(_getValue(data[43])),                                                     // int
+        "b_nomor_polisi_awal"                 : _getValue(data[44]),                                                                   // String
+        "b_nomor_polisi_akhir"                : _getValue(data[45]),                                                                   // String
+        "b_nomor_polisi_status"               : _tryParseInt(_getValue(data[46])),                                                     // int
+        "b_nomor_rangka_awal"                 : _getValue(data[47]),                                                                   // String
+        "b_nomor_rangka_akhir"                : _getValue(data[48]),                                                                   // String
+        "b_nomor_rangka_status"               : _tryParseInt(_getValue(data[49])),                                                     // int
+        "b_nomor_mesin_awal"                  : _getValue(data[50]),                                                                   // String
+        "b_nomor_mesin_akhir"                 : _getValue(data[51]),                                                                   // String
+        "b_nomor_mesin_status"                : _tryParseInt(_getValue(data[52])),                                                     // int
+        "b_nomor_bpkb_awal"                   : _getValue(data[53]),                                                                   // String
+        "b_nomor_bpkb_akhir"                  : _getValue(data[54]),                                                                   // String
+        "b_nomor_bpkb_status"                 : _tryParseInt(_getValue(data[55])),                                                     // int
+        "b_bahan_awal"                        : _getValue(data[56]),                                                                   // String
+        "b_bahan_akhir"                       : _getValue(data[57]),                                                                   // String
+        "b_bahan_status"                      : _tryParseInt(_getValue(data[58])),                                                     // int
+        "b_nomor_pabrik_awal"                 : _getValue(data[59]),                                                                   // String
+        "b_nomor_pabrik_akhir"                : _getValue(data[60]),                                                                   // String
+        "b_nomor_pabrik_status"               : _tryParseInt(_getValue(data[61])),                                                     // int
+        "kartu_inv_awal"                      : _getValue(data[62]),                                                                   // String
+        "kartu_inv_akhir"                     : _getValue(data[63]),                                                                   // String
+        "kartu_inv_status"                    : _tryParseInt(_getValue(data[64])),                                                     // int
+        "barcode_barang"                      : _tryParseInt(_getValue(data[65])),                                                     // int
+        "barcode_ruangan"                     : _tryParseInt(_getValue(data[66])),                                                     // int
+        "keberadaan_barang_akhir"             : _tryParseInt(_getValue(data[67])),                                                     // int
+        "keberadaan_barang_status"            : _tryParseInt(_getValue(data[68])),                                                     // int
+        "kondisi_awal"                        : _getValue(data[69]),                                                                   // String
+        "kondisi_akhir"                       : _getValue(data[70]),                                                                   // String
+        "kondisi_status"                      : _tryParseInt(_getValue(data[71])),                                                     // int
+        "asal_usul_awal"                      : _getValue(data[72]),                                                                   // String
+        "asal_usul_akhir"                     : _getValue(data[73]),                                                                   // String
+        "asal_usul_status"                    : _tryParseInt(_getValue(data[74])),                                                     // int
+        "penggunaan_status"                   : _tryParseInt(_getValue(data[75])),                                                     // int
+        "penggunaan_awal"                     : _getValue(data[76]),                                                                   // String
+        "penggunaan_pemda_status"             : _tryParseInt(_getValue(data[77])),                                                     // int
+        "penggunaan_pemda_akhir"              : _getValue(data[78]),                                                                   // String
+        "penggunaan_pemda_nama_pemakai"       : _getValue(data[79]),                                                                   // String
+        "penggunaan_pemda_nama_pemakai_akhir" : _getValue(data[80]),                                                                   // String
+        "penggunaan_pemda_nama_pemakai_status": _tryParseInt(_getValue(data[81])),                                                     // int
+        "penggunaan_pemda_status_pemakai"     : _getValue(data[82]),                                                                   // String
+        "penggunaan_pemda_bast_pemakaian"     : _tryParseInt(_getValue(data[83])),                                                     // int
+        "penggunaan_pempus_status"            : _tryParseInt(_getValue(data[84])),                                                     // int
+        "penggunaan_pempus_yt"                : _tryParseInt(_getValue(data[85])),                                                     // int
+        "penggunaan_pempus_y_nm"              : _getValue(data[86]),                                                                   // String
+        "penggunaan_pempus_y_doc"             : _getValue(data[87]),                                                                   // String
+        "penggunaan_pempus_t_nm"              : _getValue(data[88]),                                                                   // String
+        "penggunaan_pdl_status"               : _tryParseInt(_getValue(data[89])),                                                     // int
+        "penggunaan_pdl_yt"                   : _tryParseInt(_getValue(data[90])),                                                     // int
+        "penggunaan_pdl_y_nm"                 : _getValue(data[91]),                                                                   // String
+        "penggunaan_pdl_y_doc"                : _getValue(data[92]),                                                                   // String
+        "penggunaan_pdl_t_nm"                 : _getValue(data[93]),                                                                   // String
+        "penggunaan_pl_status"                : _tryParseInt(_getValue(data[94])),                                                     // int
+        "penggunaan_pl_yt"                    : _tryParseInt(_getValue(data[95])),                                                     // int
+        "penggunaan_pl_y_nm"                  : _getValue(data[96]),                                                                   // String
+        "penggunaan_pl_y_doc"                 : _getValue(data[97]),                                                                   // String
+        "penggunaan_pl_t_nm"                  : _getValue(data[98]),                                                                   // String
+        "tercatat_ganda"                      : _tryParseInt(_getValue(data[99])),                                                     // int
+        "tercatat_ganda_nibar"                : _getValue(data[100]),                                                                  // String
+        "tercatat_ganda_no_register"          : _getValue(data[101]),                                                                  // String
+        "tercatat_ganda_kode_barang"          : _getValue(data[102]),                                                                  // String
+        "tercatat_ganda_nama_barang"          : _getValue(data[103]),                                                                  // String
+        "tercatat_ganda_spesifikasi_barang"   : _getValue(data[104]),                                                                  // String
+        "tercatat_ganda_luas"                 : _getValue(data[105]),                                                                  // String
+        "tercatat_ganda_satuan"               : _getValue(data[106]),                                                                  // String
+        "tercatat_ganda_perolehan"            : _getValue(data[107]),                                                                  // String
+        "tercatat_ganda_tanggal_perolehan"    : _getValue(data[108]),                                                                  // date
+        "tercatat_ganda_kuasa_pengguna"       : _getValue(data[109]),                                                                  // String
+        "pemilik_id"                          : _tryParseInt(_getValue(data[110])),                                                    // int
+        "lainnya"                             : _getValue(data[111]),                                                                  // String
+        "keterangan"                          : _getValue(data[112]),                                                                  // String
+        "petugas"                             : _getValue(jsonEncode(data[113])) == '[""]' ? '[]': _getValue(jsonEncode(data[113])),   // JSON
       }
     };
 
@@ -521,6 +529,7 @@ class InventoryBController extends GetxController {
 
       if (response.statusCode == 200) {
         Get.back();
+        await penetapanController.getPenetapan(user.departemen_id.value, user.kategori.value, int.parse(user.page.value));
         customSnackBar("Success", response.body['message'], 'success');
       } else {
         print("Error: ${response.statusCode}");

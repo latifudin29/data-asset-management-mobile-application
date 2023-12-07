@@ -57,8 +57,7 @@ class AppointmentController extends GetxController {
         final Map<String, dynamic> data = response.body;
         final List<dynamic> penetapanData = data['data'];
 
-        penetapanList.assignAll(
-            penetapanData.map((item) => item as Map<String, dynamic>));
+        penetapanList.assignAll(penetapanData.map((item) => item as Map<String, dynamic>));
         totalPage.value = data['total_page'];
       }
     } finally {

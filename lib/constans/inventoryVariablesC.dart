@@ -1,21 +1,19 @@
 class InventoryVariablesC {
-  String statusInventaris     = "";
-
-  String statusNoRegister     = "";
-  String statusBarang         = "";
-  String statusNamaBarang     = "";
-  String statusLuasLantai     = "";
-  String statusPerolehan      = "";
-  String statusNilaiPerolehan = "";
-  String statusAlamat         = "";
-  String statusLuasBangunan   = "";
-  String statusLuasTanah      = "";
-  String statusKondisi        = "";
-  String statusAsalUsul       = "";
-
+  String statusInventaris       = "";
+  String statusNoRegister       = "";
+  String statusBarang           = "";
+  String statusNamaBarang       = "";
+  String statusLuasLantai       = "";
+  String statusPerolehan        = "";
+  String statusNilaiPerolehan   = "";
+  String statusAlamat           = "";
+  String statusLuasBangunan     = "";
+  String statusLuasTanah        = "";
+  String statusKondisi          = "";
+  String statusAsalUsul         = "";
   String statusAtribusi         = "";
   String statusKeberadaanBarang = "";
-  String statusStatus           = "";
+  String statusPenggunaanStatus = "";
   String statusAtasNama         = "";
   String statusNamaPemakai      = "";
   String statusBast             = "";
@@ -44,25 +42,25 @@ class InventoryVariablesC {
   String selectedKondisi     = "";
   String selectedStatusTanah = "";
 
-  List<String> keteranganNoRegister     = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganBarang         = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganNamaBarang     = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganLuasLantai     = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganPerolehan      = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganNilaiPerolehan = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganAlamat         = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganLuasBangunan   = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganLuasTanah      = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganKondisi        = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganAsalUsul       = ["Sesuai", "Tidak Sesuai"];
-  List<String> keteranganNamaPemakai    = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganNoRegister       = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganBarang           = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganNamaBarang       = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganLuasLantai       = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganPerolehan        = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganNilaiPerolehan   = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganAlamat           = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganLuasBangunan     = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganLuasTanah        = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganKondisi          = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganAsalUsul         = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganNamaPemakai      = ["Sesuai", "Tidak Sesuai"];
 
   List<String> dropdownKondisi            = ["B", "RR", "RB", "TGR", "AK", "KB"];
   List<String> keteranganAtribusi         = ["Ya", "Bukan"];
   List<String> keteranganBast             = ["Ada", "Tidak"];
   List<String> keteranganSIP              = ["Ada", "Tidak"];
   List<String> keteranganIMB              = ["Ada", "Tidak"];
-  List<String> keteranganKeberadaanBarang = ["Ada", "Tidak ada/Tidak ditemukan"];
+  List<String> keteranganKeberadaanBarang = ["Ada", "Tidak ada, tidak ditemukan"];
   List<String> keteranganStatus           = ["Sedang digunakan", "Tidak digunakan"];
   List<String> keteranganGanda            = ["Ya", "Tidak"];
   List<String> keteranganPempus           = ["Ada", "Tidak"];
