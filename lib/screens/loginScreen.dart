@@ -6,10 +6,16 @@ import 'package:kib_application/controllers/loginController.dart';
 import 'package:kib_application/screens/homeScreen.dart';
 import 'package:kib_application/utils/sharedPrefs.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final loginController = Get.put(LoginController());
   final SharedPrefs user = Get.put(SharedPrefs());
-  final bool _isObscure = true;
+
+  bool isPasswordHidden = true;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +55,7 @@ class LoginScreen extends StatelessWidget {
                       const SizedBox(height: 80),
                     ],
                   ),
+                  // Form Username
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -59,29 +66,31 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 5),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 15.0),
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'Masukan username',
-                              hintStyle: TextStyle(color: secondaryTextColor),
-                              icon: FaIcon(
-                                FontAwesomeIcons.solidUser,
-                                size: 18,
-                                color: secondaryTextColor,
-                              ),
+                      TextField(
+                        controller: loginController.usernameController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          hintText: 'Masukan username',
+                          hintStyle: TextStyle(color: secondaryTextColor),
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.only(top: 14, left: 18),
+                            child: FaIcon(
+                              FontAwesomeIcons.solidUser,
+                              size: 18,
+                              color: secondaryTextColor,
                             ),
-                            controller: loginController.usernameController,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  // Form Password
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       const Text(
                         'Password',
                         style: TextStyle(
@@ -89,32 +98,43 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 5),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 15.0),
-                          child: TextFormField(
-                            obscureText: _isObscure,
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'Masukan password',
-                              hintStyle: TextStyle(color: secondaryTextColor),
-                              icon: FaIcon(
-                                FontAwesomeIcons.lock,
-                                size: 18,
-                                color: secondaryTextColor,
-                              ),
+                      TextField(
+                        obscureText: isPasswordHidden,
+                        controller: loginController.passwordController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          hintText: 'Masukan password',
+                          hintStyle: TextStyle(color: secondaryTextColor),
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.only(top: 14, left: 18),
+                            child: FaIcon(
+                              FontAwesomeIcons.lock,
+                              size: 18,
+                              color: secondaryTextColor,
                             ),
-                            controller: loginController.passwordController,
+                          ),
+                          suffixIcon: InkWell(
+                            onTap: () {
+                              setState(() {
+                                isPasswordHidden = !isPasswordHidden;
+                              });
+                            },
+                            child: Icon(
+                              isPasswordHidden
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              size: 19,
+                              color: secondaryTextColor,
+                            ),
                           ),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 30),
+                  // Button Login
                   GestureDetector(
                     child: Container(
                       padding: const EdgeInsets.all(20),

@@ -4,6 +4,7 @@ import 'package:kib_application/constans/colors.dart';
 import 'package:kib_application/controllers/logoutController.dart';
 import 'package:kib_application/screens/changePasswordScreen.dart';
 import 'package:kib_application/screens/inventoryScreen.dart';
+import 'package:marquee/marquee.dart';
 import 'package:kib_application/utils/sharedPrefs.dart';
 import 'package:kib_application/utils/snackbar.dart';
 
@@ -102,12 +103,30 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(height: 2),
-                              Text(
-                                'Petugas ' + user.username(),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 23,
-                                ),
+                              Row(
+                                children: [
+                                  Text(
+                                    'PETUGAS',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  SizedBox(width: 4),
+                                  SizedBox(
+                                    width: 160,
+                                    height: 17,
+                                    child: Marquee(
+                                      text: user.departemen_nm(),
+                                      style: TextStyle(color: Colors.white, fontSize: 18),
+                                      scrollAxis: Axis.horizontal,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      blankSpace: 3,
+                                      velocity: 15,
+                                      pauseAfterRound: Duration(seconds: 3),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -173,7 +192,14 @@ class Menus extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.menu_book_rounded),
+                    if (showCloseIcon)
+                      Icon(
+                        Icons.warning_rounded,
+                        color: Colors.red,
+                        size: 25,
+                      )
+                    else
+                      Icon(Icons.menu_book_rounded),
                     Padding(
                       padding: const EdgeInsets.only(left: 12),
                       child: Text(
@@ -183,16 +209,6 @@ class Menus extends StatelessWidget {
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
                         ),
-                      ),
-                    ),
-                    Spacer(),
-                    if (showCloseIcon)
-                    Padding(
-                      padding: const EdgeInsets.only(right: 15),
-                      child: Icon(
-                        Icons.warning_rounded,
-                        color: Colors.red,
-                        size: 25,
                       ),
                     ),
                   ],
