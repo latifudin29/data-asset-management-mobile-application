@@ -12,7 +12,7 @@ class InventoryVariablesD {
 
   String statusAtribusi         = "";
   String statusKeberadaanBarang = "";
-  String statusStatus           = "";
+  String statusPenggunaanStatus = "";
   String statusAtasNama         = "";
   String statusPempus           = "";
   String statusPdl              = "";
@@ -66,7 +66,7 @@ class InventoryVariablesD {
 
   List<String> dropdownKondisi            = ["B", "RR", "RB", "TGR", "AK", "KB"];
   List<String> keteranganAtribusi         = ["Ya", "Bukan"];
-  List<String> keteranganKeberadaanBarang = ["Ada", "Tidak ada/Tidak ditemukan"];
+  List<String> keteranganKeberadaanBarang = ["Ada", "Tidak ada, tidak ditemukan"];
   List<String> keteranganStatus           = ["Sedang digunakan", "Tidak digunakan"];
   List<String> keteranganGanda            = ["Ya", "Tidak"];
   List<String> keteranganPempus           = ["Ada", "Tidak"];

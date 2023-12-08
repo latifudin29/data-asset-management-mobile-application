@@ -8,17 +8,15 @@ class InventoryVariablesE {
   String statusAlamat           = "";
   String statusKondisi          = "";
   String statusAsalUsul         = "";
-  // 
   String statusSpek             = "";
   String statusJudul            = "";
   String statusJenisBarang      = "";
   String statusBahanBarang      = "";
   String statusPenciptaBarang   = "";
   String statusUkuranBarang     = "";
-  // 
   String statusAtribusi         = "";
   String statusKeberadaanBarang = "";
-  String statusStatus           = "";
+  String statusPenggunaanStatus = "";
   String statusAtasNama         = "";
   String statusPempus           = "";
   String statusPdl              = "";
@@ -47,8 +45,13 @@ class InventoryVariablesE {
   List<String> keteranganAlamat         = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganKondisi        = ["Sesuai", "Tidak Sesuai"];
   List<String> keteranganAsalUsul       = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganSpek           = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganJudul          = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganJenisBarang    = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganBahanBarang    = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganPenciptaBarang = ["Sesuai", "Tidak Sesuai"];
+  List<String> keteranganUkuranBarang   = ["Sesuai", "Tidak Sesuai"];
 
-  List<String> dropdownKondisi            = ["B", "RR", "RB", "TGR", "AK", "KB"];
   List<String> keteranganAtribusi         = ["Ya", "Bukan"];
   List<String> keteranganKeberadaanBarang = ["Ada", "Tidak"];
   List<String> keteranganStatus           = ["Sedang digunakan", "Tidak digunakan"];
@@ -56,6 +59,16 @@ class InventoryVariablesE {
   List<String> keteranganPempus           = ["Ada", "Tidak"];
   List<String> keteranganPdl              = ["Ada", "Tidak"];
   List<String> keteranganPl               = ["Ada", "Tidak"];
+
+  Map<String, String> dropdownKondisi = {
+    "B"  : "B",
+    "RR" : "RR",
+    "RB" : "RB",
+    "TGR": "TGR",
+    "AK" : "AK",
+    "KB" : "KB",
+    "BJ" : "Barang dan Jasa"
+  };
 
   Map<String, String> dropdownPerolehan = {
     "1": "Pembelian",

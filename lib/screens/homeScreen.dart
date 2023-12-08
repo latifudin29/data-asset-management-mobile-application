@@ -187,14 +187,14 @@ class Menus extends StatelessWidget {
                     ),
                     Spacer(),
                     if (showCloseIcon)
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Icon(
-                          Icons.close,
-                          color: Colors.red,
-                          size: 30,
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 15),
+                      child: Icon(
+                        Icons.warning_rounded,
+                        color: Colors.red,
+                        size: 25,
                       ),
+                    ),
                   ],
                 ),
               ),

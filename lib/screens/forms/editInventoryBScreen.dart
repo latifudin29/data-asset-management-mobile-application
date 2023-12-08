@@ -52,19 +52,19 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
     editController.tgl_inventaris.text                      = (invB.statusInventaris == "0") ? DateFormat('dd-MM-yyyy').format(now) : data['tgl_inventaris_formatted'].toString();
     editController.skpd.text                                = data['departemen_kd'].toString();
     editController.skpd_uraian.text                         = data['departemen_nm'].toString();
-    editController.no_register_awal.text                    = (invB.statusInventaris == "0") ? data['no_register'].toString() : data['no_register_awal'].toString();
+    editController.no_register_awal.text                    = data['no_register'].toString();
     editController.no_register_akhir.text                   = (invB.statusInventaris == "0") ? data['no_register'].toString() : data['no_register_akhir'].toString();
     invB.statusNoRegister                                   = data['no_register_status']      != "" ? data['no_register_status'].toString() : "1";
     editController.barang.text                              = data['kategori_kd'].toString() + ' - ' + data['kategori_nm'].toString();
-    editController.kategori_id_awal.text                    = (invB.statusInventaris == "0") ? data['kategori_id'].toString() : data['kategori_id_awal'].toString();
+    editController.kategori_id_awal.text                    = data['kategori_id'].toString();
     invB.selectedKategori                                   = (invB.statusInventaris == "0") ? data['kategori_id'].toString() : data['kategori_id_akhir'].toString();
     invB.statusBarang                                       = data['kategori_id_status']      != "" ? data['kategori_id_status'].toString() : "1";
     editController.nama_spesifikasi_awal.text               = (invB.statusInventaris == "0") ? "" : data['nama_spesifikasi_awal'].toString();
     editController.nama_spesifikasi_akhir.text              = (invB.statusInventaris == "0") ? "" : data['nama_spesifikasi_akhir'].toString();
     invB.statusNamaBarang                                   = data['nama_spesifikasi_status'] != "" ? data['nama_spesifikasi_status'].toString() : "1";
-    editController.jumlah_awal.text                         = (invB.statusInventaris == "0") ? data['jumlah'].toString() : data['jumlah_awal'].toString();
+    editController.jumlah_awal.text                         = data['jumlah'].toString();
     invB.selectedSatuan                                     = (invB.statusInventaris == "0") ? (data['satuan_awal'] != "") ? data['satuan_awal'].toString() : "" : (data['satuan_akhir'] != "") ? data['satuan_akhir'].toString() : "";
-    editController.cara_perolehan_awal.text                 = (invB.statusInventaris == "0") ? data['cara_perolehan'].toString() : data['cara_perolehan_awal'].toString();
+    editController.cara_perolehan_awal.text                 = data['cara_perolehan'].toString();
     invB.statusPerolehan                                    = data['cara_perolehan_status']   != "" ? data['cara_perolehan_status'].toString() : "1";
 
     String caraPerolehan = (invB.statusInventaris == "0") ? data['cara_perolehan'].toString() : data['cara_perolehan_akhir'].toString();
@@ -80,7 +80,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
     
     editController.tgl_perolehan.text                       = (invB.statusInventaris == "0") ? data['tgl_perolehan_penetapan'].toString() : data['tgl_perolehan_inventaris'].toString();
     editController.tahun_perolehan.text                     = (invB.statusInventaris == "0") ? data['th_beli'].toString() : data['tahun_perolehan'].toString();
-    editController.perolehan_awal.text                      = (invB.statusInventaris == "0") ? data['perolehan_formatted'].toString() : data['perolehan_awal_formatted'].toString();
+    editController.perolehan_awal.text                      = data['perolehan_formatted'].toString();
     editController.perolehan_akhir.text                     = (invB.statusInventaris == "0") ? data['perolehan_formatted'].toString() : data['perolehan_akhir_formatted'].toString();
     invB.statusNilaiPerolehan                               = data['perolehan_status'] != "" ? data['perolehan_status'].toString() : "1";
     invB.statusAtribusi                                     = data['atribusi_biaya']   != "" ? data['atribusi_biaya'].toString() : "0";
@@ -91,7 +91,7 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
     editController.atribusi_no_register.text                = (invB.statusInventaris == "0") ? "" : data['atribusi_no_register'].toString();
     editController.atribusi_nama_barang.text                = (invB.statusInventaris == "0") ? "" : data['atribusi_nama_barang'].toString();
     editController.atribusi_spesifikasi_barang.text         = (invB.statusInventaris == "0") ? "" : data['atribusi_spesifikasi_barang'].toString();
-    editController.a_alamat_awal.text                       = (invB.statusInventaris == "0") ? data['a_alamat'].toString() : data['a_alamat_awal'].toString();
+    editController.a_alamat_awal.text                       = data['a_alamat'].toString();
     invB.statusAlamat                                       = data['a_alamat_status']  != "" ? data['a_alamat_status'].toString() : "1";
     editController.alamat_kota.text                         = data['alamat_kota']      != "" ? data['alamat_kota'].toString() : "KOTA BOGOR";
     invB.selectedKecamatan                                  = data['alamat_kecamatan'].toString();
@@ -107,28 +107,28 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
     editController.alamat_rt.text                           = data['alamat_rt'].toString();
     editController.alamat_rw.text                           = data['alamat_rw'].toString();
     editController.alamat_kodepos.text                      = data['alamat_kodepos'].toString();
-    editController.b_merk_awal.text                         = (invB.statusInventaris == "0") ? data['b_merk'].toString() : data['b_merk_awal'].toString();
+    editController.b_merk_awal.text                         = data['b_merk'].toString();
     editController.b_merk_akhir.text                        = (invB.statusInventaris == "0") ? data['b_merk'] : data['b_merk_akhir'].toString();
     invB.statusMerk                                         = data['b_merk_status']         != "" ? data['b_merk_status'].toString() : "1";
-    editController.b_cc_awal.text                           = (invB.statusInventaris == "0") ? data['b_cc'].toString() : data['b_cc_awal'].toString();
+    editController.b_cc_awal.text                           = data['b_cc'].toString();
     editController.b_cc_akhir.text                          = (invB.statusInventaris == "0") ? data['b_cc'].toString() : data['b_cc_akhir'].toString();
     invB.statusCC                                           = data['b_cc_status']           != "" ? data['b_cc_status'].toString() : "1";
-    editController.b_nomor_polisi_awal.text                 = (invB.statusInventaris == "0") ? data['b_nomor_polisi'].toString() : data['b_nomor_polisi_awal'].toString();
+    editController.b_nomor_polisi_awal.text                 = data['b_nomor_polisi'].toString();
     editController.b_nomor_polisi_akhir.text                = (invB.statusInventaris == "0") ? data['b_nomor_polisi'].toString() : data['b_nomor_polisi_akhir'].toString();
     invB.statusNoPolisi                                     = data['b_nomor_polisi_status'] != "" ? data['b_nomor_polisi_status'].toString() : "1";
-    editController.b_nomor_rangka_awal.text                 = (invB.statusInventaris == "0") ? data['b_nomor_rangka'].toString() : data['b_nomor_rangka_awal'].toString();
+    editController.b_nomor_rangka_awal.text                 = data['b_nomor_rangka'].toString();
     editController.b_nomor_rangka_akhir.text                = (invB.statusInventaris == "0") ? data['b_nomor_rangka'].toString() : data['b_nomor_rangka_akhir'].toString();
     invB.statusNoRangka                                     = data['b_nomor_rangka_status'] != "" ? data['b_nomor_rangka_status'].toString() : "1";
-    editController.b_nomor_mesin_awal.text                  = (invB.statusInventaris == "0") ? data['b_nomor_mesin'].toString() : data['b_nomor_mesin_awal'].toString();
+    editController.b_nomor_mesin_awal.text                  = data['b_nomor_mesin'].toString();
     editController.b_nomor_mesin_akhir.text                 = (invB.statusInventaris == "0") ? data['b_nomor_mesin'].toString() : data['b_nomor_mesin_akhir'].toString();
     invB.statusNoMesin                                      = data['b_nomor_mesin_status']  != "" ? data['b_nomor_mesin_status'].toString() : "1";
-    editController.b_nomor_bpkb_awal.text                   = (invB.statusInventaris == "0") ? data['b_nomor_bpkb'].toString() : data['b_nomor_bpkb_awal'].toString();
+    editController.b_nomor_bpkb_awal.text                   = data['b_nomor_bpkb'].toString();
     editController.b_nomor_bpkb_akhir.text                  = (invB.statusInventaris == "0") ? data['b_nomor_bpkb'].toString() : data['b_nomor_bpkb_akhir'].toString();
     invB.statusNoBPKB                                       = data['b_nomor_bpkb_status']   != "" ? data['b_nomor_bpkb_status'].toString() : "1";
-    editController.b_bahan_awal.text                        = (invB.statusInventaris == "0") ? data['b_bahan'].toString() : data['b_bahan_awal'].toString();
+    editController.b_bahan_awal.text                        = data['b_bahan'].toString();
     editController.b_bahan_akhir.text                       = (invB.statusInventaris == "0") ? data['b_bahan'].toString() : data['b_bahan_akhir'].toString();
     invB.statusBahan                                        = data['b_bahan_status']        != "" ? data['b_bahan_status'].toString() : "1";
-    editController.b_nomor_pabrik_awal.text                 = (invB.statusInventaris == "0") ? data['b_nomor_pabrik'].toString() : data['b_nomor_pabrik_awal'].toString();
+    editController.b_nomor_pabrik_awal.text                 = data['b_nomor_pabrik'].toString();
     editController.b_nomor_pabrik_akhir.text                = (invB.statusInventaris == "0") ? data['b_nomor_pabrik'].toString() : data['b_nomor_pabrik_akhir'].toString();
     invB.statusNoPabrik                                     = data['b_nomor_pabrik_status'] != "" ? data['b_nomor_pabrik_status'].toString() : "1";
     
@@ -144,10 +144,10 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
     invB.statusQRRuangan                                    = (invB.statusInventaris == "0" || data['barcode_barang'] == "") ? "0" : data['barcode_ruangan'].toString();
     invB.selectedKeberadaanBarang                           = data['keberadaan_barang_akhir']              != "" ? data['keberadaan_barang_akhir'].toString() : "1";
     invB.statusKeberadaanBarang                             = data['keberadaan_barang_status']             != "" ? data['keberadaan_barang_status'].toString() : "1";
-    editController.kondisi_awal.text                        = (invB.statusInventaris == "0") ? data['kondisi'].toString() : data['kondisi_awal'].toString();
+    editController.kondisi_awal.text                        = data['kondisi'].toString();
     invB.selectedKondisi                                    = (invB.statusInventaris == "0") ? data['kondisi'].toString() : data['kondisi_akhir'].toString();
     invB.statusKondisi                                      = data['kondisi_status']                       != "" ? data['kondisi_status'].toString() : "1";
-    editController.asal_usul_awal.text                      = (invB.statusInventaris == "0") ? data['asal_usul'].toString() : data['asal_usul_awal'].toString();
+    editController.asal_usul_awal.text                      = data['asal_usul'].toString();
     editController.asal_usul_akhir.text                     = (invB.statusInventaris == "0") ? data['asal_usul'].toString() : data['asal_usul_akhir'].toString();
     invB.statusAsalUsul                                     = data['asal_usul_status']                     != "" ? data['asal_usul_status'].toString() : "1";
     invB.statusPenggunaanStatus                             = data['penggunaan_status']                    != "" ? data['penggunaan_status'].toString() : "1";
@@ -745,12 +745,9 @@ class _EditInventoryBScreenState extends State<EditInventoryBScreen> {
                       showSelectedItems: true,
                       showSearchBox: true,
                     ),
-                    items: [
-                      "",
-                      ...satuanController.satuanList.map<String>((Map<String, dynamic> item) {
+                    items: satuanController.satuanList.map<String>((Map<String, dynamic> item) {
                         return item['satuan_nm'].toString();
                       }).toList(),
-                    ],
                     dropdownDecoratorProps: DropDownDecoratorProps(
                       dropdownSearchDecoration: InputDecoration(
                         border: OutlineInputBorder(

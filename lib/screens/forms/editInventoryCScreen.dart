@@ -60,7 +60,7 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
     editController.nama_spesifikasi_awal.text               = (invC.statusInventaris == "0") ? "" : data['nama_spesifikasi_awal'].toString();
     editController.nama_spesifikasi_akhir.text              = (invC.statusInventaris == "0") ? "" : data['nama_spesifikasi_akhir'].toString();
     invC.statusNamaBarang                                   = data['nama_spesifikasi_status'] != "" ? data['nama_spesifikasi_status'].toString() : "1";
-    editController.jumlah_awal.text                         = (invC.statusInventaris == "0") ? data['jumlah'].toString() : data['jumlah_awal'].toString();
+    editController.jumlah_awal.text                         = data['jumlah'].toString();
     invC.selectedSatuan                                     = (invC.statusInventaris == "0") ? (data['satuan_awal'] != "") ? data['satuan_awal'].toString() : "" : (data['satuan_akhir'] != "") ? data['satuan_akhir'].toString() : "";
     editController.cara_perolehan_awal.text                 = (invC.statusInventaris == "0") ? data['cara_perolehan'].toString() : data['cara_perolehan_awal'].toString();
     invC.statusPerolehan                                    = data['cara_perolehan_status']   != "" ? data['cara_perolehan_status'].toString() : "1";
@@ -3974,7 +3974,7 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                         editController.long.text,
                         editController.lainnya.text,
                         editController.keterangan.text,
-                        _petugasList,
+                        _petugasList
                       ];
                       
                       if(invC.statusInventaris == "0"){

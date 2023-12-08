@@ -134,8 +134,8 @@ class LoginScreen extends StatelessWidget {
                       )),
                     ),
                     onTap: () {
-                      // loginController.checkLogin();
-                      Get.to(HomeScreen());
+                      loginController.checkLogin();
+                      // Get.to(HomeScreen());
                     },
                   ),
                 ],
