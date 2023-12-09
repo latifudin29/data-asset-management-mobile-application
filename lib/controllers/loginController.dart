@@ -65,6 +65,9 @@ class LoginController extends GetxController {
 
     if (response.statusCode == 200) {
       if (response.body.containsKey('result')) {
+        user.setInfoLoginStatus('1');
+        user.setInfoLoginLevel('opd');
+        
         user.setUsername(response.body['result']['data'][0]['user_name']);
         user.setToken(response.body['result']['data'][0]['token'] ?? "");
         user.setNIK(response.body['result']['data'][0]['nik']);

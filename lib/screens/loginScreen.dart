@@ -154,8 +154,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       )),
                     ),
                     onTap: () {
-                      loginController.checkLogin();
-                      // Get.to(HomeScreen());
+                      // loginController.checkLogin();
+                      Get.to(HomeScreen());
                     },
                   ),
                 ],

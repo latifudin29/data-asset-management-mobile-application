@@ -104,19 +104,16 @@ class _InventoryScreenState extends State<InventoryScreen> {
   Future<void> loadPenetapanData() async {
     page = page;
 
-    await penetapanController.getPenetapan(selectedId, modifiedTitle, page);
-
-    user.setKategori(modifiedTitle);
-    user.setPage(page.toString());
+    if (user.info_login_status() == "1") {
+      await penetapanController.getPenetapan(selectedId, modifiedTitle, page);
+      user.setKategori(modifiedTitle);
+      user.setPage(page.toString());
+    } else {
+      String departemenID = user.departemen_id.value;
+      await penetapanController.getPenetapan(departemenID, modifiedTitle, page);
+      user.setPage(page.toString());
+    }
   }
-
-  // Future<void> loadPenetapanData() async {
-  //   page = page;
-  //   String departemenID = user.departemen_id.value;
-
-  //   await penetapanController.getPenetapan(departemenID, modifiedTitle, page);
-  //   user.setPage(page.toString());
-  // }
 
   void selectDepartemen(String selectedItem) {
     final department = departemenController.departemenList.firstWhere(
@@ -1588,30 +1585,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CustomDropdown.searchRequest(
-                      controller: searchDepartement,
-                      futureRequest: getDepartementData,
-                      futureRequestDelay: const Duration(seconds: 3),
-                      hintText: 'Pilih Departemen',
-                      onChanged: selectDepartemen,
-                    ),
-                    // Container(
-                    //   decoration: BoxDecoration(
-                    //     border: Border.all(color: Colors.grey),
-                    //     borderRadius: BorderRadius.circular(12),
-                    //     color: Colors.grey.shade400,
-                    //   ),
-                    //   child: Padding(
-                    //     padding: const EdgeInsets.only(left: 15),
-                    //     child: TextFormField(
-                    //       controller: departemenSelected,
-                    //       readOnly: true,
-                    //       decoration: const InputDecoration(
-                    //         border: InputBorder.none,
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
+                    user.info_login_status() == "1"
+                      ? _buildContainerForInfoLogin()
+                      : _buildDropdownForNonInfoLogin(),
                     SizedBox(height: 10),
                     RichText(
                       text: TextSpan(
@@ -1712,6 +1688,36 @@ class _InventoryScreenState extends State<InventoryScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildContainerForInfoLogin() {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.grey.shade400,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 15),
+        child: TextFormField(
+          controller: departemenSelected,
+          readOnly: true,
+          decoration: const InputDecoration(
+            border: InputBorder.none,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDropdownForNonInfoLogin() {
+    return CustomDropdown.searchRequest(
+      controller: searchDepartement,
+      futureRequest: getDepartementData,
+      futureRequestDelay: const Duration(seconds: 3),
+      hintText: 'Pilih Departemen',
+      onChanged: selectDepartemen,
     );
   }
 }
