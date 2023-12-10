@@ -3792,24 +3792,22 @@ class _EditInventoryEScreenState extends State<EditInventoryEScreen> {
                     ),
                     SizedBox(width: 10),
                     GestureDetector(
-                      child: Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: Colors.red[800],
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Center(
-                              child: Text(
-                            'Reset',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              letterSpacing: 2,
-                            ),
-                          )),
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.red[800],
+                          borderRadius: BorderRadius.circular(12),
                         ),
+                        child: const Center(
+                            child: Text(
+                          'Reset',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            letterSpacing: 2,
+                          ),
+                        )),
                       ),
                       onTap: () {
                         _resetForm();
