@@ -48,6 +48,9 @@ dependencies:
   dropdown_search: ^5.0.6
   geolocator: ^10.1.0
   marquee: ^2.2.3
+  flare_flutter: ^3.0.2
+  file_picker: ^6.1.1
+  open_file: ^3.3.2
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +80,7 @@ flutter:
   assets:
     - assets/images/appbar.png
     - assets/images/logo_kib.png
+    - assets/success.flr
 
   # To add assets to your application, add an assets section, like this:
   # assets:

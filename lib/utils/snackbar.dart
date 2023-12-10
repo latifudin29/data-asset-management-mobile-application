@@ -8,5 +8,7 @@ customSnackBar(title, message, type) {
     snackPosition: SnackPosition.TOP,
     backgroundColor: type == "error" ? Colors.red : Colors.green,
     colorText: Colors.white,
+    duration: Duration(seconds: 2),
+    isDismissible: true,
   );
 }

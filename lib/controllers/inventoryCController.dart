@@ -49,6 +49,10 @@ class InventoryCController extends GetxController {
       alamat_rt,
       alamat_rw,
       alamat_kodepos,
+      // 
+      c_luas_lantai_awal,
+      c_luas_lantai_akhir,
+      // 
       c_luas_bangunan_awal,
       c_luas_bangunan_akhir,
       c_bertingkat,
@@ -94,81 +98,85 @@ class InventoryCController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    kib_id                               = TextEditingController();
-    penetapan_id                         = TextEditingController();
-    departemen_id                        = TextEditingController();
-    tgl_inventaris                       = TextEditingController();
-    skpd                                 = TextEditingController();
-    skpd_uraian                          = TextEditingController();
-    no_register_awal                     = TextEditingController();
-    no_register_akhir                    = TextEditingController();
-    barang                               = TextEditingController();
-    kategori_id_awal                     = TextEditingController();
-    nama_spesifikasi_awal                = TextEditingController();
-    nama_spesifikasi_akhir               = TextEditingController();
-    jumlah_awal                          = TextEditingController();
-    satuan                               = TextEditingController();
-    cara_perolehan_awal                  = TextEditingController();
-    tgl_perolehan                        = TextEditingController();
-    tahun_perolehan                      = TextEditingController();
-    perolehan_awal                       = TextEditingController();
-    perolehan_akhir                      = TextEditingController();
-    atribusi_nibar                       = TextEditingController();
-    atribusi_kode_barang                 = TextEditingController();
-    atribusi_kode_lokasi                 = TextEditingController();
-    atribusi_no_register                 = TextEditingController();
-    atribusi_nama_barang                 = TextEditingController();
-    atribusi_spesifikasi_barang          = TextEditingController();
-    a_alamat_awal                        = TextEditingController();
-    alamat_kota                          = TextEditingController();
-    alamat_kecamatan                     = TextEditingController();
-    alamat_kelurahan                     = TextEditingController();
-    alamat_jalan                         = TextEditingController();
-    alamat_no                            = TextEditingController();
-    alamat_rt                            = TextEditingController();
-    alamat_rw                            = TextEditingController();
-    alamat_kodepos                       = TextEditingController();
-    c_luas_bangunan_awal                 = TextEditingController();
-    c_luas_bangunan_akhir                = TextEditingController();
-    c_bertingkat                         = TextEditingController();
-    c_beton                              = TextEditingController();
-    c_luas_tanah_awal                    = TextEditingController();
-    c_luas_tanah_akhir                   = TextEditingController();
-    kondisi_awal                         = TextEditingController();
-    kondisi_akhir                        = TextEditingController();
-    asal_usul_awal                       = TextEditingController();
-    asal_usul_akhir                      = TextEditingController();
-    penggunaan_awal                      = TextEditingController();
-    penggunaan_pemda_akhir               = TextEditingController();
-    penggunaan_pemda_nama_pemakai        = TextEditingController();
-    penggunaan_pemda_nama_pemakai_akhir  = TextEditingController();
-    penggunaan_pemda_status_pemakai      = TextEditingController();
-    penggunaan_pempus_y_nm               = TextEditingController();
-    penggunaan_pempus_y_doc              = TextEditingController();
-    penggunaan_pempus_t_nm               = TextEditingController();
-    penggunaan_pdl_y_nm                  = TextEditingController();
-    penggunaan_pdl_y_doc                 = TextEditingController();
-    penggunaan_pdl_t_nm                  = TextEditingController();
-    penggunaan_pl_yt                     = TextEditingController();
-    penggunaan_pl_y_nm                   = TextEditingController();
-    penggunaan_pl_y_doc                  = TextEditingController();
-    penggunaan_pl_t_nm                   = TextEditingController();
-    tercatat_ganda_nibar                 = TextEditingController();
-    tercatat_ganda_no_register           = TextEditingController();
-    tercatat_ganda_kode_barang           = TextEditingController();
-    tercatat_ganda_nama_barang           = TextEditingController();
-    tercatat_ganda_spesifikasi_barang    = TextEditingController();
-    tercatat_ganda_luas                  = TextEditingController();
-    tercatat_ganda_satuan                = TextEditingController();
-    tercatat_ganda_perolehan             = TextEditingController();
-    tercatat_ganda_tanggal_perolehan     = TextEditingController();
-    tercatat_ganda_kuasa_pengguna        = TextEditingController();
-    lat                                  = TextEditingController();
-    long                                 = TextEditingController();
-    lainnya                              = TextEditingController();
-    keterangan                           = TextEditingController();
-    file_nm                              = TextEditingController();
-    petugas                              = TextEditingController();
+    kib_id                              = TextEditingController();
+    penetapan_id                        = TextEditingController();
+    departemen_id                       = TextEditingController();
+    tgl_inventaris                      = TextEditingController();
+    skpd                                = TextEditingController();
+    skpd_uraian                         = TextEditingController();
+    no_register_awal                    = TextEditingController();
+    no_register_akhir                   = TextEditingController();
+    barang                              = TextEditingController();
+    kategori_id_awal                    = TextEditingController();
+    nama_spesifikasi_awal               = TextEditingController();
+    nama_spesifikasi_akhir              = TextEditingController();
+    jumlah_awal                         = TextEditingController();
+    satuan                              = TextEditingController();
+    cara_perolehan_awal                 = TextEditingController();
+    tgl_perolehan                       = TextEditingController();
+    tahun_perolehan                     = TextEditingController();
+    perolehan_awal                      = TextEditingController();
+    perolehan_akhir                     = TextEditingController();
+    atribusi_nibar                      = TextEditingController();
+    atribusi_kode_barang                = TextEditingController();
+    atribusi_kode_lokasi                = TextEditingController();
+    atribusi_no_register                = TextEditingController();
+    atribusi_nama_barang                = TextEditingController();
+    atribusi_spesifikasi_barang         = TextEditingController();
+    a_alamat_awal                       = TextEditingController();
+    alamat_kota                         = TextEditingController();
+    alamat_kecamatan                    = TextEditingController();
+    alamat_kelurahan                    = TextEditingController();
+    alamat_jalan                        = TextEditingController();
+    alamat_no                           = TextEditingController();
+    alamat_rt                           = TextEditingController();
+    alamat_rw                           = TextEditingController();
+    alamat_kodepos                      = TextEditingController();
+    // 
+    c_luas_lantai_awal                  = TextEditingController();
+    c_luas_lantai_akhir                 = TextEditingController();
+    // 
+    c_luas_bangunan_awal                = TextEditingController();
+    c_luas_bangunan_akhir               = TextEditingController();
+    c_bertingkat                        = TextEditingController();
+    c_beton                             = TextEditingController();
+    c_luas_tanah_awal                   = TextEditingController();
+    c_luas_tanah_akhir                  = TextEditingController();
+    kondisi_awal                        = TextEditingController();
+    kondisi_akhir                       = TextEditingController();
+    asal_usul_awal                      = TextEditingController();
+    asal_usul_akhir                     = TextEditingController();
+    penggunaan_awal                     = TextEditingController();
+    penggunaan_pemda_akhir              = TextEditingController();
+    penggunaan_pemda_nama_pemakai       = TextEditingController();
+    penggunaan_pemda_nama_pemakai_akhir = TextEditingController();
+    penggunaan_pemda_status_pemakai     = TextEditingController();
+    penggunaan_pempus_y_nm              = TextEditingController();
+    penggunaan_pempus_y_doc             = TextEditingController();
+    penggunaan_pempus_t_nm              = TextEditingController();
+    penggunaan_pdl_y_nm                 = TextEditingController();
+    penggunaan_pdl_y_doc                = TextEditingController();
+    penggunaan_pdl_t_nm                 = TextEditingController();
+    penggunaan_pl_yt                    = TextEditingController();
+    penggunaan_pl_y_nm                  = TextEditingController();
+    penggunaan_pl_y_doc                 = TextEditingController();
+    penggunaan_pl_t_nm                  = TextEditingController();
+    tercatat_ganda_nibar                = TextEditingController();
+    tercatat_ganda_no_register          = TextEditingController();
+    tercatat_ganda_kode_barang          = TextEditingController();
+    tercatat_ganda_nama_barang          = TextEditingController();
+    tercatat_ganda_spesifikasi_barang   = TextEditingController();
+    tercatat_ganda_luas                 = TextEditingController();
+    tercatat_ganda_satuan               = TextEditingController();
+    tercatat_ganda_perolehan            = TextEditingController();
+    tercatat_ganda_tanggal_perolehan    = TextEditingController();
+    tercatat_ganda_kuasa_pengguna       = TextEditingController();
+    lat                                 = TextEditingController();
+    long                                = TextEditingController();
+    lainnya                             = TextEditingController();
+    keterangan                          = TextEditingController();
+    file_nm                             = TextEditingController();
+    petugas                             = TextEditingController();
   }
 
   // Method Insert Inventarisasi

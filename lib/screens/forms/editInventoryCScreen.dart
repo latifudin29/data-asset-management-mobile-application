@@ -12,6 +12,7 @@ import 'package:kib_application/controllers/appointmentController.dart';
 import 'package:kib_application/controllers/categoryController.dart';
 import 'package:kib_application/controllers/getLocationController.dart';
 import 'package:kib_application/controllers/inventoryCController.dart';
+import 'package:kib_application/controllers/kuasaController.dart';
 import 'package:kib_application/controllers/unitController.dart';
 import 'package:kib_application/widgets/formPetugas.dart';
 
@@ -27,6 +28,7 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
   final editController      = Get.put(InventoryCController());
   final kategoriController  = Get.put(CategoryController());
   final satuanController    = Get.put(UnitController());
+  final kuasaController     = Get.put(KuasaController());
   final addressController   = Get.put(AddressController());
   final locationController  = Get.put(LocationController());
   final invC                = Get.put(InventoryVariablesC());
@@ -39,6 +41,7 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
   void initState() {
     super.initState();
     final data         = penetapanController.penetapanListById[0];
+    final kuasa        = kuasaController.kuasaList[0];
     final filteredList = addressController.kecamatanList
       .where((kecamatan) => kecamatan['kecamatan_kd'].toString() == data['alamat_kecamatan'].toString());
 
@@ -61,6 +64,10 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
     editController.nama_spesifikasi_akhir.text              = (invC.statusInventaris == "0") ? "" : data['nama_spesifikasi_akhir'].toString();
     invC.statusNamaBarang                                   = data['nama_spesifikasi_status'] != "" ? data['nama_spesifikasi_status'].toString() : "1";
     editController.jumlah_awal.text                         = data['jumlah'].toString();
+    // 
+    editController.c_luas_lantai_awal.text = "";
+    editController.c_luas_lantai_akhir.text = "";
+    // 
     invC.selectedSatuan                                     = (invC.statusInventaris == "0") ? (data['satuan_awal'] != "") ? data['satuan_awal'].toString() : "" : (data['satuan_akhir'] != "") ? data['satuan_akhir'].toString() : "";
     editController.cara_perolehan_awal.text                 = (invC.statusInventaris == "0") ? data['cara_perolehan'].toString() : data['cara_perolehan_awal'].toString();
     invC.statusPerolehan                                    = data['cara_perolehan_status']   != "" ? data['cara_perolehan_status'].toString() : "1";
@@ -139,7 +146,7 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
     invC.statusPenggunaanStatus                             = data['penggunaan_status']                    != "" ? data['penggunaan_status'].toString() : "1";
     editController.penggunaan_awal.text                     = (invC.statusInventaris == "0") ? data['a_penggunaan'].toString() : data['penggunaan_awal'].toString();
     invC.choosePemerintahDaerah                             = (invC.statusInventaris == "0") ? "1" : data['penggunaan_pemda_status'].toString();
-    editController.penggunaan_pemda_akhir.text              = data['penggunaan_pemda_akhir'].toString();
+    editController.penggunaan_pemda_akhir.text              = (invC.statusInventaris == "0") ? kuasa['nama'].toString() : data['penggunaan_pemda_akhir'].toString();
     editController.penggunaan_pemda_nama_pemakai.text       = data['penggunaan_pemda_nama_pemakai'].toString();
     editController.penggunaan_pemda_nama_pemakai_akhir.text = data['penggunaan_pemda_nama_pemakai_akhir'].toString();
     invC.statusNamaPemakai                                  = data['penggunaan_pemda_nama_pemakai_status'] != "" ? data['penggunaan_pemda_nama_pemakai_status'].toString() : "1";
@@ -736,6 +743,98 @@ class _EditInventoryCScreenState extends State<EditInventoryCScreen> {
                   ],
                 ),
                 SizedBox(height: 15),
+                // Luas Lantai
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Luas Lantai',
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.grey.shade400,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 15),
+                              child: TextFormField(
+                                controller: editController.c_luas_lantai_awal,
+                                readOnly: true,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            buttonStyleData: ButtonStyleData(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                            iconStyleData: const IconStyleData(
+                              icon: Icon(
+                                Icons.arrow_drop_down_outlined,
+                                color: Colors.grey,
+                                size: 25,
+                              ),
+                              iconEnabledColor: primaryTextColor,
+                            ),
+                            value: invC.statusLuasLantai,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                invC.statusLuasLantai =
+                                    newValue ?? invC.statusLuasLantai;
+                              });
+                            },
+                            items: invC.keteranganLuasLantai.map((String item) {
+                              return DropdownMenuItem<String>(
+                                value:
+                                    invC.keteranganLuasLantai.indexOf(item) == 0
+                                        ? "1"
+                                        : "2",
+                                child: Text(item),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    invC.statusLuasLantai == "2"
+                        ? Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 15),
+                              child: TextFormField(
+                                controller: editController.c_luas_lantai_akhir,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          )
+                        : SizedBox(),
+                  ],
+                ),
+                SizedBox(height: 10),
                 // Satuan
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

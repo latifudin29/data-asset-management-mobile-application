@@ -10,6 +10,7 @@ class _AuthEndPoints {
   final String getKategori      = 'kategori/';
   final String getSatuan        = 'satuan';
   final String getRuangan       = 'ruang/';
+  final String getKuasa         = 'kuasa/';
   final String getKecamatan     = 'kecamatan';
   final String getKelurahan     = 'kelurahan';
   final String getPenetapan     = 'penetapan/';

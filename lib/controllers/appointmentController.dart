@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kib_application/controllers/kuasaController.dart';
 import 'package:kib_application/screens/forms/editInventoryAScreen.dart';
 import 'package:kib_application/screens/forms/editInventoryBScreen.dart';
 import 'package:kib_application/screens/forms/editInventoryCScreen.dart';
@@ -19,6 +20,7 @@ class AppointmentController extends GetxController {
   final kategoriController = Get.put(CategoryController());
   final satuanController = Get.put(UnitController());
   final ruangController = Get.put(RoomController());
+  final kuasaController = Get.put(KuasaController());
   final addressController = Get.put(AddressController());
 
   RxList<Map<String, dynamic>> penetapanList = RxList<Map<String, dynamic>>([]);
@@ -41,6 +43,7 @@ class AppointmentController extends GetxController {
 
       satuanController.getSatuan();
       ruangController.getRuang(id);
+      kuasaController.getKuasa(id);
       addressController.getKecamatan();
 
       final response = await _connect.get(ApiEndPoints.baseurl +

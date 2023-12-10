@@ -6,6 +6,7 @@ import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:kib_application/controllers/addressController.dart';
 import 'package:kib_application/controllers/appointmentController.dart';
 import 'package:kib_application/controllers/departementController.dart';
+import 'package:kib_application/controllers/roomController.dart';
 import 'package:kib_application/controllers/unitController.dart';
 import 'package:kib_application/utils/sharedPrefs.dart';
 import 'package:number_paginator/number_paginator.dart';
@@ -25,8 +26,11 @@ class _InventoryScreenState extends State<InventoryScreen> {
   final addressController    = Get.put(AddressController());
   final satuan               = Get.put(UnitController());
 
-  final searchDepartement    = TextEditingController();
-  final departemenSelected   = TextEditingController();
+  final ruangController     = Get.put(RoomController());
+
+
+  final searchDepartement  = TextEditingController();
+  final departemenSelected = TextEditingController();
 
   DateTime now = DateTime.now();
 
@@ -70,8 +74,11 @@ class _InventoryScreenState extends State<InventoryScreen> {
     });
 
     departemenController.getDepartemen();
-    departemenSelected.text = user.departemen_nm.value;
-    selectedSKPD            = user.departemen_kd.value;
+
+    if(user.departemen_nm.value != "" && user.departemen_kd.value != ""){
+      departemenSelected.text = user.departemen_nm.value;
+      selectedSKPD            = user.departemen_kd.value;
+    }
 
     modifyTitle(widget.title);
     user.setKategori(modifiedTitle);
@@ -79,7 +86,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
     String yearNow = DateFormat.y().format(now);
     penetapanController.tahun.text = yearNow;
 
-    if (user.departemen_id.value.isNotEmpty) {
+    if (user.departemen_id.value.isNotEmpty && user.departemen_id.value != "0") {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         loadPenetapanData();
       });
@@ -102,15 +109,17 @@ class _InventoryScreenState extends State<InventoryScreen> {
   }
 
   Future<void> loadPenetapanData() async {
-    page = page;
-
-    if (user.info_login_status() == "1") {
-      await penetapanController.getPenetapan(selectedId, modifiedTitle, page);
-      user.setKategori(modifiedTitle);
-      user.setPage(page.toString());
-    } else {
+    if (user.login_status.value == "1" && user.group.value == "Aset_Operator_Views") {
       String departemenID = user.departemen_id.value;
       await penetapanController.getPenetapan(departemenID, modifiedTitle, page);
+      user.setPage(page.toString());
+    } else {
+      if (user.departemen_id.value.isNotEmpty && user.departemen_id.value != "0") {
+        String departemenID = user.departemen_id.value;
+        await penetapanController.getPenetapan(departemenID, modifiedTitle, page);
+      } else {
+        await penetapanController.getPenetapan(selectedId, modifiedTitle, page);
+      }
       user.setPage(page.toString());
     }
   }
@@ -122,11 +131,13 @@ class _InventoryScreenState extends State<InventoryScreen> {
     );
     
     setState(() {
-      departemenSelected.text = department['nama'].toString();
-      selectedSKPD = department['kode'].toString();
       selectedId = department['id'].toString();
+      selectedSKPD = department['kode'].toString();
+      departemenSelected.text = department['nama'].toString();
 
       user.setDepartemenID(selectedId);
+      user.setDepartemenKode(selectedSKPD);
+      user.setDepartemenNama(departemenSelected.text);
       page = 1;
     });
   }
@@ -1585,7 +1596,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    user.info_login_status() == "1"
+                    user.login_status.value == "1" && user.group.value == "Aset_Operator_Views"
                       ? _buildContainerForInfoLogin()
                       : _buildDropdownForNonInfoLogin(),
                     SizedBox(height: 10),
@@ -1703,6 +1714,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
         child: TextFormField(
           controller: departemenSelected,
           readOnly: true,
+          style: TextStyle(fontWeight: FontWeight.bold),
           decoration: const InputDecoration(
             border: InputBorder.none,
           ),
@@ -1712,8 +1724,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
   }
 
   Widget _buildDropdownForNonInfoLogin() {
+    final SharedPrefs user = Get.put(SharedPrefs());
     return CustomDropdown.searchRequest(
-      controller: searchDepartement,
+      controller: user.departemen_nm.value.isNotEmpty ? departemenSelected : searchDepartement,
       futureRequest: getDepartementData,
       futureRequestDelay: const Duration(seconds: 3),
       hintText: 'Pilih Departemen',

@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 
 class SharedPrefs extends GetxController {
-  var info_login_status = ''.obs;
-  var info_login_level  = ''.obs;
+  var login_status  = ''.obs;
+  var group         = ''.obs;
 
   var username      = ''.obs;
   var token         = ''.obs;
@@ -16,12 +16,12 @@ class SharedPrefs extends GetxController {
   var kategori      = ''.obs;
   var page          = ''.obs;
 
-  setInfoLoginStatus(args) {
-    return info_login_status.value = args;
+  setLoginStatus(args) {
+    return login_status.value = args;
   }
 
-  setInfoLoginLevel(args) {
-    return info_login_level.value = args;
+  setGroup(args) {
+    return group.value = args;
   }
 
   setUsername(args) {

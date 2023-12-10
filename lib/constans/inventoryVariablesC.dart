@@ -3,7 +3,9 @@ class InventoryVariablesC {
   String statusNoRegister       = "";
   String statusBarang           = "";
   String statusNamaBarang       = "";
+  // 
   String statusLuasLantai       = "";
+  // 
   String statusPerolehan        = "";
   String statusNilaiPerolehan   = "";
   String statusAlamat           = "";

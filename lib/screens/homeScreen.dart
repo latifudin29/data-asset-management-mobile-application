@@ -113,20 +113,27 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                   ),
                                   SizedBox(width: 4),
-                                  if(user.info_login_status() == "1")
-                                    SizedBox(
-                                      width: 160,
-                                      height: 17,
-                                      child: Marquee(
-                                        text: user.departemen_nm(),
-                                        style: TextStyle(color: Colors.white, fontSize: 18),
-                                        scrollAxis: Axis.horizontal,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        blankSpace: 3,
-                                        velocity: 15,
-                                        pauseAfterRound: Duration(seconds: 3),
+                                  user.login_status.value == "1" && user.group.value == "Aset_Operator_Views"
+                                    ? SizedBox(
+                                        width: 160,
+                                        height: 17,
+                                        child: Marquee(
+                                          text: user.departemen_nm(),
+                                          style: TextStyle(color: Colors.white, fontSize: 18),
+                                          scrollAxis: Axis.horizontal,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          blankSpace: 3,
+                                          velocity: 15,
+                                          pauseAfterRound: Duration(seconds: 3),
+                                        ),
+                                      )
+                                    : Text(
+                                        user.username().toUpperCase(),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                        ),
                                       ),
-                                    ),
                                 ],
                               ),
                             ],
