@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:kib_application/controllers/appointmentController.dart';
 import 'package:kib_application/utils/sharedPrefs.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:kib_application/utils/apiEndpoints.dart';
@@ -331,25 +329,9 @@ class InventoryBController extends GetxController {
       }
     };
 
-    Directory? directory = await getExternalStorageDirectory();
-    
-    if (directory != null) {
-      String path = directory.path;
-      String fileName = 'inventarisB-insert.json';
-      String filePath = '$path/$fileName';
-      String jsonString = jsonEncode(body);
-
-      File file = File(filePath);
-      await file.writeAsString(jsonString);
-
-      print('File JSON disimpan di: $filePath');
-    } else {
-      print('Error: Direktori penyimpanan eksternal null.');
-    }
-
     try {
       final response = await _connect.post(
-        '${ApiEndPoints.baseurl}${ApiEndPoints.authEndPoints.putInventaris}add/B',
+        '${ApiEndPoints.baseurl}${ApiEndPoints.authEndPoints.postInventaris}B',
         body,
       );
 
@@ -504,26 +486,9 @@ class InventoryBController extends GetxController {
       }
     };
 
-    // Membuat File JSON
-    Directory? directory = await getExternalStorageDirectory();
-    
-    if (directory != null) {
-      String path = directory.path;
-      String fileName = 'inventarisB-update.json';
-      String filePath = '$path/$fileName';
-      String jsonString = jsonEncode(body);
-
-      File file = File(filePath);
-      await file.writeAsString(jsonString);
-
-      print('File JSON disimpan di: $filePath');
-    } else {
-      print('Error: Direktori penyimpanan eksternal null.');
-    }
-
     try {
       final response = await _connect.put(
-        '${ApiEndPoints.baseurl}${ApiEndPoints.authEndPoints.putInventaris}edit/B/$kib_id',
+        '${ApiEndPoints.baseurl}${ApiEndPoints.authEndPoints.putInventaris}B/$kib_id',
         body,
       );
 

@@ -16,12 +16,12 @@ import 'package:kib_application/controllers/unitController.dart';
 import 'package:kib_application/controllers/roomController.dart';
 
 class AppointmentController extends GetxController {
-  final _connect = GetConnect();
+  final _connect           = GetConnect();
   final kategoriController = Get.put(CategoryController());
-  final satuanController = Get.put(UnitController());
-  final ruangController = Get.put(RoomController());
-  final kuasaController = Get.put(KuasaController());
-  final addressController = Get.put(AddressController());
+  final satuanController   = Get.put(UnitController());
+  final ruangController    = Get.put(RoomController());
+  final kuasaController    = Get.put(KuasaController());
+  final addressController  = Get.put(AddressController());
 
   RxList<Map<String, dynamic>> penetapanList = RxList<Map<String, dynamic>>([]);
   RxList<Map<String, dynamic>> penetapanListById =

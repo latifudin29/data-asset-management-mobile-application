@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -25,18 +26,19 @@ class _InventoryScreenState extends State<InventoryScreen> {
   final penetapanController  = Get.put(AppointmentController());
   final addressController    = Get.put(AddressController());
   final satuan               = Get.put(UnitController());
+  final ruangController      = Get.put(RoomController());
 
-  final ruangController     = Get.put(RoomController());
+  final TextEditingController searchDepartement  = TextEditingController();
+  final TextEditingController departemenSelected = TextEditingController();
+  final TextEditingController selectedSKPD       = TextEditingController();
 
-
-  final searchDepartement  = TextEditingController();
-  final departemenSelected = TextEditingController();
+  late TextEditingController searchController;
 
   DateTime now = DateTime.now();
 
-  String selectedSKPD  = '0.00.000';
   String selectedId    = '';
   String modifiedTitle = '';
+  String filter        = 'Semua';
 
   int page      = 1;
   int totalPage = 1;
@@ -73,11 +75,14 @@ class _InventoryScreenState extends State<InventoryScreen> {
       });
     });
 
+    selectedSKPD.text = '0.00.000';
+    searchController = TextEditingController();
+    
     departemenController.getDepartemen();
 
     if(user.departemen_nm.value != "" && user.departemen_kd.value != ""){
       departemenSelected.text = user.departemen_nm.value;
-      selectedSKPD            = user.departemen_kd.value;
+      selectedSKPD.text       = user.departemen_kd.value;
     }
 
     modifyTitle(widget.title);
@@ -132,11 +137,11 @@ class _InventoryScreenState extends State<InventoryScreen> {
     
     setState(() {
       selectedId = department['id'].toString();
-      selectedSKPD = department['kode'].toString();
+      selectedSKPD.text = department['kode'].toString();
       departemenSelected.text = department['nama'].toString();
 
       user.setDepartemenID(selectedId);
-      user.setDepartemenKode(selectedSKPD);
+      user.setDepartemenKode(selectedSKPD.text);
       user.setDepartemenNama(departemenSelected.text);
       page = 1;
     });
@@ -362,11 +367,26 @@ class _InventoryScreenState extends State<InventoryScreen> {
     }
 
     List<DataRow> generateDataRows() {
+      final filteredList = penetapanController.penetapanList
+          .where((penetapan) =>
+              penetapan['kategori_kd'].toString().toLowerCase().contains(searchController.text.toLowerCase()) ||
+              penetapan['kategori_nm'].toString().toLowerCase().contains(searchController.text.toLowerCase()))
+          .toList();
+      
+      final filteredAndSelectedList = filteredList.where((penetapan) {
+        if (filter == 'Sudah') {
+          return penetapan['status_inventaris'] == 1;
+        } else if (filter == 'Belum') {
+          return penetapan['status_inventaris'] == 0;
+        }
+        return true;
+      }).toList();
+
       if (modifiedTitle == "A") {
         return List<DataRow>.generate(
-          penetapanController.penetapanList.length,
+          filteredAndSelectedList.length,
           (index) {
-            final penetapan = penetapanController.penetapanList[index];
+            final penetapan = filteredAndSelectedList[index];
             bool isSelected = penetapan['status_inventaris'] == 1;
             return DataRow(
               selected: isSelected,
@@ -531,9 +551,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
         );
       } else if (modifiedTitle == "B") {
         return List<DataRow>.generate(
-          penetapanController.penetapanList.length,
+          filteredAndSelectedList.length,
           (index) {
-            final penetapan = penetapanController.penetapanList[index];
+            final penetapan = filteredAndSelectedList[index];
             bool isSelected = penetapan['status_inventaris'] == 1;
             return DataRow(
               selected: isSelected,
@@ -713,9 +733,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
         );
       } else if (modifiedTitle == "C") {
         return List<DataRow>.generate(
-          penetapanController.penetapanList.length,
+          filteredAndSelectedList.length,
           (index) {
-            final penetapan = penetapanController.penetapanList[index];
+            final penetapan = filteredAndSelectedList[index];
             bool isSelected = penetapan['status_inventaris'] == 1;
             return DataRow(
               selected: isSelected,
@@ -898,9 +918,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
         );
       } else if (modifiedTitle == "D") {
         return List<DataRow>.generate(
-          penetapanController.penetapanList.length,
+          filteredAndSelectedList.length,
           (index) {
-            final penetapan = penetapanController.penetapanList[index];
+            final penetapan = filteredAndSelectedList[index];
             bool isSelected = penetapan['status_inventaris'] == 1;
             return DataRow(
               selected: isSelected,
@@ -1076,9 +1096,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
         );
       } else if (modifiedTitle == "E") {
         return List<DataRow>.generate(
-          penetapanController.penetapanList.length,
+          filteredAndSelectedList.length,
           (index) {
-            final penetapan = penetapanController.penetapanList[index];
+            final penetapan = filteredAndSelectedList[index];
             bool isSelected = penetapan['status_inventaris'] == 1;
             return DataRow(
               selected: isSelected,
@@ -1590,69 +1610,160 @@ class _InventoryScreenState extends State<InventoryScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 30),
+              SizedBox(height: 28),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28),
+                padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Dropdown Departemen
                     user.login_status.value == "1" && user.group.value == "Aset_Operator_Views"
                       ? _buildContainerForInfoLogin()
                       : _buildDropdownForNonInfoLogin(),
-                    SizedBox(height: 10),
-                    RichText(
-                      text: TextSpan(
-                        text: 'SKPD: ',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
-                        ),
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: selectedSKPD,
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 15),
+                    SizedBox(height: 13),
                     Row(
                       children: [
-                        Expanded(
+                        // SKPD
+                        Flexible(
+                          child: TextField(
+                            controller: selectedSKPD,
+                            readOnly: true,
+                            enabled: false,
+                            style: TextStyle(color: Colors.black),
+                            decoration: InputDecoration(
+                              disabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(12)),
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              labelText: 'SKPD',
+                              labelStyle: TextStyle(color: Colors.grey),
+                              contentPadding: EdgeInsets.all(14),
+                              filled: true,
+                              fillColor: Colors.grey.shade300,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 7),
+                        // Tahun
+                        Flexible(
                           child: TextField(
                             controller: penetapanController.tahun,
                             decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12)),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(12)),
+                                borderSide: BorderSide(color: Colors.blue),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(12)),
+                                borderSide: BorderSide(color: Colors.grey),
                               ),
                               labelText: 'Tahun',
-                              labelStyle: TextStyle(color: secondaryTextColor),
+                              labelStyle: TextStyle(color: Colors.grey),
                               contentPadding: EdgeInsets.all(14),
                               filled: true,
                               fillColor: Colors.white,
                             ),
                           ),
                         ),
-                        SizedBox(width: 10),
+                        SizedBox(width: 7),
+                        // Button Generate
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: buttonColor,
-                            padding: EdgeInsets.all(16),
+                            padding: EdgeInsets.all(12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
                           onPressed: loadPenetapanData,
-                          child: Text('Generate'),
+                          child: Icon(Icons.rocket_launch_rounded),
                         ),
                       ],
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 25),
               Container(
-                height: 395,
+                height: 70,
+                decoration: BoxDecoration(color: Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: Row(
+                    children: [
+                      // Fitur Filter
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          buttonStyleData: ButtonStyleData(
+                            height: 48,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          iconStyleData: const IconStyleData(
+                            icon: Icon(
+                              Icons.arrow_drop_down_outlined,
+                              color: Colors.grey,
+                              size: 25,
+                            ),
+                            iconEnabledColor: primaryTextColor,
+                          ),
+                          value: filter,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              filter = newValue ?? filter;
+                            });
+                          },
+                          items: ['Semua', 'Sudah', 'Belum']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      SizedBox(width: 7),
+                      // Fitur Pencarian
+                      Flexible(
+                        child: TextField(
+                          controller: searchController,
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            labelText: 'Cari berdasarkan kategori',
+                            labelStyle: TextStyle(color: secondaryTextColor),
+                            contentPadding: EdgeInsets.all(13),
+                            prefixIcon: Icon(
+                              Icons.search_rounded,
+                              size: 20,
+                              color: secondaryTextColor,
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                            floatingLabelBehavior: FloatingLabelBehavior.never,
+                          ),
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              // Table
+              Container(
+                height: 394,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey.shade200),
                   color: Colors.white,
@@ -1672,6 +1783,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   ),
                 ),
               ),
+              // Pagination
               Container(
                 decoration: BoxDecoration(color: Colors.white),
                 child: totalPage > 0
@@ -1707,14 +1819,15 @@ class _InventoryScreenState extends State<InventoryScreen> {
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey),
         borderRadius: BorderRadius.circular(12),
-        color: Colors.grey.shade400,
+        color: Colors.grey.shade300,
       ),
       child: Padding(
         padding: const EdgeInsets.only(left: 15),
         child: TextFormField(
           controller: departemenSelected,
           readOnly: true,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          enabled: false,
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
           decoration: const InputDecoration(
             border: InputBorder.none,
           ),
@@ -1730,6 +1843,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
       futureRequest: getDepartementData,
       futureRequestDelay: const Duration(seconds: 3),
       hintText: 'Pilih Departemen',
+      borderSide: BorderSide(color: Colors.grey),
       onChanged: selectDepartemen,
     );
   }

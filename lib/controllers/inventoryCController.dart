@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:kib_application/controllers/appointmentController.dart';
 import 'package:kib_application/utils/sharedPrefs.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:kib_application/utils/apiEndpoints.dart';
@@ -305,25 +303,9 @@ class InventoryCController extends GetxController {
       }
     };
 
-    Directory? directory = await getExternalStorageDirectory();
-    
-    if (directory != null) {
-      String path = directory.path;
-      String fileName = 'inventarisC-insert.json';
-      String filePath = '$path/$fileName';
-      String jsonString = jsonEncode(body);
-
-      File file = File(filePath);
-      await file.writeAsString(jsonString);
-
-      print('File JSON disimpan di: $filePath');
-    } else {
-      print('Error: Direktori penyimpanan eksternal null.');
-    }
-
     try {
       final response = await _connect.post(
-        '${ApiEndPoints.baseurl}${ApiEndPoints.authEndPoints.postInventaris}add/C',
+        '${ApiEndPoints.baseurl}${ApiEndPoints.authEndPoints.postInventaris}C',
         body,
       );
 
@@ -463,25 +445,9 @@ class InventoryCController extends GetxController {
       }
     };
 
-    Directory? directory = await getExternalStorageDirectory();
-    
-    if (directory != null) {
-      String path = directory.path;
-      String fileName = 'inventarisC-update.json';
-      String filePath = '$path/$fileName';
-      String jsonString = jsonEncode(body);
-
-      File file = File(filePath);
-      await file.writeAsString(jsonString);
-
-      print('File JSON disimpan di: $filePath');
-    } else {
-      print('Error: Direktori penyimpanan eksternal null.');
-    }
-
     try {
       final response = await _connect.put(
-        '${ApiEndPoints.baseurl}${ApiEndPoints.authEndPoints.putInventaris}edit/C/$kib_id',
+        '${ApiEndPoints.baseurl}${ApiEndPoints.authEndPoints.putInventaris}C/$kib_id',
         body,
       );
 
