@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:kib_application/constans/colors.dart';
 
-class EditInventoryTGRScreen extends StatefulWidget {
-  const EditInventoryTGRScreen({super.key});
+class EditInventoryGScreen extends StatefulWidget {
+  const EditInventoryGScreen({super.key});
 
   @override
-  State<EditInventoryTGRScreen> createState() => _EditInventoryTGRScreenState();
+  State<EditInventoryGScreen> createState() => _EditInventoryGScreenState();
 }
 
-class _EditInventoryTGRScreenState extends State<EditInventoryTGRScreen> {
+class _EditInventoryGScreenState extends State<EditInventoryGScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

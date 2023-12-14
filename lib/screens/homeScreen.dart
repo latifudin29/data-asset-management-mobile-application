@@ -46,6 +46,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Title
     List<String> titleScreen = [
       "Tanah (A)",
       "Peralatan/Mesin (B)",
@@ -177,7 +178,7 @@ class Menus extends StatelessWidget {
       child: ListView(
         children: List.generate(titleScreen.length, (index) {
           final title = titleScreen[index];
-          bool showCloseIcon = index >= 5 && index <= 7;
+          bool showCloseIcon = index == 7;
 
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 28),

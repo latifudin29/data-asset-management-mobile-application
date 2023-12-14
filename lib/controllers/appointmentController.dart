@@ -6,9 +6,8 @@ import 'package:kib_application/screens/forms/editInventoryBScreen.dart';
 import 'package:kib_application/screens/forms/editInventoryCScreen.dart';
 import 'package:kib_application/screens/forms/editInventoryDScreen.dart';
 import 'package:kib_application/screens/forms/editInventoryEScreen.dart';
-import 'package:kib_application/screens/forms/editInventoryTGRScreen.dart';
+import 'package:kib_application/screens/forms/editInventoryGScreen.dart';
 import 'package:kib_application/screens/forms/editInventoryATBScreen.dart';
-import 'package:kib_application/screens/forms/editInventoryBelumTerdaftarScreen.dart';
 import 'package:kib_application/utils/apiEndpoints.dart';
 import 'package:kib_application/controllers/addressController.dart';
 import 'package:kib_application/controllers/categoryController.dart';
@@ -73,16 +72,8 @@ class AppointmentController extends GetxController {
       Get.dialog(Center(child: CircularProgressIndicator()),
           barrierDismissible: false);
 
-      if (kategori == "A") {
-        await kategoriController.getKategori("A");
-      } else if (kategori == "B"){
-        await kategoriController.getKategori("B");
-      } else if (kategori == "C"){
-        await kategoriController.getKategori("C");
-      } else if (kategori == "D"){
-        await kategoriController.getKategori("D");
-      }  else if (kategori == "E"){
-        await kategoriController.getKategori("E");
+      if (["A", "B", "C", "D", "E"].contains(kategori)) {
+        await kategoriController.getKategori(kategori);
       }
 
       final response = await _connect.get(ApiEndPoints.baseurl +
@@ -90,8 +81,6 @@ class AppointmentController extends GetxController {
           kategori +
           '/' +
           id);
-      
-      print('INI ID: $id');
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = response.body;
@@ -132,12 +121,12 @@ class AppointmentController extends GetxController {
         Get.to(EditInventoryDScreen());
       } else if (kategori == "E") {
         Get.to(EditInventoryEScreen());
-      } else if (kategori == "tgr") {
-        Get.to(EditInventoryTGRScreen());
-      } else if (kategori == "atb") {
+      } else if (kategori == "G") {
+        Get.to(EditInventoryGScreen());
+      } else if (kategori == "ATB") {
         Get.to(EditInventoryATBScreen());
-      } else if (kategori == "belumTerdaftar") {
-        Get.to(EditInventoryBelumTerdaftarScreen());
+      } else if (kategori == "UNREG") {
+        // Get.to();
       }
     }
   }
